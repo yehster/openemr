@@ -129,9 +129,5 @@ $res = sqlQuery("select * from users where username='".$_SESSION{"authUser"}."'"
 </tr>
 </table>
 
-<script type="text/javascript" language="javascript">
-parent.loadedFrameCount += 1;
-</script>
-
 </body>
 </html>
