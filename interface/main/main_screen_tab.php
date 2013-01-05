@@ -62,12 +62,12 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 <link rel="stylesheet" type="text/css" href="main_screen_tab.css" />
 <script type="text/javascript" src="../../library/topdialog.js"></script>
 <script type="text/javascript" src="../../library/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="../../library/js/jquery.touchSwipe-1.2.5.js"></script>
-<script language='JavaScript'>
+<script type="text/javascript" src="../../library/js/jquery.touchSwipe.min.js"></script>
+<script type='text/javascript'>
 <?php require($GLOBALS['srcdir'] . "/restoreSession.php"); ?>
 </script>
-<script src="../../library/js/objectWatch.js"></script>
-<script src="main_screen_tab.js"></script>
+<script type='text/javascript' src="../../library/js/objectWatch.js"></script>
+<script type='text/javascript' src="main_screen_tab.js"></script>
 </head>
 <body>
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
@@ -99,12 +99,12 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
         </div>
     </div>
 </div>
-<script>
+<script type='text/javascript'>
 var msgAddPat='<?php xl('You must first select or add a patient.','e') ?>';
 var msgSelEnc='<?php xl('You must first select or create an encounter.','e') ?>';
 var pathWebroot='<?php echo "$web_root/interface/" ?>';
 setupMainScreenTabs();
-
+window.alert($("#divHeader").is(":visible"));
 </script>
 </body>
 </html>

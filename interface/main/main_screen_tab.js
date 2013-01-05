@@ -9,7 +9,7 @@ function updateFrameInfo()
 {
     var titleText=null;
     var proxy=frameProxies[$(this).attr("name")];
-    var title=$(".title:first",proxy.frame.document);
+    var title=$(".title",proxy.frame.document).eq(0);
     if(typeof proxy.frame.goPid!='undefined')
     {
         proxy.frame.goPid= top.goPid;
@@ -26,7 +26,7 @@ function updateFrameInfo()
     }
     else
     {
-        title=$(".main_title:first",proxy.frame.document);
+        title=$(".main_title",proxy.frame.document).eq(0);
         if(title.length==1)
         {
             titleText=title.text();
@@ -77,17 +77,20 @@ function syncCBVisibility(idx,elem)
 }
 function useSingleTab()
 {
-    return !$("#multiTabs").is(":checked");
+    return !$("#multiTabs").prop("checked");
 }
 function updateFramesVisibility(displayControl)
 {
+    
     if(useSingleTab())
     {
-        displayControl.siblings("span").removeClass("active");    
+        var others=displayControl.siblings();
+        others.removeClass("active");
     }
     var active=$("#navButtons span.active").length;
     if(active==0) {active=1;}
     var size=100/active;
+
     $("#navButtons > span").each(syncCBVisibility);
     $("div.main").css("width",size+"%");
 //    $("#divframes div.hidden").css("width",0);
@@ -209,10 +212,13 @@ function setupMainScreenTabs()
 
     RBot=new frameProxy("RBot","messages",frames['messages'],$("#butTab3"));
 
+
     registerSwipe($("body"));
     $("iframe[name='left_nav']").load(registerTabsEventsLeftnav);
+
     $("iframe[name='Title']").load(registerTabsEventsMainTitle);
     $(window).resize(resizeBottomDiv);
+    
     $(document).ready(resizeBottomDiv);
 }
 
@@ -298,7 +304,8 @@ function resizeBottomDiv()
     var iOS = deviceAgent.match(/(iphone|ipod|ipad)/);
     if(!iOS)
     {
-        var botHeight=$(window).height() - ($("#divHeader").is(":visible") ? $("#divHeader").height() : 0 )-4;
+        var botHeight=$(window).height() - (!$("#divHeader").is(".hidden") ? $("#divHeader").height() : 0 )-4;
+//        var botHeight=$(window).height() -  $("#divHeader").height() -4;
         $("#divBottom").height(botHeight);
         var iframesHeight = botHeight - $("#navButtons").height();
         $("#divframes").height(iframesHeight);           
