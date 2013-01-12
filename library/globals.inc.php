@@ -635,7 +635,6 @@ $GLOBALS_METADATA = array(
       '0',                              // default = true
       xl('This will use the custom immunizations list rather than the standard CVX immunization list.')
     ),
-
   ),
     
     //Documents Tab
