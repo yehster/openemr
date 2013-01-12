@@ -634,7 +634,13 @@ $GLOBALS_METADATA = array(
       '0',                              // default = true
       xl('This will use the custom immunizations list rather than the standard CVX immunization list.')
     ),
+    'billing_create_problems' => array(
+      xl('Create Problem from Diagnosis Codes'),
+      'bool',                           // data type
+      '0',                              // default = false
+      xl('When adding diagnosis from review or direct justification, create an entry in the problem list if it does not already exist. ')
 
+    ),  
   ),
     
     //Documents Tab
