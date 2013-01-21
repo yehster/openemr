@@ -5,18 +5,18 @@ define('SEP_COMPONENT','^');
 define('SEP_SUB_COMP','&');
 define('SEP_REPETITION','~');
 define('HL7_ESCAPE','\\');
-define('SEP_SEG',PHP_EOL);
+define('SEP_SEG',"\n");
 
 class hl7_message
 {
     
     protected $segments;
-        
+    
     public function __construct()
     {
         $this->segments=array();
     } 
-    public function &addSegment($segName)
+    public function addSegment($segName)
     {
         $newSeg=new hl7_segment($segName);
         $this->segments[]=$newSeg;
@@ -68,7 +68,7 @@ class hl7_segment
         {
             for($idx=count($this->fields)+1;$idx<=$field_index;$idx++)
             {
-                $this->fields[$idx]=new hl7_field();
+                $this->fields[$idx]=new hl7_field("");
             }
         }
         return $this->fields[$field_index];
@@ -85,7 +85,7 @@ class hl7_segment
             $params[]=func_get_arg($idx);
         }
         call_user_func_array(array($this->getField($field_index),'setComponents'),$params);
-    }
+    }   
 
     public function toString()
     {
@@ -103,9 +103,11 @@ class hl7_field
 {
     // 1(one) based array of the components
     protected $components;
+    protected $repeated_values;
     public function __construct($val)
     {
         $this->components=array(1=>new hl7_component($val));
+        $this->repeated_values=array();
     }
     public function setComponents()
     {
@@ -116,6 +118,19 @@ class hl7_field
         }
     }
 
+    public function setComponent($idx,$val)
+    {
+        $numComps=count($this->components);
+        if($numComps>$idx)
+        {
+            for($counter=$numComps+1;$counter<=$idx;$counter++)
+            {
+                $this->components[$counter]=new hl7_component("");
+            }
+        }
+        $this->components[$idx]->setVal($val);
+        
+    }
     public function toString()
     {
         $retval="";
@@ -127,6 +142,10 @@ class hl7_field
             }
             $retval.=$this->components[$idx]->toString();
         }
+        foreach($this->repeated_values as $rv)
+        {
+            $retval.=SEP_REPETITION.$rv->toString();
+        }
         return $retval;
     }    
 }
@@ -134,6 +153,10 @@ class hl7_component
 {
     protected $value;
     public function __construct($val)
+    {
+        $this->value=$val;
+    }
+    public function setVal($val)
     {
         $this->value=$val;
     }

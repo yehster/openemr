@@ -13,26 +13,48 @@ class HL7_SS_ADT
     public $pid;
     public $pv1;
     
-    function __construct($type)
+    protected $processing_id;
+    protected $message_control_id;
+    function __construct($type,$message_control_id,$proc_id='D')
     {
         $this->type=$type;
+        if($type=="A03")
+        {
+            $this->constrained_message_structure="ADT_A03";
+        }
+        else
+        {
+            $this->constrained_message_structure="ADT_A01";            
+        }
         $this->hl7=new hl7_message();
         
-        $this->msh=&$this->hl7->addSegment("MSH");
+        $this->msh=$this->hl7->addSegment("MSH");
         $this->setupMSH();
         
-        $this->evn=&$this->hl7->addSegment("EVN");
+        $this->evn=$this->hl7->addSegment("EVN");
 
-        $this->pid=&$this->hl7->addSegment("PID");
-        $this->pv1=&$this->hl7->addSegment("PV1");
+        $this->pid=$this->hl7->addSegment("PID");
         
+        $this->pv1=$this->hl7->addSegment("PV1");
+     
+        $this->processing_id=$proc_id;
+        $this->message_control_id=$message_control_id;
         $this->setupMSH();
+        $this->setupPID();
     }
     function setupMSH()
     {
-        $this->msh->setField(4,"FOO BAR","1234567890","NPI");
         $this->msh->setField(3,"OPENEMR");
+        $this->msh->setField(9,"ADT",$this->type,$this->constrained_message_structure);
+        $this->msh->setField(10,$this->message_control_id);
+        $this->msh->setField(11,$this->processing_id);
+        $this->msh->setField(12,"2.5.1");
         
+    }
+
+    function setupPID()
+    {
+        $this->pid->setField(1,"1"); // Only a single PID segment is allowed, so the Set ID should always be 1;
     }
     
     function toString()
