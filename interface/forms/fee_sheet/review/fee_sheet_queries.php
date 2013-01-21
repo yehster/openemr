@@ -213,6 +213,8 @@ function issue_diagnoses($pid,$encounter)
           " LEFT JOIN issue_encounter as ie ON ie.list_id=l.id AND ie.encounter=?".
           " WHERE l.type='medical_problem'".
           " AND l.pid=?" . // 1st parameter pid
+          " AND ( (l.begdate IS NULL) OR (l.begdate IS NOT NULL AND l.begdate<=NOW()) ) AND ".
+          " ( ( l.enddate IS NULL) OR (l.enddate IS NOT NULL AND l.enddate>=NOW()) ) ".
           " ORDER BY ie.encounter DESC,l.id";
     $results=sqlStatement($sql,$parameters);
     foreach($results->GetArray() as $res)
