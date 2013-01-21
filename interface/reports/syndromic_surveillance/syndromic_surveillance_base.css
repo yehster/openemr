@@ -1,0 +1,55 @@
+/* 
+    Document   : syndromic_surveillance_base
+    Created on : Jan 22, 2013, 9:51:09 PM
+    Author     : yehster
+    Description:
+        Style Sheet for syndromic surveillance
+*/
+
+.results{
+    cursor: pointer;
+}
+
+.results tbody tr:hover
+{
+    background-color: yellow;
+}
+.label{
+    font-weight: bold;
+}
+textarea.chief_complaint
+{
+    width:60em;
+    
+}
+textarea.hl7_message
+{
+    width:60em;
+    height:20em;
+}
+.tabs{
+    margin:0px;
+    padding: 0px;
+    display: block;
+    cursor: pointer;
+}
+.tabs > span
+{  
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    min-width:5em;
+    text-align: center;
+}
+.tabs > span.tab_selected
+{
+    font-weight:bold;
+    background-color: yellowgreen;
+}
+
+.main_display
+{
+    border: 1px solid black;
+    clear:left;
+}
