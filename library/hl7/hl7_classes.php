@@ -121,7 +121,7 @@ class hl7_field
     public function setComponent($idx,$val)
     {
         $numComps=count($this->components);
-        if($numComps>$idx)
+        if($idx>$numComps)
         {
             for($counter=$numComps+1;$counter<=$idx;$counter++)
             {
@@ -130,6 +130,18 @@ class hl7_field
         }
         $this->components[$idx]->setVal($val);
         
+    }
+    public function getRepeat($repeatNumber)
+    {
+        $num_repeats=count($this->repeated_values);
+        if($repeatNumber>$num_repeats)
+        {
+            for($counter=$num_repeats+1;$counter<=$repeatNumber;$counter++)
+            {
+                $this->repeated_values[$counter]=new hl7_field("");
+            }
+        }
+        return $this->repeated_values[$repeatNumber];
     }
     public function toString()
     {

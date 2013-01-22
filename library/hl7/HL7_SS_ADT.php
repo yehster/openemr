@@ -34,7 +34,8 @@ class HL7_SS_ADT
         $this->evn=$this->hl7->addSegment("EVN");
 
         $this->pid=$this->hl7->addSegment("PID");
-        
+        $patientNameRepeat=$this->pid->getField(5)->getRepeat(1);
+        $patientNameRepeat->setComponent(7,"S");
         $this->pv1=$this->hl7->addSegment("PV1");
      
         $this->processing_id=$proc_id;
