@@ -55,10 +55,6 @@ class HL7_SS_ADT
 
         $this->processing_id=$proc_id;
         $this->message_control_id=$message_control_id;
-        $this->setupMSH();
-        $this->setupPID();
-        $this->setupPV1();
-        $this->setupOBX();
     }
     function setupMSH()
     {
@@ -77,6 +73,10 @@ class HL7_SS_ADT
         $patientNameRepeat->setComponent(7,"S");  // Transmitting a blank name per the suggestion in the documentation
     }
 
+    function setupEVN()
+    {
+        
+    }
     function setupPV1()
     {
         $this->pv1->setField(1,"1");
@@ -85,6 +85,16 @@ class HL7_SS_ADT
     function setupOBX()
     {
         $this->obx->setField(1,"1");
+    }
+
+    function applyData()
+    {
+        $this->setupMSH();
+        $this->setupEVN();
+        $this->setupPID();
+        $this->setupPV1();
+        $this->setupOBX();
+
     }
     function toString()
     {

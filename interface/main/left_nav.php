@@ -1307,7 +1307,8 @@ if (!empty($reg)) {
           <?php if (!$GLOBALS['disable_chart_tracker']) genMiscLink('RTop','rep','0',xl('Chart Activity'),'reports/chart_location_activity.php'); ?>
           <?php if (!$GLOBALS['disable_chart_tracker']) genMiscLink('RTop','rep','0',xl('Charts Out'),'reports/charts_checked_out.php'); ?>
           <?php genMiscLink('RTop','rep','0',xl('Services'), 'reports/services_by_category.php'); ?>
-          <?php genMiscLink('RTop','rep','0',xl('Syndromic Surveillance'),'reports/non_reported.php'); ?>
+          <?php genMiscLink('RBot','rep','0',xl('Syndromic Surveillance'),'reports/non_reported.php'); ?>
+          <?php genMiscLink('RTop','rep','0',xl('Syndromic Surveillance'),'reports/syndromic_surveillance/syndromic_surveillance_base.php'); ?>
         </ul>
       </li>
 <?php if (acl_check('acct', 'rep_a')) { ?>
