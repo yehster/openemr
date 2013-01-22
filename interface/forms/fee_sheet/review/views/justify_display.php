@@ -23,8 +23,9 @@
 <script type="text/html" id="justify-display">
     <div data-bind="visible: $data.show">
         <div class="duplicate_warning" data-bind="visible: $data.duplicates().length>0">
-            <span data-bind="event:{click: toggle_warning_details}" class="problem_warning" title="<?php echo xla('Click for more details') ?>"><?php echo xlt("Warning, patient has ambiguous codes in the problems list!") ?></span>
-            <div data-bind="visible: show_warning_details">
+            <div data-bind="event:{click: toggle_warning_details}" class="problem_warning" title="<?php echo xla('Click for more details') ?>"><?php echo xlt("Warning, patient has ambiguous codes in the problems list!") ?></div>
+            <div class="warning_details" data-bind="visible: show_warning_details">
+                <?php echo xlt("The following problems have the same diagnosis codes. Encounter issues will not be updated.") ?>
                 <span data-bind="foreach: $data.duplicates">
                     <div data-bind="text: description() +':'+ code_type() + '|' + code()"></div>
                 </span>

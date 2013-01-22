@@ -95,10 +95,14 @@ div.justify_template span.search_results tr:hover
 {
     font-weight:bold;
     cursor: pointer;
+    background-color: yellow;
+    width:100%
 }
 
 .warning_details
 {
     position:absolute;
+    background-color: white;
+    width:100%
     
 }
