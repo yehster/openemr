@@ -1,3 +1,21 @@
+function display_reportable_query(data)
+{
+    
+}
+function search_reportable(data,event)
+{
+    data.from($("#form_from_date").val());
+    data.to($("#form_to_date").val());
+
+    $.post(ajax_get_encounters,{
+        from_date: data.from(),
+        to_date: data.to(),
+        diags: JSON.stringify(data.diags())
+        },
+        display_reportable_query
+    );
+}
+
 function ss_view_model()
 {
     this.searchParameters={
@@ -20,9 +38,3 @@ function ss_view_model()
     return this;
 }
 
-function search_reportable(data,event)
-{
-    data.searchParameters.from($("#form_from_date").val());
-    data.searchParameters.to($("#form_to_date").val());
-    
-}

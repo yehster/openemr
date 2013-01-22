@@ -47,6 +47,7 @@ class hl7_segment
     protected $ID;
 
     protected $repeats;
+    protected $repeatIdx;
     
     // 1(one) based index of fields (1 based to correspond to HL7 Specs more easily);
     protected $fields;
@@ -62,6 +63,7 @@ class hl7_segment
         }
         $this->ID=$ID;
         $this->repeats=array();
+        $this->repeatIdx=1;
     }
     public function getID()
     {
@@ -99,7 +101,7 @@ class hl7_segment
         for($count=$numRepeats+1;$count<=$repeatIdx;$count++)
         {
             $this->repeats[$count]=new hl7_segment($this->ID);
-            $this->repeats[$count]->setField(1,$count+1); // 
+            $this->repeats[$count]->repeatIdx=$count+1; // Number the repeat segment
         }
         return $this->repeats[$repeatIdx];
     }

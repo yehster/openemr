@@ -1,9 +1,12 @@
 <?php
+$fake_register_globals=false;
+$sanitize_all_escapes=true;
+
 require_once("../../globals.php");
 require_once("$srcdir/patient.inc");
 require_once("../../../custom/code_types.inc.php");
 
-require_once("queries/reportable_code.php");
+require_once("queries/syndromic_classes.php");
 require_once("queries/syndromic_queries.php");
 require_once("views/search_parameters.php");
 require_once("views/report_parameters.php");
@@ -18,7 +21,6 @@ require_once("views/report_parameters.php");
 <?php include_once("{$GLOBALS['srcdir']}/dynarch_calendar_en.inc.php"); ?>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/dynarch_calendar_setup.js"></script>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/textformat.js"></script>
-<script type="text/javascript" src="<?php echo $web_root;?>/library/textformat.js"></script>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/js/knockout/knockout-2.2.0.js"></script>
 <script type="text/javascript" src="viewmodel/syndromic_surveillance_vm.js"></script>
@@ -32,6 +34,8 @@ var facilities=<?php echo json_encode(get_facilities()); ?>;
 view_model.searchParameters.diag_options=ko.observableArray(reportable_codes);
 view_model.searchParameters.diags=ko.observableArray(reportable_codes);
 view_model.reportParameters.facility_options=ko.observableArray(facilities);
+var basedir='<?php echo $web_root;?>/interface/reports/syndromic_surveillance/ajax/';
+var ajax_get_encounters=basedir+'get_encounters.php';
 </script>
 
 <body class="body_top">
