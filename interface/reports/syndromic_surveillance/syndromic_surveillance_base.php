@@ -28,11 +28,8 @@ var mypcc=1;
 var view_model=new ss_view_model();
 var reportable_codes=<?php echo json_encode(get_reportable_codes()); ?>;
 var facilities=<?php echo json_encode(get_facilities()); ?>;
-for(idx=0;idx<reportable_codes.length;idx++)
-{
-    view_model.searchParameters.diag_options.push(reportable_codes[idx]);
-    view_model.searchParameters.diags.push(reportable_codes[idx]);
-}
+view_model.searchParameters.diag_options=ko.observableArray(reportable_codes);
+view_model.searchParameters.diags=ko.observableArray(reportable_codes);
 view_model.reportParameters.facility_options=ko.observableArray(facilities);
 </script>
 

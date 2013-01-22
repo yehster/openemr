@@ -3,8 +3,8 @@ function ss_view_model()
     this.searchParameters={
                             from: ko.observable(),
                             to: ko.observable(),
-                            diags: ko.observableArray(),
-                            diag_options: ko.observableArray()
+                            diags: {},
+                            diag_options: {}
                            };
     
     this.searchResults={
