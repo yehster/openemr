@@ -32,7 +32,11 @@ class hl7_message
         $retval="";
         foreach($this->segments as $seg)
         {
-            $retval.=$seg->toString().SEP_SEG;
+            $strSeg=$seg->toString();
+            if($strSeg!="")
+            {
+                $retval.=$strSeg.SEP_SEG;            
+            }
         }
         return $retval;
     }
@@ -42,6 +46,7 @@ class hl7_segment
 {
     protected $ID;
 
+    protected $repeats;
     
     // 1(one) based index of fields (1 based to correspond to HL7 Specs more easily);
     protected $fields;
@@ -56,6 +61,7 @@ class hl7_segment
             $this->fields=array(1=>new hl7_field(""));
         }
         $this->ID=$ID;
+        $this->repeats=array();
     }
     public function getID()
     {
@@ -87,12 +93,32 @@ class hl7_segment
         call_user_func_array(array($this->getField($field_index),'setComponents'),$params);
     }   
 
+    public function getRepeat($repeatIdx)
+    {
+        $numRepeats=count($this->repeats);
+        for($count=$numRepeats+1;$count<=$repeatIdx;$count++)
+        {
+            $this->repeats[$count]=new hl7_segment($this->ID);
+        }
+        return $this->repeats[$repeatIdx];
+    }
     public function toString()
     {
+        if((count($this->fields)==1) && (count($this->repeats)==0))
+        {
+            if($this->fields[1]->toString()=="")
+            {
+                return "";
+            }
+        }
         $retval=$this->ID;
         foreach($this->fields as $field)
         {
             $retval.=SEP_FIELD.$field->toString();
+        }
+        foreach($this->repeats as $repeat)
+        {
+            $retval.=SEP_SEG.$repeat->toString();
         }
         return $retval;
     }

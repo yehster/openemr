@@ -12,36 +12,53 @@ class HL7_SS_ADT
     public $evn;
     public $pid;
     public $pv1;
+    public $pv2;
+    public $dg1;
+    public $pr1;
+    public $obx;
+    public $in1;        
     
     protected $processing_id;
     protected $message_control_id;
     function __construct($type,$message_control_id,$proc_id='D')
     {
         $this->type=$type;
-        if($type=="A03")
-        {
-            $this->constrained_message_structure="ADT_A03";
-        }
-        else
-        {
-            $this->constrained_message_structure="ADT_A01";            
-        }
         $this->hl7=new hl7_message();
         
         $this->msh=$this->hl7->addSegment("MSH");
-        $this->setupMSH();
         
         $this->evn=$this->hl7->addSegment("EVN");
 
         $this->pid=$this->hl7->addSegment("PID");
-        $patientNameRepeat=$this->pid->getField(5)->getRepeat(1);
-        $patientNameRepeat->setComponent(7,"S");
+
         $this->pv1=$this->hl7->addSegment("PV1");
-     
+
+        $this->pv2=$this->hl7->addSegment("PV2");
+
+        if($type=="A03")
+        {
+            $this->dg1=$this->hl7->addSegment("DG1");
+            $this->pr1=$this->hl7->addSegment("PR1");
+            $this->obx=$this->hl7->addSegment("OBX");
+            $this->constrained_message_structure="ADT_A03";
+        }
+        else
+        {
+            $this->obx=$this->hl7->addSegment("OBX");
+            $this->dg1=$this->hl7->addSegment("DG1");
+            $this->pr1=$this->hl7->addSegment("PR1");
+            $this->constrained_message_structure="ADT_A01";            
+        }
+        
+        
+        $this->in1=$this->hl7->addSegment("IN1");
+
         $this->processing_id=$proc_id;
         $this->message_control_id=$message_control_id;
         $this->setupMSH();
         $this->setupPID();
+        $this->setupPV1();
+        $this->setupOBX();
     }
     function setupMSH()
     {
@@ -56,8 +73,19 @@ class HL7_SS_ADT
     function setupPID()
     {
         $this->pid->setField(1,"1"); // Only a single PID segment is allowed, so the Set ID should always be 1;
+        $patientNameRepeat=$this->pid->getField(5)->getRepeat(1);
+        $patientNameRepeat->setComponent(7,"S");  // Transmitting a blank name per the suggestion in the documentation
+    }
+
+    function setupPV1()
+    {
+        $this->pv1->setField(1,"1");
     }
     
+    function setupOBX()
+    {
+        $this->obx->setField(1,"1");
+    }
     function toString()
     {
         return $this->hl7->toString();
