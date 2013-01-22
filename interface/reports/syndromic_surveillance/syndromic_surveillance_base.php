@@ -5,6 +5,7 @@ require_once("../../../custom/code_types.inc.php");
 
 require_once("queries/reportable_code.php");
 require_once("queries/syndromic_queries.php");
+require_once("views/search_parameters.php");
 require_once("views/report_parameters.php");
 ?>
 <html>
@@ -34,33 +35,12 @@ view_model.reportParameters.facility_options=ko.observableArray(facilities);
 </script>
 
 <body class="body_top">
-    <select data-bind="options:searchParameters.diag_options, selectedOptions: searchParameters.diags, optionsText: 'code'" size="3" multiple="true"></select>
-    <span><?php echo xlt("From:");?></span>
-    <input type='text' name='form_from_date' id="form_from_date"
-    size='10' 
-    onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' 
-    title='yyyy-mm-dd'>
-    <img src='../../pic/show_calendar.gif' align='absbottom' 
-    width='24' height='22' id='img_from_date' border='0' 
-    alt='[?]' style='cursor:pointer'
-    title='<?php xl('Click here to choose a date','e'); ?>'>
-
-    <span><?php echo xlt("To:");?></span>
-    <input type='text' name='form_to_date' id="form_to_date" 
-    size='10' 
-    onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' 
-    title='yyyy-mm-dd'>
-    <img src='../../pic/show_calendar.gif' align='absbottom' 
-    width='24' height='22' id='img_to_date' border='0' 
-    alt='[?]' style='cursor:pointer'
-    title='<?php xl('Click here to choose a date','e'); ?>'>
-    <input type="button" value="<?php echo xla('Search') ?>" data-bind="event:{click: search_reportable}"/>
-
+    <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
     <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
 </body>
 <script>
+ ko.applyBindings(view_model);
  Calendar.setup({inputField:"form_from_date", ifFormat:"%Y-%m-%d", button:"img_from_date"});
  Calendar.setup({inputField:"form_to_date", ifFormat:"%Y-%m-%d", button:"img_to_date"});
- ko.applyBindings(view_model);
 </script>
 </html>

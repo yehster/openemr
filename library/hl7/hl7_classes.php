@@ -99,6 +99,7 @@ class hl7_segment
         for($count=$numRepeats+1;$count<=$repeatIdx;$count++)
         {
             $this->repeats[$count]=new hl7_segment($this->ID);
+            $this->repeats[$count]->setField(1,$count+1); // 
         }
         return $this->repeats[$repeatIdx];
     }
