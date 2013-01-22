@@ -15,5 +15,14 @@ class reportable_code {
     public $code_type;
     public $description;
 }
-
+class facility
+{
+    public function __construct($name,$npi)
+    {
+        $this->name=$name;
+        $this->npi=$npi;
+    }
+    public $name;
+    public $npi;
+}
 ?>

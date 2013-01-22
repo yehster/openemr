@@ -12,4 +12,16 @@ function get_reportable_codes()
    }
    return $retval;
 }
+
+function get_facilities()
+{
+    $sqlSelectFacilities = "select name, facility_npi from facility";
+    $res=sqlStatement($sqlSelectFacilities,array());
+    $retval=array();
+    foreach($res->GetArray() as $fac)
+    {
+        array_push($retval,new facility($fac['name'],$fac['facility_npi']));
+    }
+    return $retval;
+}
 ?>
