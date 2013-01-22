@@ -5,7 +5,7 @@ require_once("../../../custom/code_types.inc.php");
 
 require_once("queries/reportable_code.php");
 require_once("queries/syndromic_queries.php");
-
+require_once("views/report_parameters.php");
 ?>
 <html>
     <header>
@@ -59,10 +59,7 @@ view_model.reportParameters.facility_options=ko.observableArray(facilities);
     title='<?php xl('Click here to choose a date','e'); ?>'>
     <input type="button" value="<?php echo xla('Search') ?>" data-bind="event:{click: search_reportable}"/>
 
-    <span><?php echo xlt("Reporting:")?></span>
-    <select data-bind="options:reportParameters.facility_options, selected: reportParameters.reporting_facility, optionsText: 'name'"></select>
-    <span><?php echo xlt("Event:")?></span>
-    <select data-bind="options:reportParameters.facility_options, selected: reportParameters.event_facility, optionsText: 'name'"></select>
+    <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
 </body>
 <script>
  Calendar.setup({inputField:"form_from_date", ifFormat:"%Y-%m-%d", button:"img_from_date"});
