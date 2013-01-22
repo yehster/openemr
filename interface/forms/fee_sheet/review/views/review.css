@@ -90,3 +90,15 @@ div.justify_template span.search_results tr:hover
 {
     background-color:yellow;
 }
+
+.problem_warning
+{
+    font-weight:bold;
+    cursor: pointer;
+}
+
+.warning_details
+{
+    position:absolute;
+    
+}

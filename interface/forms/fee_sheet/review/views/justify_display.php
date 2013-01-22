@@ -22,6 +22,14 @@
 ?>
 <script type="text/html" id="justify-display">
     <div data-bind="visible: $data.show">
+        <div class="duplicate_warning" data-bind="visible: $data.duplicates().length>0">
+            <span data-bind="event:{click: toggle_warning_details}" class="problem_warning" title="<?php echo xla('Click for more details') ?>"><?php echo xlt("Warning, patient has ambiguous codes in the problems list!") ?></span>
+            <div data-bind="visible: show_warning_details">
+                <span data-bind="foreach: $data.duplicates">
+                    <div data-bind="text: description() +':'+ code_type() + '|' + code()"></div>
+                </span>
+            </div>
+        </div>
         <span>
             <span data-bind="visible: diag_code_types.length>0">
                 <input value= type="text" data-bind="value: search_query, valueUpdate: 'afterkeydown', event:{focus:search_focus, blur: search_blur}, hasfocus: search_has_focus"/>

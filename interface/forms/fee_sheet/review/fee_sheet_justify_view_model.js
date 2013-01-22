@@ -275,10 +275,22 @@ function setup_justify(model,current,patient,common)
         else
         {
             var entry=model.added_keys[new_justify.key()];
-            entry.prob_id=cur_entry.db_id;
-            if(cur_entry.selected)
+            if((entry.prob_id!=null) &&(entry.prob_id!=cur_entry.db_id))
             {
-                entry.encounter_issue(true);
+                new_justify.prob_id=cur_entry.db_id;
+                if(model.duplicates().length==0)
+                    {
+                        model.duplicates.push(entry);
+                    }
+                model.duplicates.push(new_justify);
+            }
+            else
+            {
+                entry.prob_id=cur_entry.db_id;
+                if(cur_entry.selected)
+                {
+                    entry.encounter_issue(true);
+                }
             }
         }
     }
@@ -298,6 +310,10 @@ function setup_justify(model,current,patient,common)
     }
     model.diagnosis_options.sort(priority_order);
     
+}
+function toggle_warning_details(data,event)
+{
+    data.show_warning_details(!data.show_warning_details());
 }
 function fee_sheet_justify_view_model(billing_id,enc_id,pat_id,current_justify)
 {
@@ -319,6 +335,8 @@ function fee_sheet_justify_view_model(billing_id,enc_id,pat_id,current_justify)
                     ,diag_code_types: diag_code_types
                     ,searchType: ko.observable()
                     ,create_problems:ko.observable(global_create)
+                    ,duplicates:ko.observableArray()
+                    ,show_warning_details:ko.observable(false)
                   };
     var vm=this.justify;
     vm.search_query_throttled=ko.computed(vm.search_query).extend({throttle:300}).subscribe(function(data){search_change(data,vm)});
