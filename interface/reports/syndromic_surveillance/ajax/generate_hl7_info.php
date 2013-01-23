@@ -23,7 +23,6 @@ $diagnoses=$encounter->{'diagnoses'};
 $dg_repeat=1;
 foreach($diagnoses as $diag)
 {
-    error_log($diag->{'description'});
     $seg=$ss_message->dg1->getRepeat($dg_repeat);
     $seg->setField(3,str_replace(".","",$diag->{'code'})
                                 ,$diag->{'description'}

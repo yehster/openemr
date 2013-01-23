@@ -70,7 +70,7 @@ class HL7_SS_ADT
     function setupPID()
     {
         $this->pid->setField(1,"1"); // Only a single PID segment is allowed, so the Set ID should always be 1;
-        $patientNameRepeat=$this->pid->getField(5)->getRepeat(1);
+        $patientNameRepeat=$this->pid->getField(5)->getRepeat(2);
         $patientNameRepeat->setComponent(7,"S");  // Transmitting a blank name per the suggestion in the documentation
     }
 

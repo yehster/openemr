@@ -180,6 +180,12 @@ class hl7_field
     }
     public function getRepeat($repeatNumber)
     {
+        if($repeatNumber==1)
+        {
+            return $this;
+        }
+        // Repeats are a 1's based array so the second repeated components is in the first slot of the array.
+        $repeatNumber--;
         $num_repeats=count($this->repeated_values);
         if($repeatNumber>$num_repeats)
         {
