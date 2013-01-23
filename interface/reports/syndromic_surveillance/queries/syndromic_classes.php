@@ -30,4 +30,24 @@ class facility
     public $name;
     public $npi;
 }
+
+class event
+{
+    public $list_id;
+    public $encounter;  
+    public $encounter_date;
+    public $pid;
+    public $description;
+    public $diagnosis_code;
+    
+    public function __construct($list_id,$encounter,$encounter_date,$pid,$desc,$diagnosis)
+    {
+        $this->list_id=$list_id;
+        $this->encounter=$encounter;
+        $this->encounter_date=$encounter_date;
+        $this->pid=$pid;
+        $this->description=$desc;
+        $this->diagnosis_code=$diagnosis;
+    }
+}
 ?>

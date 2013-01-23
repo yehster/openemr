@@ -19,5 +19,5 @@
     width='24' height='22' id='img_to_date' border='0' 
     alt='[?]' style='cursor:pointer'
     title='<?php xl('Click here to choose a date','e'); ?>'>
-    <input type="button" value="<?php echo xla('Search') ?>" data-bind="event:{click: search_reportable}"/>    
+    <input id="search" type="button" value="<?php echo xla('Search') ?>" data-bind="event:{click: search_reportable}"/>    
 </script>

@@ -1,0 +1,19 @@
+/* 
+    Document   : syndromic_surveillance_base
+    Created on : Jan 22, 2013, 9:51:09 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.results{
+    cursor: pointer;
+}
+
+.results tbody tr:hover
+{
+    background-color: yellow;
+}
+.label{
+    font-weight: bold;
+}

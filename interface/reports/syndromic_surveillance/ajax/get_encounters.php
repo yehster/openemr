@@ -1,4 +1,8 @@
 <?php
+/**
+ * This function retrieves the encounter information related to the given list of codes
+ * Codes which are listed as part of a "multi diagnosis" Issue are 
+ */
 $fake_register_globals=false;
 $sanitize_all_escapes=true;
 
@@ -29,5 +33,5 @@ else
     $diags=get_reportable_codes();
 }
 $events=find_events($from_date,$to_date,$diags);
-echo $from_date.":".$to_date;
+echo json_encode($events);
 ?>
