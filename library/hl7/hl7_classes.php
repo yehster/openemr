@@ -5,7 +5,7 @@ define('SEP_COMPONENT','^');
 define('SEP_SUB_COMP','&');
 define('SEP_REPETITION','~');
 define('HL7_ESCAPE','\\');
-define('SEP_SEG',"\n");
+define('SEP_SEG',"\r");
 
 class hl7_message
 {
