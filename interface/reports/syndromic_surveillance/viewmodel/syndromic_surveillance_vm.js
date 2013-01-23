@@ -108,6 +108,7 @@ function ss_view_model()
                        
     this.reportParameters=
                         {
+                          type: "A04",
                           facility_options: {},
                           reporting_facility: ko.observable(),
                           event_facility: ko.observable(),
