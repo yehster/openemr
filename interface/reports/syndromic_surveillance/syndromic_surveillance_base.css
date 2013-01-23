@@ -17,3 +17,9 @@
 .label{
     font-weight: bold;
 }
+
+textarea.hl7_message
+{
+    width:60em;
+    height:20em;
+}

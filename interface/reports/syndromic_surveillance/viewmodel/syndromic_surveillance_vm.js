@@ -79,7 +79,20 @@ function choose_event(data,event)
 
     }
 }
-
+function show_hl7(data)
+{
+    view_model.hl7Message.message(data.hl7);
+}
+function generate_hl7(data,event)
+{
+    $.post(ajax_generate_json,
+        {
+            data: ko.toJSON(view_model.reportParameters)
+        },
+        show_hl7,
+        "json"
+    );
+}
 function ss_view_model()
 {
     this.searchParameters={
@@ -113,6 +126,9 @@ function ss_view_model()
                                 diagnoses:ko.observableArray()
                               }
                         }
+    this.hl7Message={
+        message: ko.observable()
+    }
     return this;
 }
 

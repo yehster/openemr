@@ -1,8 +1,8 @@
 <script type="text/html" id="report_parameters">
     <span><?php echo xlt("Reporting:")?></span>
-    <select data-bind="options:facility_options, selected: reporting_facility, optionsText: 'name'"></select>
+    <select data-bind="options:facility_options, value: reporting_facility, optionsText: 'name'"></select>
     <span><?php echo xlt("Event:")?></span>
-    <select data-bind="options:facility_options, selected: event_facility, optionsText: 'name'"></select>
+    <select data-bind="options:facility_options, value: event_facility, optionsText: 'name'"></select>
     <div data-bind="with: patient">
         <span data-bind="text: fname"></span>
         <span data-bind="text: lname"></span>
@@ -19,4 +19,5 @@
         </div>
     </div>
     <div data-bind="template: {name: 'encounter_info', data: $data.encounter}"></div>
+    <input type="button" value="<?php echo xla('Generate HL7'); ?>" data-bind="event:{click: generate_hl7}"/>
 </script>

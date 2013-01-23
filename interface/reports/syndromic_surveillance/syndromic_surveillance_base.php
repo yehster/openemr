@@ -13,6 +13,7 @@ require_once("views/search_parameters.php");
 require_once("views/report_parameters.php");
 require_once("views/search_results.php");
 require_once("views/encounter_info.php");
+require_once("views/hl7_message.php");
 
 ?>
 <html>
@@ -42,6 +43,7 @@ view_model.reportParameters.facility_options=ko.observableArray(facilities);
 var basedir='<?php echo $web_root;?>/interface/reports/syndromic_surveillance/ajax/';
 var ajax_get_encounters=basedir+'get_encounters.php';
 var ajax_get_event_info=basedir+'get_event_info.php';
+var ajax_generate_json=basedir+'generate_hl7_info.php';
 var NO_ENC_MESSAGE='<?php echo addslashes(xl("No Encounter associated with this event! Please document encounter before proceeding."))?>';
 
 </script>
@@ -50,7 +52,7 @@ var NO_ENC_MESSAGE='<?php echo addslashes(xl("No Encounter associated with this 
     <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
     <div data-bind="template: {name: 'search_results', data: searchResults}"></div>
     <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
-
+    <div data-bind="template: {name: 'hl7_message', data: hl7Message}"></div>
 </body>
 <script>
  ko.applyBindings(view_model);
