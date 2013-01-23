@@ -55,7 +55,7 @@ class hl7_segment
     {
         if($ID=="MSH")
         {
-            $this->fields=array(2=>new hl7_field("^~\&"),3=>new hl7_field(""));        
+            $this->fields=array(1=>new hl7_field(""),2=>new hl7_field("^~\&"),3=>new hl7_field(""));        
         }
         else
         {
@@ -115,9 +115,14 @@ class hl7_segment
             }
         }
         $retval=$this->ID;
-        foreach($this->fields as $field)
+        
+        foreach($this->fields as $key=>$field)
         {
-            $retval.=SEP_FIELD.$field->toString();
+            if(!($this->ID="MSH" && $key==1))
+            {
+                $retval.=SEP_FIELD.$field->toString();
+                
+            }
         }
         foreach($this->repeats as $repeat)
         {

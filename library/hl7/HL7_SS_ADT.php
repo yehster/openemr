@@ -58,6 +58,7 @@ class HL7_SS_ADT
     }
     function setupMSH()
     {
+        error_log("Setup MSH");
         $this->msh->setField(3,"OPENEMR");
         $this->msh->setField(9,"ADT",$this->type,$this->constrained_message_structure);
         $this->msh->setField(10,$this->message_control_id);
