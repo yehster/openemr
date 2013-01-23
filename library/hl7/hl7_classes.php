@@ -97,13 +97,26 @@ class hl7_segment
 
     public function getRepeat($repeatIdx)
     {
-        $numRepeats=count($this->repeats);
-        for($count=$numRepeats+1;$count<=$repeatIdx;$count++)
+        if($repeatIdx==1)
         {
-            $this->repeats[$count]=new hl7_segment($this->ID);
-            $this->repeats[$count]->repeatIdx=$count+1; // Number the repeat segment
+            return $this;
         }
-        return $this->repeats[$repeatIdx];
+        else
+        {
+            $arrayIdx=$repeatIdx-1;
+            $numRepeats=count($this->repeats);
+            for($count=$numRepeats+1;$count<=$arrayIdx;$count++)
+            {
+                $this->repeats[$count]=new hl7_segment($this->ID);
+                $this->repeats[$count]->repeatIdx=$count+1; // Number the repeat segment
+            }
+            return $this->repeats[$arrayIdx];
+            
+        }
+    }
+    public function getRepeatIdx()
+    {
+        return $this->repeatIdx;
     }
     public function toString()
     {
@@ -118,7 +131,7 @@ class hl7_segment
         
         foreach($this->fields as $key=>$field)
         {
-            if(!($this->ID="MSH" && $key==1))
+            if(!($this->ID=="MSH" && $key==1))
             {
                 $retval.=SEP_FIELD.$field->toString();
                 
