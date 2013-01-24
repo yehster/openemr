@@ -52,15 +52,19 @@ var NO_ENC_MESSAGE='<?php echo addslashes(xl("No Encounter associated with this 
 
 <body class="body_top">
     <span class="tabs">
-        <span>Events</span>
-        <span>Details</span>
-        <span>Message</span>
+        <span tab_num="1" data-bind="css: {tab_selected: tabs.selected_tab_idx()==1}">Events</span>
+        <span tab_num="2" data-bind="css: {tab_selected: tabs.selected_tab_idx()==2}">Details</span>
     </span>
+    <script>$(".tabs span").on({click: function(evt){ view_model.tabs.selected_tab_idx($(this).attr("tab_num"))}});</script>
     <div class="main_display">
-        <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
-        <div data-bind="template: {name: 'search_results', data: searchResults}"></div>
-        <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
-        <div data-bind="template: {name: 'hl7_message', data: hl7Message}"></div>
+        <span data-bind="visible: tabs.selected_tab_idx()==1">
+            <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
+            <div data-bind="template: {name: 'search_results', data: searchResults}"></div>
+        </span>
+        <span data-bind="visible: tabs.selected_tab_idx()==2">
+            <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
+            <div data-bind="template: {name: 'hl7_message', data: hl7Message}"></div>
+        </span>
     </div>
 </body>
 <script>

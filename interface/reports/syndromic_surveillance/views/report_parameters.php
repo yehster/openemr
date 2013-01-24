@@ -4,6 +4,8 @@
     <select data-bind="options:facility_options, value: reporting_facility, optionsText: 'name'"></select>
     <span><?php echo xlt("Event:")?></span>
     <select data-bind="options:facility_options, value: event_facility, optionsText: 'name'"></select>
+    <span>Encounter#</span>
+    <span data-bind="text: encounter.encounter_id()"></span>
     <div data-bind="with: patient">
         <span data-bind="text: fname"></span>
         <span data-bind="text: lname"></span>

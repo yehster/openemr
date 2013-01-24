@@ -27,6 +27,7 @@ textarea.hl7_message
     margin:0px;
     padding: 0px;
     display: block;
+    cursor: pointer;
 }
 .tabs > span
 {  
@@ -34,6 +35,10 @@ textarea.hl7_message
     padding: 0px;
     margin: 0px;
     float: left;
+}
+.tabs > span.tab_selected
+{
+    font-weight:bold;
 }
 
 .main_display

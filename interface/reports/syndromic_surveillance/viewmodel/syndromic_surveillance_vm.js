@@ -17,7 +17,7 @@ function display_reportable_query(data)
 function display_event_data(data,encounter_id)
 {
     var rp=view_model.reportParameters;
-    rp.encounter.encounter_id=encounter_id
+    rp.encounter.encounter_id(encounter_id)
     for(var key in data.patient)
         {
             if(typeof rp.patient[key]!='undefined')
@@ -78,6 +78,8 @@ function choose_event(data,event)
         function(data)
         {
             display_event_data(data,enc_id);
+            view_model.tabs.selected_tab_idx(2);
+            view_model.hl7Message.message("");
         },
         "json"
         );
@@ -87,6 +89,7 @@ function choose_event(data,event)
 function show_hl7(data)
 {
     view_model.hl7Message.message(data.hl7);
+    view_model.tabs.selected_tab_idx(2);
 }
 function generate_hl7(data,event)
 {
@@ -100,6 +103,9 @@ function generate_hl7(data,event)
 }
 function ss_view_model()
 {
+    this.tabs={
+                selected_tab_idx: ko.observable(1)
+              }
     this.searchParameters={
                             from: ko.observable(),
                             to: ko.observable(),
