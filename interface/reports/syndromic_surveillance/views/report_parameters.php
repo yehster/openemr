@@ -6,6 +6,12 @@
     <select data-bind="options:facility_options, value: event_facility, optionsText: 'name'"></select>
     <span>Encounter#</span>
     <span data-bind="text: encounter.encounter_id()"></span>
+    <div>
+        <span class="label">Admit Date/Time</span>
+        <input type="text" data-bind="value: admit_date_time" title="format: YYYYMMDDHHMMss"></input>
+        <span class="label">Discharge Date/Time</span>
+        <input type="text" data-bind="value: discharge_date_time" title="format: YYYYMMDDHHMMss"></input>
+    </div>
     <div data-bind="with: patient">
         <span data-bind="text: fname"></span>
         <span data-bind="text: lname"></span>

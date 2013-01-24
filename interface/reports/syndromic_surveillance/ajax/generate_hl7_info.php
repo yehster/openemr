@@ -55,9 +55,14 @@ $vn=$pv1->getField(19);
 $vn->setComponent(1,$encounter->{'encounter_id'});
 $vn->setComponent(5,'VN');
 // Admit Date -44
-$pv1->setField(44,"20130101011200"); // TO DO Fix Hard coded!
-
+$pv1->setField(44,$data->{'admit_date_time'});
 // Discharge Date --45
+if(isset($data->{'discharge_date_time'}))
+{
+$pv1->setField(45,$data->{'discharge_date_time'});
+    
+}
+
 //Done with PV1
 
 // OBX Segments

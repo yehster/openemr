@@ -15,12 +15,12 @@ function get_reportable_codes()
 
 function get_facilities()
 {
-    $sqlSelectFacilities = "select name, facility_npi from facility";
+    $sqlSelectFacilities = "select name, facility_npi as npi, pos_code from facility";
     $res=sqlStatement($sqlSelectFacilities,array());
     $retval=array();
     foreach($res->GetArray() as $fac)
     {
-        array_push($retval,new facility($fac['name'],$fac['facility_npi']));
+        array_push($retval,$fac);
     }
     return $retval;
 }

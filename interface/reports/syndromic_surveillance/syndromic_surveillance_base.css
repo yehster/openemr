@@ -35,6 +35,8 @@ textarea.hl7_message
     padding: 0px;
     margin: 0px;
     float: left;
+    min-width:5em;
+    text-align: center;
 }
 .tabs > span.tab_selected
 {

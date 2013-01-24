@@ -20,16 +20,6 @@ class reportable_code {
         return $this->code_key.":".$this->code;
     }
 }
-class facility
-{
-    public function __construct($name,$npi)
-    {
-        $this->name=$name;
-        $this->npi=$npi;
-    }
-    public $name;
-    public $npi;
-}
 
 class event
 {

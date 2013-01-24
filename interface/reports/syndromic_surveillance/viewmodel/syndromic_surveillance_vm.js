@@ -35,6 +35,11 @@ function display_event_data(data,encounter_id)
                     var diag=data.encounter[key][idx];
                     rp.encounter['diagnoses'].push(new diagnosis_object(diag.description,diag.code));
                 }
+            }else if(key=='date')
+            {
+                var date_str=data.encounter[key];
+                var stripdate=date_str.replace(/[ :-]/g,"");
+                rp.admit_date_time(stripdate);
             }
             else
             {
@@ -124,6 +129,8 @@ function ss_view_model()
                           facility_options: {},
                           reporting_facility: ko.observable(),
                           event_facility: ko.observable(),
+                          admit_date_time: ko.observable(),
+                          discharge_date_time: ko.observable(),
                           patient:{
                               fname:ko.observable(),
                               lname:ko.observable(),
