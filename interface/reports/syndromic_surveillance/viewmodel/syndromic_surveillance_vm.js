@@ -14,9 +14,10 @@ function display_reportable_query(data)
         }
 }
 
-function display_event_data(data)
+function display_event_data(data,encounter_id)
 {
     var rp=view_model.reportParameters;
+    rp.encounter.encounter_id=encounter_id
     for(var key in data.patient)
         {
             if(typeof rp.patient[key]!='undefined')
@@ -67,13 +68,17 @@ function choose_event(data,event)
     }
     else
     {
+        var enc_id=data.encounter;
         $.post(ajax_get_event_info,
         {
             pid:data.pid,
             encounter: data.encounter,
             list_id: data.list_id
         },
-        display_event_data,
+        function(data)
+        {
+            display_event_data(data,enc_id);
+        },
         "json"
         );
 
@@ -108,7 +113,8 @@ function ss_view_model()
                        
     this.reportParameters=
                         {
-                          type: "A04",
+                          type_options: {},
+                          type: ko.observable(),
                           facility_options: {},
                           reporting_facility: ko.observable(),
                           event_facility: ko.observable(),
@@ -122,6 +128,7 @@ function ss_view_model()
                           },
                           encounter:
                               {
+                                encounter_id: ko.observable(),
                                 reason: ko.observable(),
                                 date: ko.observable(),
                                 diagnoses:ko.observableArray()

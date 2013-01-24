@@ -1,4 +1,5 @@
 <script type="text/html" id="report_parameters">
+    <select data-bind="options:type_options, value: type"></select>
     <span><?php echo xlt("Reporting:")?></span>
     <select data-bind="options:facility_options, value: reporting_facility, optionsText: 'name'"></select>
     <span><?php echo xlt("Event:")?></span>
