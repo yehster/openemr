@@ -58,6 +58,23 @@ $vn->setComponent(5,'VN');
 // Discharge Date --45
 //Done with PV1
 
+// OBX Segments
+// Handle Age First
+$obx_age=$ss_message->obx->getRepeat(1);
+$obx_age->setField(1,1);
+$obx_age->setField(2,'NM'); // Numeric Field
+$obx_age->setField(3,"21612-7","AGE TIME PATIENT REPORTED","LN"); // LOINC format age
+$obx_age->setField(5,"20");
+$obx_age->setField(6,"a","YEAR","UCUM");
+$obx_age->setField(11,"F"); // Result Status (Final)
+// done with age
+$obx_facility_type=$ss_message->obx->getRepeat(2);
+$obx_facility_type->setField(1,2);
+$obx_facility_type->setField(2,'HD');
+$obx_facility_type->setField(3,'SS001','TREATING FACILITY IDENTIFIER','PHINQUESTION');
+
+//
+
 // build the DG1 segments
 $diagnoses=$encounter->{'diagnoses'};
 $dg_repeat=1;
