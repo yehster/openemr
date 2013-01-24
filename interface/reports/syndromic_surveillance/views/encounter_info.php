@@ -14,7 +14,7 @@
             <tr>
                 <td data-bind="text:description"></td>
                 <td data-bind="text:code"></td>
-                <td><select data-bind="value:diagnosis_type, options: ['A','W','D']"></select></td>
+                <td><select data-bind="value:diagnosis_type, options: ['A','W','F']"></select></td>
             </tr>
         </tbody>
     </table>
