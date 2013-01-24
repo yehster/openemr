@@ -17,7 +17,11 @@
 .label{
     font-weight: bold;
 }
-
+textarea.chief_complaint
+{
+    width:60em;
+    
+}
 textarea.hl7_message
 {
     width:60em;
@@ -41,9 +45,11 @@ textarea.hl7_message
 .tabs > span.tab_selected
 {
     font-weight:bold;
+    background-color: yellowgreen;
 }
 
 .main_display
 {
+    border: 1px solid black;
     clear:left;
 }

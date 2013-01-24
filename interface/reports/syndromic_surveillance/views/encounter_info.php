@@ -1,7 +1,7 @@
 <script type="text/html" id="encounter_info">
     <div>
-        <span class="label">Chief Complaint</span>
-        <input type="text" data-bind="value: reason"></input>
+        <div class="label">Chief Complaint</div>
+        <textarea class="chief_complaint" data-bind="value: reason"></textarea>
     </div>
     <table>
         <thead>
