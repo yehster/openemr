@@ -51,10 +51,17 @@ var NO_ENC_MESSAGE='<?php echo addslashes(xl("No Encounter associated with this 
 </script>
 
 <body class="body_top">
-    <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
-    <div data-bind="template: {name: 'search_results', data: searchResults}"></div>
-    <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
-    <div data-bind="template: {name: 'hl7_message', data: hl7Message}"></div>
+    <span class="tabs">
+        <span>Events</span>
+        <span>Details</span>
+        <span>Message</span>
+    </span>
+    <div class="main_display">
+        <div data-bind="template: {name: 'search_parameters', data: searchParameters}"></div>
+        <div data-bind="template: {name: 'search_results', data: searchResults}"></div>
+        <div data-bind="template: {name: 'report_parameters', data: reportParameters}"></div>
+        <div data-bind="template: {name: 'hl7_message', data: hl7Message}"></div>
+    </div>
 </body>
 <script>
  ko.applyBindings(view_model);

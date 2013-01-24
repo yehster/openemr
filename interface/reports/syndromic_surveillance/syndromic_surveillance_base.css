@@ -23,3 +23,20 @@ textarea.hl7_message
     width:60em;
     height:20em;
 }
+.tabs{
+    margin:0px;
+    padding: 0px;
+    display: block;
+}
+.tabs > span
+{  
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+    float: left;
+}
+
+.main_display
+{
+    clear:left;
+}

@@ -55,6 +55,8 @@ $vn=$pv1->getField(19);
 $vn->setComponent(1,$encounter->{'encounter_id'});
 $vn->setComponent(5,'VN');
 // Admit Date -44
+$pv1->setField(44,"20130101011200"); // TO DO Fix Hard coded!
+
 // Discharge Date --45
 //Done with PV1
 
@@ -64,8 +66,24 @@ $obx_age=$ss_message->obx->getRepeat(1);
 $obx_age->setField(1,1);
 $obx_age->setField(2,'NM'); // Numeric Field
 $obx_age->setField(3,"21612-7","AGE TIME PATIENT REPORTED","LN"); // LOINC format age
-$obx_age->setField(5,"20");
-$obx_age->setField(6,"a","YEAR","UCUM");
+$in_months=strpos($patient->{'age'},'month');
+if($in_months===false)
+{
+    $numeric_age=$patient->{'age'};
+    $unit_code='a';
+    $unit_concept_name='year [time]';
+    $unit_system='UCUM';  
+}
+else
+{
+    $numeric_age=substr($patient->{'age'},0,$in_months-1);
+    $unit_code='mo';
+    $unit_concept_name='month [time]';
+    $unit_system='UCUM';  
+    
+}
+$obx_age->setField(5,$numeric_age);
+$obx_age->setField(6,$unit_code,$unit_concept_name,$unit_system);
 $obx_age->setField(11,"F"); // Result Status (Final)
 // done with age
 $obx_facility_type=$ss_message->obx->getRepeat(2);
