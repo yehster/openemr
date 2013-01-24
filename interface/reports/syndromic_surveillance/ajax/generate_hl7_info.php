@@ -70,9 +70,10 @@ $obx_age->setField(11,"F"); // Result Status (Final)
 // done with age
 $obx_facility_type=$ss_message->obx->getRepeat(2);
 $obx_facility_type->setField(1,2);
-$obx_facility_type->setField(2,'HD');
-$obx_facility_type->setField(3,'SS001','TREATING FACILITY IDENTIFIER','PHINQUESTION');
-
+$obx_facility_type->setField(2,'CWE');
+$obx_facility_type->setField(3,'SS003','FACILITY / VISIT TYPE','PHINQUESTION');
+$obx_facility_type->setField(5,"251V00000X","Urgent Care","HCPTNUCC");
+$obx_facility_type->setField(11,"F");
 //
 
 // build the DG1 segments
