@@ -46,5 +46,6 @@ function()
 {
     checkForLeft();
     checkForTitle();
+    ko.applyBindings(view_model);
 }
 );

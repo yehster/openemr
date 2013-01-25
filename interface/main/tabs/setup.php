@@ -4,3 +4,4 @@
     var pathWebroot='<?php echo "$web_root/interface/" ?>';
 </script>
 <script type='text/javascript' src="tabs/setup.js"></script>
+<script type='text/javascript' src="tabs/tabs_view_model.js"></script>
