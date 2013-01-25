@@ -1515,6 +1515,5 @@ if (!$GLOBALS['athletic_team']) {
 <script language='JavaScript'>
 syncRadios();
 </script>
-
 </body>
 </html>
