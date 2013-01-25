@@ -1488,6 +1488,5 @@ if (!$GLOBALS['athletic_team']) {
 <script language='JavaScript'>
 syncRadios();
 </script>
-<script type="text/javascript" src="tabs/left_nav_updates.js"></script>
 </body>
 </html>
