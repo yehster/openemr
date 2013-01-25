@@ -61,6 +61,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 <title>
 <?php echo $openemr_name ?>
 </title>
+<script type="text/javascript" src="../../library/js/objectWatch.js"></script>
 <script type="text/javascript" src="../../library/topdialog.js"></script>
 <script type="text/javascript" src="../../library/js/jquery.min.js"></script>
 <script type="text/javascript" src="../../library/js/knockout/knockout-2.2.0.js"></script>
@@ -72,7 +73,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 </head>
 <body>
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
-    <table>
+    <table class="main_window">
         </tbody>
             <tr class="header">
                 <td colspan="2"><iframe src='main_title.php' name='Title'></iframe></td>
