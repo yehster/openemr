@@ -1,0 +1,94 @@
+/* 
+    Document   : layout
+    Created on : Jan 25, 2013, 8:51:24 AM
+    Author     : yehster
+    Description:
+        Manages layout of tabs
+*/
+
+root { 
+    display: block;
+}
+*
+{
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+body
+{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    font-family: sans-serif;    
+}
+
+table.main_window{
+    width:100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+td
+{
+    padding: 0;
+    margin: 0;
+    border: 0;    
+}
+tr
+{
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+iframe[name='Title']
+{
+    height: 3em;
+}
+
+div.main
+{
+    float:left;
+    width: 100%;
+    height: 100%;
+}
+iframe
+{
+    height:100%;
+    width:100%;
+    padding: 0px;
+    margin: 0px;
+}
+.buttons
+{
+    cursor: pointer;
+}
+.buttons > ul{
+    display:inline;
+}
+.buttons li
+{
+    background-color: gold;
+    padding: 0, 0.5em 0 0.5em;
+    border: 1px solid black;
+    display: inline;
+}
+.buttons li{
+    display: inline;
+}
+
+.buttons input{
+    display: inline;
+}
+.hidden{
+    display: none;
+}
+
+.buttons .active
+{
+    background-color: #fefdcf;
+}
