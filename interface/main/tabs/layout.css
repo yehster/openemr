@@ -1,0 +1,80 @@
+/* 
+    Document   : layout
+    Created on : Jan 25, 2013, 8:51:24 AM
+    Author     : yehster
+    Description:
+        Manages layout of tabs
+*/
+
+root { 
+    display: block;
+}
+*
+{
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+body
+{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+table{
+    width:100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+td
+{
+    padding: 0;
+    margin: 0;
+    border: 0;    
+}
+tr
+{
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+
+tr.header
+{
+    height: 3em;
+}
+
+td.nav
+{
+    width: 10em;
+}
+div.main
+{
+    float:left;
+    width: 100%;
+    height: 100%;
+}
+iframe
+{
+    height:100%;
+    width:100%;
+}
+td.buttons
+{
+    height: 1.1em;
+}
+td.frames
+{
+    width:90%;
+}
+
+.hidden{
+    display: none;
+}
