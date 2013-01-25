@@ -69,6 +69,7 @@ iframe
 td.buttons
 {
     height: 1.1em;
+    cursor: pointer;
 }
 td.frames
 {
@@ -77,4 +78,10 @@ td.frames
 
 .hidden{
     display: none;
+}
+
+.active
+{
+    font-weight: bold;
+    background-color: greenyellow;
 }

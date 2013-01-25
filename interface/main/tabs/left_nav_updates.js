@@ -45,3 +45,21 @@ function loadCurrentEncounterFromTitle()
 {
     top.displayInFrame("RBot",'../patient_file/encounter/encounter_top.php');
 }
+
+
+function updateElements()
+{
+    navForm=$("body > form");
+    navForm.children("center:first").hide();
+    navForm.children("table:first").hide();
+    navForm.attr("target","main1");
+    navForm.submit(function(){top.set_visible(1);})
+    $("hr:last").remove();
+    $("#support_link").remove();
+    $("#navigation-slide a > img").remove();
+    var calLink=$("#cal0");
+    var calOnClick = calLink.attr("onclick");
+    calLink.attr("onclick",calOnClick.replace("RTop","Cal"));
+    $.fx.speeds._default=0;
+}
+updateElements();

@@ -1,12 +1,4 @@
-frames_map={};
-frames_map['RTop']=frames['main2'];
-frames_map['RBot']=frames['main3'];
-RTop=frames['main2'];
-RBot=frames['main3'];
-function displayInFrame(frame,url)
-{
-    frames_map[frame].location=url;
-}
+
 
 var left_script="<script src='"+pathWebroot+"main/tabs/left_nav_updates.js'></script>"
 
