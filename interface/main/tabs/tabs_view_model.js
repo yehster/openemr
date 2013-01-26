@@ -2,7 +2,7 @@ function goPid(pid)
 {
     top.restoreSession();
     top.RTop.location = pathWebroot+'patient_file/summary/demographics.php' + '?set_pid=' + pid;
-    set_visible(1);
+    set_visible(1,false);
 }
 function override_events(frame)
 {
@@ -88,27 +88,57 @@ function displayInFrame(old_fname,url,title)
 {
     window[old_fname].location=url;
     window[old_fname].title(title);
-    set_visible(window[old_fname].idx);
+    set_visible(window[old_fname].idx,false);
 }
 
-function set_visible(chosen_idx)
+function set_visible(chosen_idx,toggle)
 {
-    for(var idx=0;idx<view_model.tabStates.length;idx++)
-    {
-        if(idx==chosen_idx)
+    if(view_model.multi())
+        {
+            if(toggle)
+                {
+                    view_model.tabStates[chosen_idx].visible(!view_model.tabStates[chosen_idx].visible());                   
+                }
+                else
+                {
+                    view_model.tabStates[chosen_idx].visible(true);                                       
+                }
+            var visible=0;
+            for(var idx=0;idx<view_model.tabStates.length;idx++)
             {
-                view_model.tabStates[idx].visible(true);
+                if(view_model.tabStates[idx].visible())
+                    {
+                        visible++;
+                    }
             }
-            else
+            if(visible==0)
+                {
+                    visible=1;
+                    view_model.tabStates[chosen_idx].visible(true);
+                }
+            var size=100/visible+"%";
+            $("div.main").css("width",size);
+        }
+        else
             {
-                view_model.tabStates[idx].visible(false);
+                $("div.main").css("width","100%");
+                for(var idx=0;idx<view_model.tabStates.length;idx++)
+                {
+                    if(idx==chosen_idx)
+                        {
+                            view_model.tabStates[idx].visible(true);
+                        }
+                        else
+                        {
+                            view_model.tabStates[idx].visible(false);
+                        }
+                }                
             }
-    }    
 }
 function tab_button_click(data,event)
 {
     var clicked_idx=event.target.attributes['tab_idx'].value;
-    set_visible(clicked_idx);
+    set_visible(clicked_idx,true);
 }
 function tabState(title,visible)
 {
@@ -120,6 +150,7 @@ function tabState(title,visible)
 function tabs_view_model()
 {
     this.tabStates=[new frame_proxy(frames['main0'],"Calendar","0"),new frame_proxy(frames['main1'],"Patient","1"),new frame_proxy(frames['main2'],"Messages","2")];
+    this.multi=ko.observable();
     return this;
 }
 

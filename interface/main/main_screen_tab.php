@@ -88,7 +88,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
                         <li tab_idx="0" id="butTab0" data-bind="text: tabStates[0].title, click: tab_button_click, css: {'active':tabStates[0].visible}"/></li>
                         <li tab_idx="1" id="butTab1" data-bind="text: tabStates[1].title, click: tab_button_click, css: {'active':tabStates[1].visible}"/></li>
                         <li tab_idx="2" id="butTab2" data-bind="text: tabStates[2].title, click: tab_button_click, css: {'active':tabStates[2].visible}"/></li>
-                        <li><input id="multiTabs" type="checkbox" title="Enable Multiple Tabs"/></li>
+                        <li><input id="multiTabs" type="checkbox" title="Enable Multiple Tabs" data-bind="checked: multi"/></li>
 
                     </ul>
                 </td>
