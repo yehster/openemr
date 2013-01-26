@@ -29,7 +29,8 @@ if (isset($_GET["set_encounter"])) {
 <head>
 <?php html_header_show();?>
 </head>
-<frameset cols="*">
- <frame src="forms.php" name="Forms" scrolling="auto">
-</frameset>
+<script>
+    window.location="forms.php";
+</script>
+    
 </html>
