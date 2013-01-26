@@ -74,6 +74,10 @@ td.buttons
     height: 1.1em;
     cursor: pointer;
 }
+td.buttons > span{
+    border: 1px solid black;
+    background-color: lightblue;
+}
 td.frames
 {
     width:90%;
@@ -83,7 +87,7 @@ td.frames
     display: none;
 }
 
-.active
+td.buttons > span.active
 {
     font-weight: bold;
     background-color: greenyellow;

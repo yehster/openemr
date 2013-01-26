@@ -1,8 +1,66 @@
+function goPid(pid)
+{
+    top.restoreSession();
+    top.RTop.location = pathWebroot+'patient_file/summary/demographics.php' + '?set_pid=' + pid;
+    set_visible(1);
+}
 function override_events(frame)
 {
-    
+    if(typeof frame.goPid!='undefined')
+    {
+        frame.goPid= top.goPid;
+    }
+    if(typeof frame.openNewForm!='undefined') {
+        frame.openNewForm=function(sel)
+        {
+            frame.location.href=sel;
+        }
+    }    
+    $(frame.document).ready(function(){$("a[target='_parent']",frame.document).removeAttr("target")});    
 }
 
+function set_tab_title(proxy)
+{
+    var title=$(".title",proxy.frame.document).eq(0);
+    if(title.length==1)
+    {
+        proxy.title(title.text());
+        return;
+    }    
+    title=$(".main_title",proxy.frame.document).eq(0);
+    if(title.length==1)
+    {
+        proxy.title(title.text());
+        return;
+    }     
+    var subFrames=proxy.frame.frames;
+    if(subFrames.length==1) {
+            proxy.frame.location=subFrames[0].location.href;
+    }
+    else
+        {
+            if($("title",proxy.frame.document).length>0)
+            {
+                proxy.title($("title",proxy.frame.document).text());
+                return;
+            }
+            else
+            {
+                if(proxy.frame.location.href.indexOf("calendar")>0)
+                    {
+                        proxy.title("Calendar");
+                    }
+                    else
+                    {
+                        var bold=$("b",proxy.frame.document);
+                        if(bold.length==1)
+                            {
+                                proxy.title(bold.text());
+                            }
+                    }
+            }
+        }
+}
 function frame_ready(evt)
 {
 
@@ -11,7 +69,7 @@ function frame_ready(evt)
     proxy.jqFrame.off('load');
     proxy.jqFrame.on({load:frame_ready});    
     override_events(proxy.frame);
-    proxy.title($(this).attr("name"));
+    set_tab_title(proxy);
 }
 function frame_proxy(frame,default_title,idx)
 {
@@ -26,9 +84,10 @@ function frame_proxy(frame,default_title,idx)
     this.watch("location", function(property,oldval,newval){this.frame.location=newval;});
     return this;
 }
-function displayInFrame(old_fname,url)
+function displayInFrame(old_fname,url,title)
 {
     window[old_fname].location=url;
+    window[old_fname].title(title);
     set_visible(window[old_fname].idx);
 }
 

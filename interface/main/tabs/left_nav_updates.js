@@ -12,6 +12,7 @@ function loadFrame(fname, frame, url) {
  
  
   function loadFrame2(fname, frame, url) {
+
   var usage = fname.substring(3);
   if (active_pid == 0 && usage > '0') {
    alert(msgAddPat);
@@ -31,7 +32,7 @@ var fi = f.sel_frame.selectedIndex;
 if (fi == 1) frame = 'RTop'; else if (fi == 2) frame = 'RBot';
    }
   if (!f.cb_bot.checked) frame = 'RTop'; else if (!f.cb_top.checked) frame = 'RBot';
-  top.displayInFrame(frame, pathWebroot + url);
+  top.displayInFrame(frame, pathWebroot + url,  $("a[onclick*='"+url+"']").text());
   if (frame == 'RTop') topName = fname; else botName = fname;
   return false;
  }
