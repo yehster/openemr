@@ -81,7 +81,14 @@ function frame_proxy(frame,default_title,idx)
     this.idx=idx;
     this.jqFrame=$(frame).on({load:frame_ready});
     this.name=this.jqFrame.attr("name");
-    this.watch("location", function(property,oldval,newval){this.frame.location=newval;});
+    this.watch("location", function(property,oldval,newval)
+                    {
+                        this.frame.location=newval;
+                        if(newval.indexOf('demographics.php?set_pid')>0)
+                            {
+                                set_visible(1,false);
+                            }
+                    });
     return this;
 }
 function displayInFrame(old_fname,url,title)
