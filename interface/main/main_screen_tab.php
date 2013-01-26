@@ -65,7 +65,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 <script type="text/javascript" src="../../library/topdialog.js"></script>
 <script type="text/javascript" src="../../library/js/jquery.min.js"></script>
 <script type="text/javascript" src="../../library/js/knockout/knockout-2.2.0.js"></script>
-
+<link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css">
 <script type='text/javaScript'>
 <?php require($GLOBALS['srcdir'] . "/restoreSession.php"); ?>
 </script>
@@ -73,7 +73,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 </head>
 <body>
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
-    <table class="main_window">
+    <table class="main_window body_top"">
         </tbody>
             <tr class="header">
                 <td colspan="2"><iframe src='main_title.php' name='Title'></iframe></td>
@@ -84,10 +84,13 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
                     <iframe name="left_nav" src="left_nav.php"></iframe>
                 </td>
                 <td  class="right buttons">
-                    <span tab_idx="0" id="butTab0" data-bind="text: tabStates[0].title, click: tab_button_click, css: {'active':tabStates[0].visible}"/></span>
-                    <span tab_idx="1" id="butTab1" data-bind="text: tabStates[1].title, click: tab_button_click, css: {'active':tabStates[1].visible}"/></span>
-                    <span tab_idx="2" id="butTab2" data-bind="text: tabStates[2].title, click: tab_button_click, css: {'active':tabStates[2].visible}"/></span>
-                    <input id="multiTabs" type="checkbox" title="Enable Multiple Tabs"/>
+                    <ul>                      
+                        <li tab_idx="0" id="butTab0" data-bind="text: tabStates[0].title, click: tab_button_click, css: {'active':tabStates[0].visible}"/></li>
+                        <li tab_idx="1" id="butTab1" data-bind="text: tabStates[1].title, click: tab_button_click, css: {'active':tabStates[1].visible}"/></li>
+                        <li tab_idx="2" id="butTab2" data-bind="text: tabStates[2].title, click: tab_button_click, css: {'active':tabStates[2].visible}"/></li>
+                        <li><input id="multiTabs" type="checkbox" title="Enable Multiple Tabs"/></li>
+
+                    </ul>
                 </td>
 
             </tr>

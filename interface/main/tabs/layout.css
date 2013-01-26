@@ -23,6 +23,7 @@ body
     padding: 0px;
     margin: 0px;
     border: 0px;
+    font-family: sans-serif;    
 }
 
 table.main_window{
@@ -74,9 +75,14 @@ td.buttons
     height: 1.1em;
     cursor: pointer;
 }
-td.buttons > span{
+td.buttons li[tab_idx]{
+    padding: 0, 0.5em, 0 0.5em;
     border: 1px solid black;
     background-color: lightblue;
+    display: inline;
+}
+td.buttons li{
+    display: inline;
 }
 td.frames
 {
@@ -87,8 +93,7 @@ td.frames
     display: none;
 }
 
-td.buttons > span.active
+td.buttons li.active
 {
-    font-weight: bold;
     background-color: greenyellow;
 }
