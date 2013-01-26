@@ -63,4 +63,4 @@ function updateElements()
     calLink.attr("onclick",calOnClick.replace("RTop","Cal"));
     $.fx.speeds._default=0;
 }
-updateElements();
+$(document).ready(updateElements);
