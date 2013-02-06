@@ -131,22 +131,13 @@ define_external_table($code_external_tables,5,'icd9_sg_code','formatted_sg_code'
 // For generic SNOMED-CT, there is no need to join with the descriptions table to get a specific description Type
 
 // For generic concepts, use the fully specified description (DescriptionType=3) so we can tell the difference between them.
-define_external_table($code_external_tables,7,'sct_descriptions','ConceptId','Term','Term',array("DescriptionStatus=0","DescriptionType=3"),"");
-
-
-// To determine codes, we need to evaluate data in both the sct_descriptions table, and the sct_concepts table.
-// the base join with sct_concepts is the same for all types of SNOMED definitions, so we define the common part here
-$SNOMED_joins=array(JOIN_TABLE=>"sct_concepts",JOIN_FIELDS=>array("sct_descriptions.ConceptId=sct_concepts.ConceptId"));
+define_external_table($code_external_tables,7,'sct_semantic_descriptions','ConceptId','Term',array("DescriptionType=3"),"");
 
 // For disorders, use the preferred term (DescriptionType=1)
-define_external_table($code_external_tables,2,'sct_descriptions','ConceptId','Term','Term',array("DescriptionStatus=0","DescriptionType=1"),"",array($SNOMED_joins));
-// Add the filter to choose only disorders. This filter happens as part of the join with the sct_concepts table
-array_push($code_external_tables[2][EXT_JOINS][0][JOIN_FIELDS],"FullySpecifiedName like '%(disorder)'");
+define_external_table($code_external_tables,2,'sct_semantic_descriptions','ConceptId','Term',array("DescriptionType=1","SemanticType='(disorder)'"),"");
 
 // SNOMED-PR definition
-define_external_table($code_external_tables,9,'sct_descriptions','ConceptId','Term','Term',array("DescriptionStatus=0","DescriptionType=1"),"",array($SNOMED_joins));
-// Add the filter to choose only procedures. This filter happens as part of the join with the sct_concepts table
-array_push($code_external_tables[9][EXT_JOINS][0][JOIN_FIELDS],"FullySpecifiedName like '%(procedure)'");
+define_external_table($code_external_tables,9,'sct_semantic_descriptions','ConceptId','Term',array("DescriptionType=1","SemanticType='(procedure)'"),"");
 
 
 //**** End SNOMED Definitions
