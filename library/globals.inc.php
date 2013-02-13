@@ -437,7 +437,12 @@ $GLOBALS_METADATA = array(
       '$',                              // default
       xl('Code or symbol to indicate currency')
     ),
-
+    'age_display_format'=>array(xl('Age Display Format'),
+        array(
+            '0'=>xl('Years or months'),
+            '1'=>xl('Years, months and days')
+            )
+    )
   ),
 
   // Features Tab
