@@ -441,7 +441,9 @@ $GLOBALS_METADATA = array(
         array(
             '0'=>xl('Years or months'),
             '1'=>xl('Years, months and days')
-            )
+            ),
+            '0',
+            xl('Format for age display')
     )
   ),
 
