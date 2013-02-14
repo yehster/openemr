@@ -16,7 +16,8 @@ $COMPARE_FUNCTION_HASH = array(
 	'date' => 'compareAppointmentsByDate',
 	'time' => 'compareAppointmentsByTime',
 	'type' => 'compareAppointmentsByType',
-	'comment' => 'compareAppointmentsByComment'
+	'comment' => 'compareAppointmentsByComment',
+	'status' => 'compareAppointmentsByStatus'
 );
 
 $ORDERHASH = array(
@@ -26,7 +27,8 @@ $ORDERHASH = array(
   	'date' => array( 'date', 'time', 'type', 'patient' ),
   	'time' => array( 'time', 'date', 'patient' ),
   	'type' => array( 'type', 'date', 'time', 'patient' ),
-  	'comment' => array( 'comment', 'date', 'time', 'patient' )
+  	'comment' => array( 'comment', 'date', 'time', 'patient' ),
+	'status' => array( 'status', 'date', 'time', 'patient' )
 );
 
 function fetchEvents( $from_date, $to_date, $where_param = null, $orderby_param = null ) 
@@ -43,7 +45,7 @@ function fetchEvents( $from_date, $to_date, $where_param = null, $orderby_param 
 	
 	$query = "SELECT " .
   	"e.pc_eventDate, e.pc_endDate, e.pc_startTime, e.pc_endTime, e.pc_duration, e.pc_recurrtype, e.pc_recurrspec, e.pc_recurrfreq, e.pc_catid, e.pc_eid, " .
-  	"e.pc_title, e.pc_hometext, " .
+  	"e.pc_title, e.pc_hometext, e.pc_apptstatus, " .
   	"p.fname, p.mname, p.lname, p.pid, p.pubpid, p.phone_home, p.phone_cell, " .
   	"u.fname AS ufname, u.mname AS umname, u.lname AS ulname, u.id AS uprovider_id, " .
   	"c.pc_catname, c.pc_catid " .
@@ -90,7 +92,7 @@ function fetchAllEvents( $from_date, $to_date, $provider_id = null, $facility_id
 	return $appointments;
 }
 
-function fetchAppointments( $from_date, $to_date, $patient_id = null, $provider_id = null, $facility_id = null )
+function fetchAppointments( $from_date, $to_date, $patient_id = null, $provider_id = null, $facility_id = null, $pc_appstatus = null, $with_out_provider = null, $with_out_facility = null, $pc_catid = null )
 {
 	$where = "";
 	if ( $provider_id ) $where .= " AND e.pc_aid = '$provider_id'";
@@ -108,6 +110,33 @@ function fetchAppointments( $from_date, $to_date, $patient_id = null, $provider_
 	}
 	
 	$where .= $facility_filter;
+	
+	//Appointment Status Checking
+	$filter_appstatus = '';
+	if($pc_appstatus != ''){
+		$filter_appstatus = " AND e.pc_apptstatus = '".$pc_appstatus."'";
+	}
+	$where .= $filter_appstatus;
+
+        if($pc_catid !=null)
+        {
+            $where .= " AND e.pc_catid=".intval($pc_catid); // using intval to escape this parameter
+        }
+        
+	//Without Provider checking
+	$filter_woprovider = '';
+	if($with_out_provider != ''){
+		$filter_woprovider = " AND e.pc_aid = ''";
+	}
+	$where .= $filter_woprovider;
+	
+	//Without Facility checking
+	$filter_wofacility = '';
+	if($with_out_facility != ''){
+		$filter_wofacility = " AND e.pc_facility = 0";
+	}
+	$where .= $filter_wofacility;
+	
 	$appointments = fetchEvents( $from_date, $to_date, $where );
 	return $appointments;
 }
@@ -125,7 +154,18 @@ function getRecurringEvents( $event, $from_date, $to_date )
 
 		preg_match( '/"event_repeat_freq";s:1:"(\d)"/', $event['pc_recurrspec'], $matches );
 		$repeatfreq = $matches[1];
+    if ($event['pc_recurrtype'] == 2) {
+     // Repeat type is 2 so frequency comes from event_repeat_on_freq.
+     preg_match('/"event_repeat_on_freq";s:1:"(\d)"/', $event['pc_recurrspec'], $matches);
+     $repeatfreq = $matches[1];
+    }
 		if ( !$repeatfreq ) $repeatfreq = 1;
+
+    preg_match('/"event_repeat_on_num";s:1:"(\d)"/', $event['pc_recurrspec'], $matches);
+    $my_repeat_on_num = $matches[1];
+
+    preg_match('/"event_repeat_on_day";s:1:"(\d)"/', $event['pc_recurrspec'], $matches);
+    $my_repeat_on_day = $matches[1];
 
 		$upToDate = strtotime( $to_date." 23:59:59" ); // set the up-to-date to the last second of the "to_date"
 		$endtime = strtotime( $event['pc_endDate'] . " 23:59:59" );
@@ -150,24 +190,49 @@ function getRecurringEvents( $event, $from_date, $to_date )
 			if  ( ++$repeatix >= $repeatfreq ) $repeatix = 0;
 
 			$adate = getdate($thistime);
-			if ($repeattype == 0)        { // daily
-				$adate['mday'] += 1;
-			} else if ($repeattype == 1) { // weekly
-				$adate['mday'] += 7;
-			} else if ($repeattype == 2) { // monthly
-				$adate['mon'] += 1;
-			} else if ($repeattype == 3) { // yearly
-				$adate['year'] += 1;
-			} else if ($repeattype == 4) { // work days
-				if ($adate['wday'] == 5)      // if friday, skip to monday
-				$adate['mday'] += 3;
-				else if ($adate['wday'] == 6) // saturday should not happen
-				$adate['mday'] += 2;
-				else
-				$adate['mday'] += 1;
-			} else {
-				die("Invalid repeat type '$repeattype'");
-			}
+
+      if ($event['pc_recurrtype'] == 2) {
+        // Need to skip to nth or last weekday of the next month.
+        $adate['mon'] += 1;
+        if ($adate['mon'] > 12) {
+          $adate['year'] += 1;
+          $adate['mon'] -= 12;
+        }
+        if ($my_repeat_on_num < 5) { // not last
+          $adate['mday'] = 1;
+          $dow = jddayofweek(cal_to_jd(CAL_GREGORIAN, $adate['mon'], $adate['mday'], $adate['year']));
+          if ($dow > $my_repeat_on_day) $dow -= 7;
+          $adate['mday'] += ($my_repeat_on_num - 1) * 7 + $my_repeat_on_day - $dow;
+        }
+        else { // last weekday of month
+          $adate['mday'] = cal_days_in_month(CAL_GREGORIAN, $adate['mon'], $adate['year']);
+          $dow = jddayofweek(cal_to_jd(CAL_GREGORIAN, $adate['mon'], $adate['mday'], $adate['year']));
+          if ($dow < $my_repeat_on_day) $dow += 7;
+          $adate['mday'] += $my_repeat_on_day - $dow;
+        }
+      } // end recurrtype 2
+
+      else { // recurrtype 1
+			  if ($repeattype == 0)        { // daily
+				  $adate['mday'] += 1;
+			  } else if ($repeattype == 1) { // weekly
+				  $adate['mday'] += 7;
+			  } else if ($repeattype == 2) { // monthly
+				  $adate['mon'] += 1;
+			  } else if ($repeattype == 3) { // yearly
+				  $adate['year'] += 1;
+			  } else if ($repeattype == 4) { // work days
+				  if ($adate['wday'] == 5)      // if friday, skip to monday
+				  $adate['mday'] += 3;
+				  else if ($adate['wday'] == 6) // saturday should not happen
+				  $adate['mday'] += 2;
+				  else
+				  $adate['mday'] += 1;
+			  } else {
+				  die("Invalid repeat type '$repeattype'");
+			  }
+      } // end recurrtype 1
+
 			$thistime = mktime(0, 0, 0, $adate['mon'], $adate['mday'], $adate['year']);
 		}
 	}
@@ -370,4 +435,17 @@ function compareAppointmentsByComment( $appointment1, $appointment2 )
 	return compareBasic( $comment1, $comment2 );
 }
 
+function compareAppointmentsByStatus( $appointment1, $appointment2 )
+{
+	$status1 = $appointment1['pc_apptstatus'];
+	$status2 = $appointment2['pc_apptstatus'];
+	return compareBasic( $status1, $status2 );
+}
+
+function fetchAppointmentCategories()
+{
+     $catSQL= " SELECT pc_catid as id, pc_catname as category " 
+            . " FROM openemr_postcalendar_categories WHERE pc_recurrtype=0 and pc_cattype=0 ORDER BY category";    
+     return sqlStatement($catSQL);
+}
 ?>
