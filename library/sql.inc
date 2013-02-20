@@ -546,6 +546,7 @@ function sqlNumRows($r)
 */
 function HelpfulDie ($statement, $sqlerr='')
 {
+  error_log($statement."===>".$sqlerr);
   echo "<p><p><font color='red'>ERROR:</font> $statement<p>";
   if ($sqlerr) {
     echo "Error: <font color='red'>$sqlerr</font><p>";
