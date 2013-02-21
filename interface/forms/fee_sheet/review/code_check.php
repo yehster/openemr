@@ -21,14 +21,13 @@
  */
 
 
-function diag_code_types($format='json')
+function diag_code_types($format='json',$sqlEscape=false)
 {
     global $code_types;
     $diagCodes=array();
     foreach($code_types as $key=>$ct)
     {
-        if(((!isset($ct['active']) || $ct['active'])            // if the OpenEMR version predates the active column, active and external won't be defined so don't filter on those criteria
-         && $ct['diag'] ))
+        if($ct['active'] && $ct['diag'] )
         {
             if($format=='json')
             {
@@ -36,7 +35,9 @@ function diag_code_types($format='json')
             }
             else if($format=='keylist')
             {
-                $entry="'".$key."'";
+                $entry="'";
+                $entry.= $sqlEscape ? add_escape_custom($key) : $key;
+                $entry.="'";
             }
             array_push($diagCodes,$entry);
         }

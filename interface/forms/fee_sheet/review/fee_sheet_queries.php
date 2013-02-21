@@ -275,7 +275,7 @@ function common_diagnoses($limit=10)
     $retval=array();
     $parameters=array($limit);
     $sql="SELECT code_type, code, code_text,count(code) as num " .
-         " FROM billing WHERE code_type in (".diag_code_types('keylist').")" .  // include all code types
+         " FROM billing WHERE code_type in (".diag_code_types('keylist',true).")" .  // include all code types
          " GROUP BY code_type,code,code_text ORDER BY num desc LIMIT ?";
     $results=sqlStatement($sql,$parameters);
     while($res=sqlFetchArray($results))
