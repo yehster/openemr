@@ -21,6 +21,28 @@
  */
 if(!$isBilled)
 {
+if(!function_exists("xls"))
+{
+    function xls($string)
+    {
+        return addslashes(xl($string));
+    }
+}
+if(!function_exists("xlt"))
+{
+    function xlt($string)
+    {
+        return htmlspecialchars(xl($string),ENT_NOQUOTES);
+    }
+}
+if(!function_exists("xla"))
+{
+    function xla($string)
+    {
+        return htmlspecialchars(xl($string),ENT_QUOTES);
+    }
+}
+
 require_once("code_check.php");
 ?>
 <script>

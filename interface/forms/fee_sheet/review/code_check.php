@@ -27,7 +27,8 @@ function diag_code_types($format='json',$sqlEscape=false)
     $diagCodes=array();
     foreach($code_types as $key=>$ct)
     {
-        if($ct['active'] && $ct['diag'] )
+        if(((!isset($ct['active']) || $ct['active'])            // if the OpenEMR version predates the active column, active and external won't be defined so don't filter on those criteria
+         && $ct['diag'] ))
         {
             if($format=='json')
             {

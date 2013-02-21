@@ -123,7 +123,10 @@ function update_issues($pid,$encounter,$diags)
     if($list_touched)
     {
         // If the list was touched at any point by this code, then flag it in the DB.
-       setListTouch($pid,'medical_problem');
+        if(function_exists("setListTouch"))
+        {
+           setListTouch($pid,'medical_problem');        
+        }
     }
 }
 
