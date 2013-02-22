@@ -2099,24 +2099,6 @@ function convertCompSql($comp) {
 
 
 /**
- * Wrapper to make sure the clinical rules dates formats corresponds to the 
- * format expected by getPatientAgeYMD in patient.inc
- *
- * @param  string  $dob     date of birth
- * @param  string  $target  date to calculate age on
- * @return float            years(decimal) from dob to target(date)
- */
-function parseAgeInfo($dob,$target)
-{
-    // Prepare dob (expected in order Y M D, remove whatever delimiters might be there
-    $dateDOB = preg_replace("/[-\s\/]/", "", $dob);;
-    // Prepare target (Y-M-D H:M:S)
-    $dateTarget = preg_replace("/[-\s\/]/","",$target);
-
-    return getPatientAgeYMD($dateDOB,$dateTarget);
-
-}
-/**
  * Function to find age in years (with decimal) on the target date
  *
  * @param  string  $dob     date of birth
