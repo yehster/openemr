@@ -2097,6 +2097,25 @@ function convertCompSql($comp) {
   }
 }
 
+
+/**
+ * Wrapper to make sure the clinical rules dates formats corresponds to the 
+ * format expected by getPatientAgeYMD in patient.inc
+ *
+ * @param  string  $dob     date of birth
+ * @param  string  $target  date to calculate age on
+ * @return float            years(decimal) from dob to target(date)
+ */
+function parseAgeInfo($dob,$target)
+{
+    // Prepare dob (expected in order Y M D, remove whatever delimiters might be there
+    $dateDOB = preg_replace("/[-\s\/]/", "", $dob);;
+    // Prepare target (Y-M-D H:M:S)
+    $dateTarget = preg_replace("/[-\s\/]/","",$target);
+
+    return getPatientAgeYMD($dateDOB,$dateTarget);
+
+}
 /**
  * Function to find age in years (with decimal) on the target date
  *
@@ -2105,29 +2124,7 @@ function convertCompSql($comp) {
  * @return float            years(decimal) from dob to target(date)
  */
 function convertDobtoAgeYearDecimal($dob,$target) { 
-     
-    // Prepare dob (Y M D)
-    $dateDOB = explode(" ",$dob);
-
-    // Prepare target (Y-M-D H:M:S)
-    $dateTargetTemp = explode(" ",$target);
-    $dateTarget = explode("-",$dateTargetTemp[0]);
-
-    // Collect differences 
-    $iDiffYear  = $dateTarget[0] - $dateDOB[0]; 
-    $iDiffMonth = $dateTarget[1] - $dateDOB[1]; 
-    $iDiffDay   = $dateTarget[2] - $dateDOB[2]; 
-     
-    // If birthday has not happen yet for this year, subtract 1. 
-    if ($iDiffMonth < 0 || ($iDiffMonth == 0 && $iDiffDay < 0)) 
-    { 
-        $iDiffYear--; 
-    } 
-
-    // Ensure diffYear is not less than 0
-    if ($iDiffYear < 0) $iDiffYear = 0;
-     
-    return $iDiffYear; 
+    return parseAgeInfo($dob,$target)['age']; 
 }  
 
 /**
@@ -2138,29 +2135,7 @@ function convertDobtoAgeYearDecimal($dob,$target) {
  * @return float            months(decimal) from dob to target(date)
  */
 function convertDobtoAgeMonthDecimal($dob,$target) {
-
-    // Prepare dob (Y M D)
-    $dateDOB = explode(" ",$dob);
-
-    // Prepare target (Y-M-D H:M:S)
-    $dateTargetTemp = explode(" ",$target);
-    $dateTarget = explode("-",$dateTargetTemp[0]);
-
-    // Collect differences
-    $iDiffYear  = $dateTarget[0] - $dateDOB[0];
-    $iDiffMonth = $dateTarget[1] - $dateDOB[1];
-    $iDiffDay   = $dateTarget[2] - $dateDOB[2];
-
-    // If birthday has not happen yet for this year, subtract 1.
-    if ($iDiffMonth < 0 || ($iDiffMonth == 0 && $iDiffDay < 0))
-    {
-        $iDiffYear--;
-    }
-
-    // Ensure diffYear is not less than 0
-    if ($iDiffYear < 0) $iDiffYear = 0;
-
-    return (12 * $iDiffYear) + $iDiffMonth;
+    return parseAgeInfo($dob,$target)['age_in_months']; 
 }
 
 /**
