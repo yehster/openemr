@@ -370,6 +370,7 @@ function parse_era($filename, $cb) {
         // 151 = service period end
         else if ($segid == 'DTM' && $out['loopid'] == '2110') {
             $out['dos'] = trim($seg[2]); // yyyymmdd
+            $out['svc'][$i]['dos']= trim($seg[2]);
         }
         else if ($segid == 'CAS' && $out['loopid'] == '2110') {
             $i = count($out['svc']) - 1;

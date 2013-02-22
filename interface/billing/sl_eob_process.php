@@ -355,7 +355,7 @@ require_once("$srcdir/billing.inc");
                 }
                 $class = $error ? 'errdetail' : 'newdetail';
                 writeDetailLine($bgcolor, $class, $patient_name, $invnumber,
-                    $codekey, $production_date, $description,
+                    $codekey, parse_date($svc['dos']), $description,
                     $svc['chg'], ($error ? '' : $invoice_total));
 
             }
@@ -467,7 +467,7 @@ require_once("$srcdir/billing.inc");
                         $invoice_total -= $adj['amount'];
                     }
                     writeDetailLine($bgcolor, $class, $patient_name, $invnumber,
-                        $codekey, $production_date, $description,
+                        $codekey, parse_date($svc['dos']), $description,
                         0 - $adj['amount'], ($error ? '' : $invoice_total));
                 }
             }
