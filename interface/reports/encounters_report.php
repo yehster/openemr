@@ -55,7 +55,9 @@ $sqlColumns =  "fe.encounter, fe.date, fe.reason, " .
                    "f.formdir, f.form_name, " .
                    "p.fname, p.mname, p.lname, p.pid, p.pubpid, " .
                    "u.lname AS ulname, u.fname AS ufname, u.mname AS umname " .
-                   ", 'Unspecified' as insurance_name ";
+                   ", 'Unspecified' as insurance_name " .
+                   ", 'Unspecified' as secondary_ins " .
+                   ", 'Unspecified' as tertiary_ins ";
 
 
 
@@ -97,9 +99,15 @@ else
 
 $res= sqlStatement("DROP TABLE IF EXISTS tmp_encounters_data");
 $res = sqlStatement($query);
-$update_insurance=" update tmp_encounters_data as ed JOIN (SELECT name,pid,date FROM insurance_companies,insurance_data WHERE insurance_companies.id=insurance_data.provider and type='primary' ORDER BY insurance_data.date DESC) as id "
-                  ." SET ed.insurance_name=id.name WHERE ed.pid=id.pid AND id.date<=ed.date";
-sqlStatement($update_insurance);
+$update_insurance_base=" update tmp_encounters_data as ed ".
+                  "  JOIN (SELECT name,pid,date FROM insurance_companies,insurance_data ".
+                  " WHERE insurance_companies.id=insurance_data.provider and type=? ORDER BY insurance_data.date DESC) as id ".
+                  " SET ed.";
+$update_insurance_suffix = "=id.name WHERE ed.pid=id.pid AND id.date<=ed.date";
+sqlStatement($update_insurance_base.'insurance_name'.$update_insurance_suffix,array('primary'));
+sqlStatement($update_insurance_base.'secondary_ins'.$update_insurance_suffix,array('secondary'));
+sqlStatement($update_insurance_base.'tertiary_ins'.$update_insurance_suffix,array('tertiary'));
+
 
 if($form_details)
 {
@@ -418,6 +426,13 @@ if ($form_details) {
   <td>
     <?php echo $row['insurance_name']; ?>
   </td>
+  <td>
+    <?php echo $row['secondary_ins']; ?>
+  </td>
+  <td>
+    <?php echo $row['tertiary_ins']; ?>
+  </td>
+
 
  </tr>
 <?php
