@@ -1306,7 +1306,7 @@ if (!empty($reg)) {
       <li><a class="collapsed_lv2"><span><?php xl('Visits','e') ?></span></a>
         <ul>
           <?php if (!$GLOBALS['disable_calendar']) genMiscLink('RTop','rep','0',xl('Appointments'),'reports/appointments_report.php'); ?>
-          <?php  genMiscLink('RTop','rep','0',xl('Encounters'),'reports/encounters_report.php'); ?>
+          <?php  genMiscLink('RTop','rep','0',xl('Encounters'),'reports/encounters_report_insurance.php'); ?>
           <?php if (!$GLOBALS['disable_calendar']) genMiscLink('RTop','rep','0',xl('Appt-Enc'),'reports/appt_encounter_report.php'); ?>
 <?php if (empty($GLOBALS['code_types']['IPPF'])) { ?>
           <?php genMiscLink('RTop','rep','0',xl('Superbill'),'reports/custom_report_range.php'); ?>
