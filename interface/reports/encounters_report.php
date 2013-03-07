@@ -51,17 +51,25 @@ $form_orderby = $ORDERHASH[$_REQUEST['form_orderby']] ?
   $_REQUEST['form_orderby'] : 'doctor';
 $orderby = $ORDERHASH[$form_orderby];
 
-// Get the info.
-//
-$query = "SELECT " .
-  "fe.encounter, fe.date, fe.reason, " .
-  "f.formdir, f.form_name, " .
-  "p.fname, p.mname, p.lname, p.pid, p.pubpid, " .
-  "u.lname AS ulname, u.fname AS ufname, u.mname AS umname " .
-  "FROM ( form_encounter AS fe, forms AS f ) " .
-  "LEFT OUTER JOIN patient_data AS p ON p.pid = fe.pid " .
-  "LEFT JOIN users AS u ON u.id = fe.provider_id " .
-  "WHERE f.encounter = fe.encounter AND f.formdir = 'newpatient' ";
+$sqlColumns =  "fe.encounter, fe.date, fe.reason, " .
+                   "f.formdir, f.form_name, " .
+                   "p.fname, p.mname, p.lname, p.pid, p.pubpid, " .
+                   "u.lname AS ulname, u.fname AS ufname, u.mname AS umname " .
+                   ", 'Unspecified' as insurance_name ";
+
+
+
+
+$sqlTables =   "FROM ( form_encounter AS fe, forms AS f ) " .
+  " LEFT OUTER JOIN patient_data AS p ON p.pid = fe.pid " .
+  " LEFT JOIN users AS u ON u.id = fe.provider_id ";
+
+
+$query = "CREATE TEMPORARY TABLE tmp_encounters_data SELECT " .
+  $sqlColumns .
+  $sqlTables .
+  " WHERE f.encounter = fe.encounter AND f.formdir = 'newpatient' " .
+  "";
 if ($form_to_date) {
   $query .= "AND fe.date >= '$form_from_date 00:00:00' AND fe.date <= '$form_to_date 23:59:59' ";
 } else {
@@ -76,9 +84,31 @@ if ($form_facility) {
 if ($form_new_patients) {
   $query .= "AND fe.date = (SELECT MIN(fe2.date) FROM form_encounter AS fe2 WHERE fe2.pid = fe.pid) ";
 }
-$query .= "ORDER BY $orderby";
+if($form_details)
+{
+    $query .= "ORDER BY $orderby";
+}
+else
+{
+    $query.= " GROUP BY concat(u.lname,',',u.fname),fe.id";
+    $query.= " ORDER BY concat(u.lname,',',u.fname) ";
+    
+}
 
+$res= sqlStatement("DROP TABLE IF EXISTS tmp_encounters_data");
 $res = sqlStatement($query);
+$update_insurance=" update tmp_encounters_data as ed JOIN (SELECT name,pid,date FROM insurance_companies,insurance_data WHERE insurance_companies.id=insurance_data.provider and type='primary' ORDER BY insurance_data.date DESC) as id "
+                  ." SET ed.insurance_name=id.name WHERE ed.pid=id.pid AND id.date<=ed.date";
+sqlStatement($update_insurance);
+
+if($form_details)
+{
+    $res = sqlStatement("SELECT * FROM tmp_encounters_data");   
+}
+else
+{
+    $res = sqlStatement("SELECT concat(ed.ulname,',',ed.ufname) as provider_name,insurance_name,count(ed.encounter) as num_encounters from tmp_encounters_data as ed GROUP BY provider_name,insurance_name");
+}
 ?>
 <html>
 <head>
@@ -294,55 +324,57 @@ $res = sqlStatement($query);
   <th>
    <?php  xl('Coding','e'); ?>
   </th>
+  <th>
+   <?php  xl('Insurance','e'); ?>
+  </th>
 <?php } else { ?>
   <th><?php  xl('Provider','e'); ?></td>
   <th><?php  xl('Encounters','e'); ?></td>
+  <th><?php  xl('Insurance','e'); ?></td>
 <?php } ?>
  </thead>
  <tbody>
 <?php
-if ($res) {
-  $lastdocname = "";
-  $doc_encounters = 0;
-  while ($row = sqlFetchArray($res)) {
-    $patient_id = $row['pid'];
-
-    $docname = '';
-    if (!empty($row['ulname']) || !empty($row['ufname'])) {
-      $docname = $row['ulname'];
-      if (!empty($row['ufname']) || !empty($row['umname']))
-        $docname .= ', ' . $row['ufname'] . ' ' . $row['umname'];
-    }
-
-    $errmsg  = "";
-    if ($form_details) {
-      // Fetch all other forms for this encounter.
-      $encnames = '';      
-      $encarr = getFormByEncounter($patient_id, $row['encounter'],
-        "formdir, user, form_name, form_id");
-      if($encarr!='') {
+if ($form_details) {
+    if ($res) {
+        $lastdocname = "";
+        $doc_encounters = 0;
+        while ($row = sqlFetchArray($res)) {
+        $patient_id = $row['pid'];
+        $docname = '';
+        if (!empty($row['ulname']) || !empty($row['ufname'])) {
+        $docname = $row['ulname'];
+        if (!empty($row['ufname']) || !empty($row['umname']))
+            $docname .= ', ' . $row['ufname'] . ' ' . $row['umname'];
+        }
+        $errmsg  = "";
+        // Fetch all other forms for this encounter.
+        $encnames = '';      
+        $encarr = getFormByEncounter($patient_id, $row['encounter'],
+            "formdir, user, form_name, form_id");
+        if($encarr!='') {
 	      foreach ($encarr as $enc) {
 	        if ($enc['formdir'] == 'newpatient') continue;
 	        if ($encnames) $encnames .= '<br />';
 	        $encnames .= $enc['form_name'];
 	      }
-      }     
+        }     
 
-      // Fetch coding and compute billing status.
-      $coded = "";
-      $billed_count = 0;
-      $unbilled_count = 0;
-      if ($billres = getBillingByEncounter($row['pid'], $row['encounter'],
+       // Fetch coding and compute billing status.
+       $coded = "";
+       $billed_count = 0;
+       $unbilled_count = 0;
+       if ($billres = getBillingByEncounter($row['pid'], $row['encounter'],
         "code_type, code, code_text, billed"))
-      {
-        foreach ($billres as $billrow) {
-          // $title = addslashes($billrow['code_text']);
-          if ($billrow['code_type'] != 'COPAY' && $billrow['code_type'] != 'TAX') {
-            $coded .= $billrow['code'] . ', ';
-            if ($billrow['billed']) ++$billed_count; else ++$unbilled_count;
-          }
-        }
-        $coded = substr($coded, 0, strlen($coded) - 2);
+        {
+            foreach ($billres as $billrow) {
+            // $title = addslashes($billrow['code_text']);
+            if ($billrow['code_type'] != 'COPAY' && $billrow['code_type'] != 'TAX') {
+                $coded .= $billrow['code'] . ', ';
+                if ($billrow['billed']) ++$billed_count; else ++$unbilled_count;
+              }
+            }
+            $coded = substr($coded, 0, strlen($coded) - 2);
       }
 
       // Figure product sales into billing status.
@@ -383,20 +415,51 @@ if ($res) {
   <td>
    <?php echo $coded; ?>
   </td>
+  <td>
+    <?php echo $row['insurance_name']; ?>
+  </td>
+
  </tr>
 <?php
-    } else {
-      if ($docname != $lastdocname) {
-        show_doc_total($lastdocname, $doc_encounters);
-        $doc_encounters = 0;
-      }
-      ++$doc_encounters;
-    }
-    $lastdocname = $docname;
   }
-
-  if (!$form_details) show_doc_total($lastdocname, $doc_encounters);
 }
+}
+else { // Not details
+        if($res)
+        {
+            $current_provider="Not Yet Determined";
+            while($row=sqlFetchArray($res))
+            {
+                if($current_provider!=$row['provider_name'])
+                {
+                    $current_provider=$row['provider_name'];
+                    $total_encounters[$current_provider]=0;
+                    $encounters_by_insurance[$current_provider]=array();
+                }
+                $total_encounters[$current_provider]+=$row['num_encounters'];
+                $ins_name=empty($row['insurance_name']) ? 'Unspecified' : $row['insurance_name'];
+                $encounters_by_insurance[$current_provider][$ins_name]=$row['num_encounters'];
+            }
+            foreach($total_encounters as $cur_provider=>$total)
+            {
+                echo "<tr>";
+                    $cur_provider_name=empty($cur_provider) ? "Unspecified" : $cur_provider;
+                    echo "<td>$cur_provider_name</td>";
+                    echo "<td>$total</td>";
+                    echo "<td>Total</td>";
+                echo "</tr>";
+                foreach($encounters_by_insurance[$cur_provider] as $ins_name=>$enc_count)
+                {
+                    $pct=intval($enc_count/$total*100);
+                    echo "<tr>";
+                    echo "<td></td>";
+                    echo "<td>$enc_count($pct%)</td>";
+                    echo "<td>$ins_name</td>";
+                    echo "</tr>";
+                }
+            }
+        }
+    }
 ?>
 </tbody>
 </table>
