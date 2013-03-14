@@ -1,0 +1,30 @@
+/* 
+    Document   : immunizations_schedules
+    Created on : Mar 14, 2013, 11:05:10 AM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.schedule_template
+{
+    text-align: left;
+    background-color: white;
+}
+#immunization_list
+{
+    clear:left;
+}
+#scheduleCodes
+{
+    cursor:pointer;
+}
+
+#scheduleCodes tr:hover
+{
+    background-color: yellow;
+}
+td.schedule
+{
+    vertical-align: top;
+}

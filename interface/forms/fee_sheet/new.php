@@ -1265,3 +1265,4 @@ if (true) {
 </body>
 </html>
 <?php require_once("review/initialize_review.php"); ?>
+<?php require_once("immunizations_schedules/initialize_immunization_info.php"); ?>
