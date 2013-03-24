@@ -342,6 +342,8 @@ function checkAll(checked) {
                     $row['dos'] = substr($erow['fdate'], 0, 10);
                     $row['search_date'] = $erow['$form_searchby'];
                     $row['deposit_date'] = $erow['deposit_date'];
+                    $row['post_date']=substr($erow['post_time'],0,10);
+                    $row['bill_date']=substr($erow['bill_date'],0,10);
                     $row['ss'] = $erow['ss'];
                     $row['DOB'] = $erow['check_date'];
                     $row['pubpid'] = $erow['pubpid'];
@@ -369,7 +371,8 @@ function checkAll(checked) {
                   echo '"Provider",';
                   echo '"Invoice",';
                   echo '"DOS",';
-                  echo '"' . array_search($form_searchby, $searchby) . '",';
+                  echo '"Billing Date",';
+                  echo '"Post Date",';
                   echo '"Deposit Date",';
                   echo '"CPT",';
                   echo '"Amt Paid",';
@@ -396,7 +399,10 @@ function checkAll(checked) {
                      <?php xl('Svc Date','e'); ?>
                      </th>
                       <th >
-                     <?php xl(array_search($form_searchby, $searchby), 'e') ?>
+                     <?php xl('Billing Date', 'e') ?>
+                      </th>
+                      <th >
+                     <?php xl('Post Date', 'e') ?>
                       </th>
                      <th >
                      <?php xl('Deposit Date','e'); ?>
@@ -438,7 +444,10 @@ function checkAll(checked) {
                         &nbsp;<?php echo $row['dos']; ?>
                       </td>
                       <td bgcolor = '<?php echo $bgcolor; ?>' class='detail'>
-                        &nbsp;<?php echo $row['search_date']; ?>
+                        &nbsp;<?php echo $row['bill_date']; ?>
+                      </td>
+                      <td bgcolor = '<?php echo $bgcolor; ?>' class='detail'>
+                        &nbsp;<?php echo $row['post_date']; ?>
                       </td>
                       <td bgcolor = '<?php echo $bgcolor; ?>' class="detail" align="left">
                 <?php echo $row['deposit_date'] ?>&nbsp;
@@ -466,7 +475,8 @@ function checkAll(checked) {
                   echo '"' . $row['provider'] . '",';
                   echo '"' . $row['invnumber'] . '",';
                   echo '"' . $row['dos'] . '",';
-                  echo '"' . $row['search_date'] . '",';
+                  echo '"' . $row['bill_date'] . '",';
+                  echo '"' . $row['post_date'] . '",';
                   echo '"' . $row['deposit_date'] . '",';
                   echo '"' . $row['cpt'] . '",';
                   echo '"' . oeFormatMoney($row['amt_paid']) . '",';
