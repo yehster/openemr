@@ -55,7 +55,14 @@ $grand_total_amt_balance  = 0;
   $form_to_date   = fixDate($_POST['form_to_date']  , date('Y-m-d'));
   $form_facility  = $_POST['form_facility'];
   $form_provider  = $_POST['form_provider'];
-
+  $form_code0     = $_POST['form_code0'];
+  $form_code1     = $_POST['form_code1'];
+  $form_code2     = $_POST['form_code2'];
+  $form_code3     = $_POST['form_code3'];
+  $form_code4     = $_POST['form_code4'];
+  $form_code5     = $_POST['form_code5'];
+  
+  
   if ($_POST['form_csvexport']) {
     header("Pragma: public");
     header("Expires: 0");
@@ -139,7 +146,23 @@ $grand_total_amt_balance  = 0;
                                 echo "   </select>\n";
                                 ?>
 				</td>
-		</tr><tr>
+		</tr>
+		<tr>
+		      <td>
+			       <?php echo xlt('Code'); //hacked by sherwin ?>
+			  </td>
+		     <td>
+			      
+				   <input type='text' name='form_code0' id='form_code0' size='10' value='<?php echo $form_code0?>'>
+				   <input type='text' name='form_code1' id='form_code1' size='10' value='<?php echo $form_code1?>'>
+				   <input type='text' name='form_code2' id='form_code2' size='10' value='<?php echo $form_code2?>'>
+				   <input type='text' name='form_code3' id='form_code3' size='10' value='<?php echo $form_code3?>'>
+				   <input type='text' name='form_code4' id='form_code4' size='10' value='<?php echo $form_code4?>'>
+				   <input type='text' name='form_code5' id='form_code5' size='10' value='<?php echo $form_code5?>'>				   
+				  
+			 </td>
+		</tr>
+		<tr>
                  <td colspan="2">
                           <?php echo xlt('From'); ?>:&nbsp;&nbsp;&nbsp;&nbsp;
                            <input type='text' name='form_from_date' id="form_from_date" size='10' value='<?php echo attr($form_from_date) ?>'
@@ -203,11 +226,20 @@ $grand_total_amt_balance  = 0;
 <?php
 }
    // end not export
-
+   //b.code ='" . $code . "' AND 
+   
   if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
     $rows = array();
     $from_date = $form_from_date;
     $to_date   = $form_to_date;
+	$codes      = array();
+	$codes['|' . $form_code0 . '|'] = $form_code0 ;
+	$codes['|' . $form_code1 . '|'] = $form_code1 ;
+	$codes['|' . $form_code2 . '|'] = $form_code2 ;
+	$codes['|' . $form_code3 . '|'] = $form_code3 ;
+	$codes['|' . $form_code4 . '|'] = $form_code4 ;
+	$codes['|' . $form_code5 . '|'] = $form_code5 ;
+	
     $sqlBindArray = array();
     if ($INTEGRATED_AR) {
     $query = "select b.code,sum(b.units) as units,sum(b.fee) as billed,sum(ar_act.paid) as PaidAmount, " .
@@ -255,6 +287,7 @@ $grand_total_amt_balance  = 0;
       $row['Adjustment Amt'] = $erow['AdjustAmount'];
       $row['Balance Amt'] = $erow['Balance'];
       $row['financial_reporting'] = $erow['financial_reporting'];
+	  
       $rows[$erow['pid'] . '|' . $erow['code'] . '|' . $erow['units']] = $row;
       }
               if ($_POST['form_csvexport']) {
@@ -293,12 +326,32 @@ $grand_total_amt_balance  = 0;
  <?php
               }
      $orow = -1;
+	 
+
+     $a = $rows;
+
+     $b = $codes;
+
+$frows = 
+     array_intersect_ukey($a, $b, function($ka, $kb) {
+        if ($ka[0] == '|') {                     // transform key
+                $ka = substr($ka, 1, strrpos($ka, '|') - 1);
+        }
+        if ($kb[0] == '|') {                     // transform key
+                $kb = substr($kb, 1, strrpos($kb, '|') - 1);
+        }
+        // perform regular comparison
+        return strcmp($ka, $kb);
+}); 
+	 
+if(!$_POST['form_code0']){	 
 
      foreach ($rows as $key => $row) {
 $print = '';
 $csv = '';
 
 if($row['financial_reporting']){ $bgcolor = "#FFFFDD";  }else { $bgcolor = "#FFDDDD";  }
+     
 $print = "<tr bgcolor='$bgcolor'><td class='detail'>".text($row['Procedure codes'])."</td><td class='detail'>".text($row['Units'])."</td><td class='detail'>".text(oeFormatMoney($row['Amt Billed']))."</td><td class='detail'>".text(oeFormatMoney($row['Paid Amt']))."</td><td class='detail'>".text(oeFormatMoney($row['Adjustment Amt']))."</td><td class='detail'>".text(oeFormatMoney($row['Balance Amt']))."</td>"; 
 
 $csv = '"' . text($row['Procedure codes']) . '","' . text($row['Units']) . '","' . text(oeFormatMoney($row['Amt Billed'])) . '","' . text(oeFormatMoney($row['Paid Amt'])) . '","' . text(oeFormatMoney($row['Adjustment Amt'])) . '","' . text(oeFormatMoney($row['Balance Amt'])) . '"' . "\n";
@@ -314,6 +367,32 @@ $bgcolor = ((++$orow & 1) ? "#ffdddd" : "#ddddff");
 	else { echo $print;
  }
      }
+	    } else {
+//testing filtered results:
+  $forow = -1;
+
+     foreach ($frows as $key => $frow) {
+$print = '';
+$csv = '';
+
+if($frow['financial_reporting']){ $bgcolor = "#FFFFDD";  }else { $bgcolor = "#FFDDDD";  }
+     
+$print = "<tr bgcolor='$bgcolor'><td class='detail'>".text($frow['Procedure codes'])."</td><td class='detail'>".text($frow['Units'])."</td><td class='detail'>".text(oeFormatMoney($frow['Amt Billed']))."</td><td class='detail'>".text(oeFormatMoney($frow['Paid Amt']))."</td><td class='detail'>".text(oeFormatMoney($frow['Adjustment Amt']))."</td><td class='detail'>".text(oeFormatMoney($frow['Balance Amt']))."</td>"; 
+
+$csv = '"' . text($frow['Procedure codes']) . '","' . text($frow['Units']) . '","' . text(oeFormatMoney($frow['Amt Billed'])) . '","' . text(oeFormatMoney($frow['Paid Amt'])) . '","' . text(oeFormatMoney($frow['Adjustment Amt'])) . '","' . text(oeFormatMoney($frow['Balance Amt'])) . '"' . "\n";
+
+$bgcolor = ((++$forow & 1) ? "#ffdddd" : "#ddddff");
+                                $grand_total_units  += $frow['Units'];
+                                                $grand_total_amt_billed  += $frow['Amt Billed'];
+                                                $grand_total_amt_paid  += $frow['Paid Amt'];
+                                                $grand_total_amt_adjustment  += $frow['Adjustment Amt'];
+                                                $grand_total_amt_balance  += $frow['Balance Amt'];
+
+        if ($_POST['form_csvexport']) { echo $csv; } 
+	else { echo $print;
+   }
+ }
+}
        if (!$_POST['form_csvexport']) {
          echo "<tr bgcolor='#ffffff'>\n";
          echo " <td class='detail'>" . xlt("Grand Total") . "</td>\n"; 
@@ -365,6 +444,12 @@ if (!$_POST['form_refresh'] && !$_POST['form_csvexport']) { ?>
  top.restoreSession();
 </script>
 </html>
+<pre>
 <?php
   } // End not csv export
+
+//var_dump($frows);
+
+
 ?>
+</pre>

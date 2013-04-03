@@ -1257,28 +1257,28 @@ class Claim {
   }
 
   function referrerFirstName() {
-    return x12clean(trim($this->referrer['fname']));
+    return x12clean(trim($this->supervisor['fname']));
   }
 
   function referrerMiddleName() {
-    return x12clean(trim($this->referrer['mname']));
+    return x12clean(trim($this->supervisor['mname']));
   }
 
   function referrerNPI() {
-    return x12clean(trim($this->referrer['npi']));
+    return x12clean(trim($this->supervisor['npi']));
   }
 
   function referrerUPIN() {
-    return x12clean(trim($this->referrer['upin']));
+    return x12clean(trim($this->supervisor['upin']));
   }
 
   function referrerSSN() {
-    return x12clean(trim(str_replace('-', '', $this->referrer['federaltaxid'])));
+    return x12clean(trim(str_replace('-', '', $this->supervisor['federaltaxid'])));
   }
 
   function referrerTaxonomy() {
     if (empty($this->referrer['taxonomy'])) return '207Q00000X';
-    return x12clean(trim($this->referrer['taxonomy']));
+    return x12clean(trim($this->supervisor['taxonomy']));
   }
 
   function supervisorLastName() {
