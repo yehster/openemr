@@ -19,28 +19,6 @@ include_once("$srcdir/md5.js");
 <script language='JavaScript' src="../../library/js/jquery-1.4.3.min.js"></script>
 <script language='JavaScript'>
 
-//VicarePlus :: Validation function for checking the hashing algorithm used for encrypting password
-function chk_hash_fn()
-{
-var str = document.forms[0].authUser.value;
-   $.ajax({
-  url: "validateUser.php?u="+str,
-  context: document.body,
-  success: function(data){
-        if(data == 0) //VicarePlus :: If the hashing algorithm is 'MD5'
-        {
-                document.forms[0].authPass.value=MD5(document.forms[0].clearPass.value);
-                document.forms[0].authNewPass.value=SHA1(document.forms[0].clearPass.value);
-        }
-        else  //VicarePlus :: If the hashing algorithm is 'SHA1'
-        {
-                document.forms[0].authPass.value=SHA1(document.forms[0].clearPass.value);
-        }
-                document.forms[0].clearPass.value='';
-                document.login_form.submit();
-                }
-        });
-}
 
 function imsubmitted() {
 <?php if (!empty($GLOBALS['restore_sessions'])) { ?>
@@ -50,7 +28,8 @@ function imsubmitted() {
  olddate.setFullYear(olddate.getFullYear() - 1);
  document.cookie = '<?php echo session_name() . '=' . session_id() ?>; path=/; expires=' + olddate.toGMTString();
 <?php } ?>
- return false; //Currently the submit action is handled by the chk_hash_fn() function itself.
+ document.forms[0].authPass.value=document.forms[0].clearPass.value;
+ return true; //Currently the submit action is handled by the chk_hash_fn() function itself.
 }
 </script>
 
@@ -74,7 +53,7 @@ if (count($result) == 1) {
 	echo "<input type='hidden' name='authProvider' value='$resvalue' />\n";
 }
 // collect default language id
-$res2 = sqlStatement("select * from lang_languages where lang_description = '".$GLOBALS['language_default']."'");
+$res2 = sqlStatement("select * from lang_languages where lang_description = ?",array($GLOBALS['language_default']));
 for ($iter = 0;$row = sqlFetchArray($res2);$iter++)
           $result2[$iter] = $row;
 if (count($result2) == 1) {
@@ -201,7 +180,7 @@ if (count($result3) != 1) { ?>
 <!-- ViCareplus : As per NIST standard, the SHA1 encryption algorithm is used -->
 <input class="button large" type="submit" onClick="javascript:this.form.authPass.value=SHA1(this.form.clearPass.value);" value="<?php xl('Login','e');?>">
 <?php else: ?>
-<input class="button large" type="submit" onClick="chk_hash_fn();" value="<?php xl('Login','e');?>">
+<input class="button large" type="submit" value="<?php xl('Login','e');?>">
 <?php endif; ?>
 </td></tr>
 <tr><td colspan='2' class='text' style='color:red'>

@@ -11,9 +11,15 @@ require_once("{$GLOBALS['srcdir']}/sql.inc");
 // added for the phpGACL group check -- JRM
 require_once("{$GLOBALS['srcdir']}/acl.inc");
 require_once("$srcdir/formdata.inc.php");
+require_once("$srcdir/authentication/user_operations.php");
 
 $incoming_site_id = '';
 
+if(isset($_POST['authPass']))
+{
+    $clearPass=$_POST['authPass'];
+    $_POST['authPass']=sha1($_POST['authPass']);
+}
 if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser']) &&
     isset($_POST['authPass']) && isset($_POST['authProvider']))
 {
@@ -24,28 +30,20 @@ if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser
     else {
         $_SESSION['language_choice'] = 1;
     }
+    
+    if(!validate_user_password($_POST['authUser'],$clearPass,$_POST['authProvider']) && verify_user_gacl_group($_POST['authUser']))
+    {
+        authLoginScreen();
+    }
 //If password expiration option is enabled call authCheckExpired() to check whether login user password is expired or not
+    
     if($GLOBALS['password_expiration_days'] != 0){
-    	authCheckExpired();
+    	if(authCheckExpired())
+        {
+            authLoginScreen();
+        }
     }
     $ip=$_SERVER['REMOTE_ADDR'];
-     //VicarePlus :: authNewPass is set ,only if the password in DB is encrypted using MD5.
-    if (isset($_POST['authNewPass']))
-    {
-    if (!authNewSession($_POST['authUser'], $_POST['authPass'], $_POST['authProvider'], $_POST['authNewPass']))
-    {
-        $_SESSION['loginfailure'] = 1;
-        authLoginScreen();
-    }
-    }
-    else
-    {
-    if (!authNewSession($_POST['authUser'], $_POST['authPass'], $_POST['authProvider'],''))
-    {
-        $_SESSION['loginfailure'] = 1;
-        authLoginScreen();
-    }
-    }
     $_SESSION['loginfailure'] = null;
     unset($_SESSION['loginfailure']);
     //store the very first initial timestamp for timeout errors
@@ -99,79 +97,12 @@ if (!isset($_SESSION["last_update"])) {
 
 //----------THINGS WE DO IF WE STILL LIKE YOU
 
-function authNewSession ($user, $pass, $provider, $new_upgrade_pass)
-{
-    $ip = $_SERVER['REMOTE_ADDR'];
-    // check to see if the user belongs to *any* OpenEMR groups in phpGACL -- JRM
-    global $phpgacl_location;
-    if (isset ($phpgacl_location)) {
-      if (acl_get_group_titles($user) == 0) {
-          newEvent( 'login', $user, $provider, 0, "failure: $ip. user not in any phpGACL groups. (bad username?)");
-	  return false;
-      }
-    }
-
-    // get details about the user
-    $authDB = sqlQuery("select id, password, authorized, see_auth".
-                        ", cal_ui, active ".
-                        " from users where username = '$user'");
-
-    // if the user is NOT active, get out
-    if ($authDB['active'] != 1) {
-        newEvent( 'login', $user, $provider, 0, "failure: $ip. user not active or not found in users table");
-        return false;
-    }
-
-    //VicarePlus :: If the password in DB is encrypted using 'md5' , it is updated with 'sha1' encryption and
-    //Vicareplus :: the user is asked to login again. 
-    if (strlen($pass) == 32)
-    {
-    if ($authDB['password'] == $pass)
-    {
-    sqlStatement("update users set password='$new_upgrade_pass' where username = '$user'");
-    $_SESSION['relogin'] = 1;
-    }
-    else
-    {
-    newEvent( 'login', $user, $provider, 0, "failure: $ip. user password mismatch ($pass)");
-    return false;
-    }
-    }
-    // compare the submitted password with the stored password
-    if ($authDB['password'] == $pass)
-    {
-        //here, we check to see if the user is in fact a member of the correct group:
-        if ($authGroup = sqlQuery("select * from groups where user='$user' and name='$provider'"))
-        {
-            $_SESSION['authUser'] = $user;
-            $_SESSION['authGroup'] = $authGroup['name'];
-            $_SESSION['authUserID'] = $authDB['id'];
-            $_SESSION['authPass'] = $pass;
-            $_SESSION['authProvider'] = $provider;
-            $_SESSION['authId'] = $authDB{'id'};
-            $_SESSION['cal_ui'] = $authDB['cal_ui'];
-            $_SESSION['userauthorized'] = $authDB['authorized'];
-            // Some users may be able to authorize without being providers:
-            if ($authDB['see_auth'] > '2') $_SESSION['userauthorized'] = '1';
-            newEvent( 'login', $user, $provider, 1, "success: $ip");
-            return true;
-        } else {
-            newEvent( 'login', $user, $provider, 0, "failure: $ip. user not in group: $provider");
-	    return false;
-        }
-    }
-
-    newEvent( 'login', $user, $provider, 0, "failure: $ip. user password mismatch ($pass)");
-    return false;
-}
-
 function authCheckSession ()
 {
     if (isset($_SESSION['authId'])) {
         $authDB = sqlQuery("select username, password from users where id = '" .
             $_SESSION['authId']."'");
-        if ($_SESSION['authUser'] == $authDB['username'] &&
-            $_SESSION['authPass'] == $authDB['password'])
+        if ($_SESSION['authUser'] == $authDB['username'] )
         {
             return true;
         }
@@ -223,23 +154,9 @@ function authCheckExpired()
   {
     sqlStatement("update users set active=0 where username = '".$auser."'");
     $_SESSION['loginfailure'] = 1;
+    return true;
   }
-}
-
-
-function addUser ($username, $password_md5, $info, $authorized = 'yes')
-{
-    return sqlInsert("insert into users (username, password, info, authorized) values ('$username', '$password_md5', '$info', '$authorized')");
-}
-
-function delUser ($id)
-{
-    return sqlQuery("delete from users where id = '$id' limit 0,1");
-}
-
-function changePasword ($id, $new_md5)
-{
-    return sqlQuery("update users set password = '$new_md5' where id = '$id'");
+  return false;
 }
 
 function getUserList ($cols = '*', $limit = 'all', $start = '0')
@@ -327,18 +244,18 @@ function validateGroupStatus ($user_to_be_checked, $group_user) {
 // Return true if successfull, false on failure
 function UpdatePasswordHistory($userid,$pwd)
 {
-    $result = sqlStatement("select password, pwd_history1, pwd_history2 from users where id = $userid");
+    $result = sqlStatement("select password, pwd_history1, pwd_history2 from users where id = ?",array($userid));
     if ($row = sqlFetchArray($result)) {
         $previous_pwd1=$row['password'];
         $previous_pwd2=$row['pwd_history1'];
         $previous_pwd3=$row['pwd_history2'];
     }
     if (($pwd != $previous_pwd1) && ($pwd != $previous_pwd2) && ($pwd != $previous_pwd3)) {
-        sqlStatement("update users set pwd_history2='$previous_pwd2', pwd_history1='$previous_pwd1',password='$pwd' where id=$userid");
+        sqlStatement("update users set pwd_history2=?, pwd_history1=?,password=? where id=?",array($previous_pwd2,$previous_pwd1,$pwd,$userid));
 	if($GLOBALS['password_expiration_days'] != 0){
 	$exp_days=$GLOBALS['password_expiration_days'];
         $exp_date = date('Y-m-d', strtotime("+$exp_days days"));
-        sqlStatement("update users set pwd_expiration_date='$exp_date' where id=$userid");
+        sqlStatement("update users set pwd_expiration_date=? where id=?",array($exp_date,$userid));
 	}
         return true;
     } 
