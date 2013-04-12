@@ -524,7 +524,10 @@ function bnpExp(e,z) {
 // (public) this^e % m, 0 <= e < 2^32
 function bnModPowInt(e,m) {
   var z;
-  e=65537;
+  if(e.t===1)
+      {
+          e=e[0];
+      }
   if(e < 256 || m.isEven()) z = new Classic(m); else z = new Montgomery(m);
   return this.exp(e,z);
 }
