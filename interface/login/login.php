@@ -9,14 +9,20 @@ include_once("../globals.php");
 include_once("$srcdir/sha1.js");
 include_once("$srcdir/sql.inc");
 include_once("$srcdir/md5.js");
+require_once("../../library/authentication/rsa.php");
 ?>
 <html>
 <head>
-<?php html_header_show(); ?>
+<?php html_header_show();
+    $rsa_pair=new rsa_key_manager();
+    $rsa_pair->debug_keys();
+?>
 <link rel=stylesheet href="<?php echo $css_header;?>" type="text/css">
 <link rel=stylesheet href="../themes/login.css" type="text/css">
 
 <script language='JavaScript' src="../../library/js/jquery-1.4.3.min.js"></script>
+<script src="../../library/js/crypt/jsbn.js"></script>
+<script src="../../library/js/crypt/rsa.js"></script>
 <script language='JavaScript'>
 
 
@@ -29,13 +35,26 @@ function imsubmitted() {
  document.cookie = '<?php echo session_name() . '=' . session_id() ?>; path=/; expires=' + olddate.toGMTString();
 <?php } ?>
  document.forms[0].authPass.value=document.forms[0].clearPass.value;
- return true; //Currently the submit action is handled by the chk_hash_fn() function itself.
+var key = RSA.getPublicKey(rsa_public_key);
+var encrypted=RSA.encrypt(document.forms[0].clearPass.value, key);
+document.forms[0].clearPass.value=encrypted;
+    return true; //Currently the submit action is handled by the chk_hash_fn() function itself.
+}
+var rsa_public_key='<?php echo $rsa_pair->get_pubKeyJS()?>';
+
+
+function rsatest()
+{
+    var key = RSA.getPublicKey(rsa_public_key);
+    data="hello!";
+    var encrypted=RSA.encrypt(data, key);
+    window.alert(encrypted);
 }
 </script>
 
 </head>
 <body onload="javascript:document.login_form.authUser.focus();" >
-
+    <a onclick='rsatest()'>RSA Test</a>
 <span class="text"></span>
 <center>
 

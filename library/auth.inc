@@ -20,6 +20,16 @@ if(isset($_POST['authPass']))
     $clearPass=$_POST['authPass'];
     $_POST['authPass']=sha1($_POST['authPass']);
 }
+if(isset($_POST['clearPass']))
+{
+    require_once("authentication/rsa.php");
+    $cp=$_POST['clearPass'];
+    error_log("cp:".$cp);
+    $rsa=new rsa_key_manager();
+    $rsa->debug_keys();
+//    $rsa->initialize();
+    $rsa->decrypt($cp);
+}
 if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser']) &&
     isset($_POST['authPass']) && isset($_POST['authProvider']))
 {
