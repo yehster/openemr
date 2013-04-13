@@ -24,10 +24,9 @@ if(isset($_POST['clearPass']))
 {
     require_once("authentication/rsa.php");
     $cp=$_POST['clearPass'];
-    error_log("cp:".$cp);
     $rsa=new rsa_key_manager();
-    $rsa->debug_keys();
-//    $rsa->initialize();
+    $pubKey=$_POST['pk'];
+    $rsa->load_from_db($pubKey);
     $rsa->decrypt($cp);
 }
 if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser']) &&

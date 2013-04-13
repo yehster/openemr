@@ -10,7 +10,6 @@ class rsa_key_manager
     protected $pubKey;
     protected $privKey;
     
-    protected $res;
     public function __construct()
     {
         
@@ -27,20 +26,16 @@ class rsa_key_manager
         $keyDetails=openssl_pkey_get_details($pair);
         $this->pubKey=$keyDetails['key'];
         openssl_pkey_export($pair, $this->privKey);
-        error_log($this->get_pubKey());
-        error_log($this->privKey);
-
-        $this->res=openssl_pkey_get_private($this->privKey);
-        if(!$this->res)
-        {
-        }
-        else
-        {
-            error_log("Hello World!");
-        }
-        
+        sqlQuery("INSERT into rsa_pairs (public,private,created) values (?,?,NOW())",array($this->get_pubKeyJS(),$this->privKey));
     }
     
+    public function load_from_db($pub)
+    {
+        $res=sqlQuery("SELECT private FROM rsa_pairs where public=?",array($pub));
+        $this->privKey=$res['private'];
+        sqlQuery("DELETE FROM rsa_pairs where public=?",array($pub));
+        
+    }
     public function get_pubKey()
     {
         return $this->pubKey;
