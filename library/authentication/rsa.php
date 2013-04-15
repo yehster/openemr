@@ -2,8 +2,8 @@
 class rsa_key_manager
 {
     static $config = array(
-        "digest_alg" => "sha1",
-        "private_key_bits" => 512,
+        "digest_alg" => "sha512",
+        "private_key_bits" => 4096,
         "private_key_type" => OPENSSL_KEYTYPE_RSA
     );
 
@@ -44,9 +44,7 @@ class rsa_key_manager
     public function decrypt($msg)
     {
         $decrypted='';
-        $encrypted='';
         $status=openssl_private_decrypt(base64_decode($msg),$decrypted,$this->privKey);
-        error_log($decrypted);
         return $decrypted;
     }
     public function get_pubKeyJS()
