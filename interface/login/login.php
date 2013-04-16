@@ -13,10 +13,7 @@ require_once("../../library/authentication/rsa.php");
 ?>
 <html>
 <head>
-<?php html_header_show();
-    $rsa_pair=new rsa_key_manager();
-    $rsa_pair->initialize();
-?>
+<?php html_header_show();?>
 <link rel=stylesheet href="<?php echo $css_header;?>" type="text/css">
 <link rel=stylesheet href="../themes/login.css" type="text/css">
 
@@ -25,7 +22,23 @@ require_once("../../library/authentication/rsa.php");
 <script src="../../library/js/crypt/rsa.js"></script>
 <script language='JavaScript'>
 
+function encrypt_form()
+{
 
+    var rsa_ajax='<?php echo $webroot;?>/library/ajax/rsa_request.php';
+    $.post(rsa_ajax,{},
+        function(data)
+        {
+            var key = RSA.getPublicKey(data);
+            var encryptedPass=RSA.encrypt(document.forms[0].clearPass.value, key);
+            document.forms[0].authPass.value=encryptedPass;
+
+            document.forms[0].clearPass.value='';
+            document.forms[0].pk.value=data;   
+            document.forms[0].submit();
+        }
+    );
+}
 function imsubmitted() {
 <?php if (!empty($GLOBALS['restore_sessions'])) { ?>
  // Delete the session cookie by setting its expiration date in the past.
@@ -34,15 +47,8 @@ function imsubmitted() {
  olddate.setFullYear(olddate.getFullYear() - 1);
  document.cookie = '<?php echo session_name() . '=' . session_id() ?>; path=/; expires=' + olddate.toGMTString();
 <?php } ?>
- document.forms[0].authPass.value=document.forms[0].clearPass.value;
-var key = RSA.getPublicKey(rsa_public_key);
-var encrypted=RSA.encrypt(document.forms[0].clearPass.value, key);
-document.forms[0].clearPass.value=encrypted;
-document.forms[0].pk.value=rsa_public_key;
-    return true; //Currently the submit action is handled by the chk_hash_fn() function itself.
+    return false; //Currently the submit action is handled by the encrypt_form(). 
 }
-var rsa_public_key='<?php echo $rsa_pair->get_pubKeyJS()?>';
-
 </script>
 
 </head>
@@ -192,7 +198,7 @@ if (count($result3) != 1) { ?>
 <!-- ViCareplus : As per NIST standard, the SHA1 encryption algorithm is used -->
 <input class="button large" type="submit" onClick="javascript:this.form.authPass.value=SHA1(this.form.clearPass.value);" value="<?php xl('Login','e');?>">
 <?php else: ?>
-<input class="button large" type="submit" value="<?php xl('Login','e');?>">
+<input class="button large" type="submit" onClick="encrypt_form()" value="<?php xl('Login','e');?>">
 <?php endif; ?>
 </td></tr>
 <tr><td colspan='2' class='text' style='color:red'>

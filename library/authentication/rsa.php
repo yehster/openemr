@@ -33,7 +33,8 @@ class rsa_key_manager
     {
         $res=sqlQuery("SELECT private FROM rsa_pairs where public=?",array($pub));
         $this->privKey=$res['private'];
-        sqlQuery("DELETE FROM rsa_pairs where public=?",array($pub));
+        // Delete this pair, and garbage collect any pairs older than 5 minutes.
+        sqlQuery("DELETE FROM rsa_pairs where public=? OR timestampdiff(second,created,now()) > ?",array($pub,300));
         
     }
     public function get_pubKey()

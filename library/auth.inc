@@ -15,19 +15,15 @@ require_once("$srcdir/authentication/user_operations.php");
 
 $incoming_site_id = '';
 
+
 if(isset($_POST['authPass']))
 {
-    $clearPass=$_POST['authPass'];
-    $_POST['authPass']=sha1($_POST['authPass']);
-}
-if(isset($_POST['clearPass']))
-{
     require_once("authentication/rsa.php");
-    $cp=$_POST['clearPass'];
+    $cp=$_POST['authPass'];
     $rsa=new rsa_key_manager();
     $pubKey=$_POST['pk'];
     $rsa->load_from_db($pubKey);
-    $rsa->decrypt($cp);
+    $clearPass=$rsa->decrypt($cp);
 }
 if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser']) &&
     isset($_POST['authPass']) && isset($_POST['authProvider']))
