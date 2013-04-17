@@ -28,17 +28,46 @@ function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
         $hash_admin=crypt($currentPwd,$adminInfo[COL_SALT]);
         if($hash_admin!=$adminInfo[COL_PWD])
         {
-            $errMsg=xl("Incorrect password");
+            $errMsg=xl("Incorrect password!");
+            return false;
+        }
+        if(!acl_check('admin', 'users'))
+        {
+            
+            $errMsg=xl("Not authorized to change password!");
             return false;
         }
     }
-    
-    $forbid_reuse=$GLOBALS['password_history'] != 0;
     if(strlen($newPwd)==0)
     {
         $errMsg=xl("Empty Password Not Allowed");
         return false;
     }
+    $require_strong=$GLOBALS['secure_password'] !=0;
+    if($require_strong)
+    {
+        if(strlen($newPwd)<8)
+        {
+            $errMsg=xl("Password too short. Minimum 8 characters required.");
+            return false;
+        }
+        $features=0;
+        $reg_security=array("/[a-z]+/","/[A-Z]+/","/\d+/","/[\W_]+/");
+        foreach($reg_security as $expr)
+        {
+            if(preg_match($expr,$newPwd))
+            {
+                $features++;
+            }
+        }
+        if($features<3)
+        {
+            $errMsg=xl("Password does not meet minimum requirements and should contain at least three of the four following items: A number, a lowercase letter, an uppercase letter, a special character (Not a leter or number).");
+            return false;
+        }
+    }
+
+    $forbid_reuse=$GLOBALS['password_history'] != 0;
     if($forbid_reuse)
     {
         // password reuse disallowed
