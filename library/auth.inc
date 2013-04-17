@@ -11,7 +11,7 @@ require_once("{$GLOBALS['srcdir']}/sql.inc");
 // added for the phpGACL group check -- JRM
 require_once("{$GLOBALS['srcdir']}/acl.inc");
 require_once("$srcdir/formdata.inc.php");
-require_once("$srcdir/authentication/user_operations.php");
+require_once("$srcdir/authentication/login_operations.php");
 
 $incoming_site_id = '';
 
@@ -38,12 +38,13 @@ if (isset($_GET['auth']) && ($_GET['auth'] == "login") && isset($_POST['authUser
     
     if(!validate_user_password($_POST['authUser'],$clearPass,$_POST['authProvider']) && verify_user_gacl_group($_POST['authUser']))
     {
+        $_SESSION['loginfailure'] = 1;
         authLoginScreen();
     }
 //If password expiration option is enabled call authCheckExpired() to check whether login user password is expired or not
     
     if($GLOBALS['password_expiration_days'] != 0){
-    	if(authCheckExpired())
+    	if(authCheckExpired($_POST['authUser']))
         {
             authLoginScreen();
         }
@@ -105,8 +106,7 @@ if (!isset($_SESSION["last_update"])) {
 function authCheckSession ()
 {
     if (isset($_SESSION['authId'])) {
-        $authDB = sqlQuery("select username, password from users where id = '" .
-            $_SESSION['authId']."'");
+        $authDB = sqlQuery("select username, password from users where id = ?",array($_SESSION['authId']));
         if ($_SESSION['authUser'] == $authDB['username'] )
         {
             return true;
@@ -142,10 +142,9 @@ function authLoginScreen()
 
 // Check if the user's password has expired beyond the grace limit.
 // If so, deactivate the user
-function authCheckExpired()
+function authCheckExpired($user)
 {
-  $auser=formData('authUser','P');
-  $result = sqlStatement("select pwd_expiration_date from users where username = '".$auser."'");
+  $result = sqlStatement("select pwd_expiration_date from users where username = ?",array($user));
   if($row = sqlFetchArray($result)) 
   {
     $pwd_expires = $row['pwd_expiration_date'];
