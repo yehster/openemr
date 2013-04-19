@@ -179,6 +179,9 @@ parent.$.fn.fancybox.close();
 <script type="text/javascript" src="../../library/dialog.js"></script>
 <script type="text/javascript" src="../../library/js/jquery.1.3.2.js"></script>
 <script type="text/javascript" src="../../library/js/common.js"></script>
+<script type="text/javascript" src="../../library/js/crypt/jsbn.js"></script>
+<script type="text/javascript" src="../../library/js/crypt/rsa.js"></script>
+
 <script src="checkpwd_validation.js" type="text/javascript"></script>
 
 <script language="JavaScript">
@@ -232,7 +235,7 @@ function submitform() {
 		if((document.forms[0].user_type.value != "Emergency Login") && (document.forms[0].pre_active.value == 0) && (document.forms[0].active.checked == 1) && (document.forms[0].grace_time.value != "") && (document.forms[0].current_date.value) > (document.forms[0].grace_time.value))
 		{
 			flag=1;
-			document.getElementById('error_message').innerHTML="<?php xl('Please reset the password.',e) ?>";
+			document.getElementById('error_message').innerHTML="<?php xl('Please reset the password.','e') ?>";
 		}
 	}
 
@@ -285,10 +288,31 @@ function submitform() {
 	}
 	<?php } ?>
 	if(flag == 0){
-		// ViCareplus : As per NIST standard, SHA1 encryption algorithm is used
-		document.forms[0].newauthPass.value=SHA1(document.forms[0].clearPass.value);document.forms[0].clearPass.value='';
-		document.forms[0].submit();
-		parent.$.fn.fancybox.close(); 
+                if($("[name='adminPass']").val().length>0)
+                    {
+                        $.ajax({
+                            url: '<?php echo $webroot; ?>/library/ajax/rsa_request.php',
+                            async: false,
+                            success: function(public_key)
+                            {
+                                var key = RSA.getPublicKey(public_key);
+                                $("input[name='userPass']").val(RSA.encrypt($("input[name='adminPass']").val(), key));
+                                $("input[name='newauthPass']").val(RSA.encrypt($("input[name='clearPass']").val(), key));
+                                $("input[name='pk']").val(public_key);
+                                $('input[name="adminPass"]').val('');
+                                $('input[name="clearPass"]').val('');
+                                document.forms[0].submit();
+                                parent.$.fn.fancybox.close(); 
+                            }
+                    
+                        });
+                        
+                    }
+                    else
+                    {
+                        document.forms[0].submit();
+                        parent.$.fn.fancybox.close(); 
+                    }
 	}
 }
 //Getting the list of selected item in ACL
@@ -347,6 +371,7 @@ if($password_exp != "0000-00-00")
 <!--  Get the list ACL for the user -->
 <?php
 $acl_name=acl_get_group_titles($iter["username"]);
+$bg_name='';
 $bg_count=count($acl_name);
    for($i=0;$i<$bg_count;$i++){
       if($acl_name[$i] == "Emergency Login")
@@ -556,6 +581,8 @@ Display red alert if entered password matched one of last three passwords/Displa
 <INPUT TYPE="HIDDEN" NAME="privatemode" VALUE="user_admin">
 <INPUT TYPE="HIDDEN" NAME="userPass" VALUE="">
 <INPUT TYPE="HIDDEN" NAME="newauthPass" VALUE="">
+<INPUT TYPE="HIDDEN" NAME="pk" VALUE="">
+
 <INPUT TYPE="HIDDEN" NAME="secure_pwd" VALUE="<?php echo $GLOBALS['secure_password']; ?>">
 </FORM>
 <script language="JavaScript">
