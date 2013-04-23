@@ -38,7 +38,7 @@ else { // default version
     'allergy'         => array(xl('Allergies')       ,xl('Allergy')   ,xl('A'),0,1),
     'medication'      => array(xl('Medications')     ,xl('Medication'),xl('M'),0,1),
     'surgery'         => array(xl('Surgeries')       ,xl('Surgery')   ,xl('S'),0,0),
-    'dental'          => array(xl('Dental Issues')   ,xl('Dental')    ,xl('D'),0,0),
+    'newborn'          => array(xl('Newborn Screening')   ,xl('Newborn Screening')    ,xl('D'),0,0),
     //
     // Styles are:
     // 0 - Normal, as in 2.8.1.

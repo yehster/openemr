@@ -598,7 +598,7 @@ class HTML_TreeMenu_DHTML extends HTML_TreeMenu_Presentation
     * @param array  $options   Array of options
     * @param bool   $isDynamic Whether the tree is dynamic or not
     */
-    function HTML_TreeMenu_DHTML(&$structure, $options = array(), $isDynamic = true)
+    function HTML_TreeMenu_DHTML(&$structure, $options = array(), $isDynamic = false)
     {
         $this->HTML_TreeMenu_Presentation($structure);
         $this->isDynamic = $isDynamic;

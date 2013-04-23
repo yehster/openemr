@@ -378,6 +378,7 @@ function generate_receipt($patient_id, $encounter=0) {
 </head>
 <body class="body_top">
 <center>
+<img src="../../images/santiago_logo.jpg" width="325" height="150">
 <?php 
   if ( $GLOBALS['receipts_by_provider'] && !empty($providerrow) ) { printProviderHeader($providerrow); }
   else { printFacilityHeader($frow); }

@@ -159,27 +159,17 @@ function create_statement($stmt) {
  //  %-25s = left-justified string of 25 characters padded with spaces
  // Note that "\n" is a line feed (new line) character.
  // reformatted to handle i8n by tony
-
-$out  = sprintf("%-30s %-23s %-s\n",$clinic_name,$stmt['patient'],$stmt['today']);
-$out .= sprintf("%-30s %s: %-s\n",$clinic_addr,$label_chartnum,$stmt['pid']);
-$out .= sprintf("%-30s %-s\n",$clinic_csz,$label_insinfo);
-$out .= sprintf("%-30s %s: %-s\n",null,$label_totaldue,null);
-$out .= "\n\n";
-$out .= sprintf("%-30s %-s\n",$label_addressee,$label_remitto);
-$out .= sprintf("%-32s %s\n",$stmt['to'][0],$remit_name);
-$out .= sprintf("%-32s %s\n",$stmt['to'][1],$remit_addr);
-$out .= sprintf("%-32s %s\n",$stmt['to'][2],$remit_csz);
+$out  = sprintf("%-37s %-23s %-s\n",$clinic_name,$stmt['patient'],$stmt['today']);
+$out .= sprintf("%-37s %s: %-s\n",$clinic_addr,$label_chartnum,$stmt['pid']);
+$out .= sprintf("%-37s %-s\n",$clinic_csz,$label_insinfo);
+$out .= "\n\n\n\n\n\n\n\n";
+$out .= sprintf("%-44s %-s\n",$label_addressee,$label_remitto);
+$out .= sprintf("%-44s %s\n",$stmt['to'][0],$remit_name);
+$out .= sprintf("%-44s %s\n",$stmt['to'][1],$remit_addr);
+$out .= sprintf("%-44s %s\n",$stmt['to'][2],$remit_csz);
 
 if($stmt['to'][3]!='')//to avoid double blank lines the if condition is put.
  	$out .= sprintf("   %-32s\n",$stmt['to'][3]);
-$out .= sprintf("_________________________________________________________________\n");
-$out .= "\n";
-$out .= sprintf("%-32s\n",$label_payby.' '.$label_cards);
-$out .= "\n";
-$out .= sprintf("%s_____________________  %s______ %s___________________\n",
-                $label_cardnum,$label_expiry,$label_sign);
-$out .= sprintf("%-20s %s\n",null,$label_retpay);
-$out .= sprintf("-----------------------------------------------------------------\n");
 $out .= "\n";
 $out .= sprintf("_______________________ %s _______________________\n",$label_pgbrk);
 $out .= "\n";

@@ -20,7 +20,9 @@ function gen_x12_837($pid, $encounter, &$log, $encounter_claim=false) {
 
   // This is true for the 5010 standard, false for 4010.
   // x12gsversionstring() should be "005010X222A1" or "004010X098A1".
-  $CMS_5010 = strpos($claim->x12gsversionstring(), '5010') !== false;
+$CMS_5010=true;
+if(strpos($claim->x12gsversionstring(),'4010')!==false)
+{$CMS_5010=false;}
 
   $log .= "Generating claim $pid-$encounter for " .
     $claim->patientFirstName()  . ' ' .
