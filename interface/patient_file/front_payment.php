@@ -442,7 +442,7 @@ if ($_POST['form_save'] || $_REQUEST['receipt']) {
 <center>
 
 <p><h2><?php echo xlt('Receipt for Payment'); ?></h2>
-
+<img src="../../images/santiago_logo.jpg" width="325" height="150">
 <p><?php echo text($frow['name']) ?>
 <br><?php echo text($frow['street']) ?>
 <br><?php echo text($frow['city'] . ', ' . $frow['state']) . ' ' .

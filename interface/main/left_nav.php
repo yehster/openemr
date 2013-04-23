@@ -137,7 +137,8 @@
   'enc' => array(xl('Encounter') , 2, 'patient_file/encounter/encounter_top.php'),
   'erx' => array(xl('e-Rx') , 1, 'eRx.php'),
   'err' => array(xl('e-Rx Renewal') , 1, 'eRx.php?page=status'),
-  'pay' => array(xl('Payment') , 1, '../patient_file/front_payment.php')
+  'pay' => array(xl('Payment') , 1, '../patient_file/front_payment.php'),
+  'edi' => array(xl('EDI History') , 0, 'billing/edih_view.php')
  );
  $primary_docs['npa']=array(xl('Batch Payments')   , 0, 'billing/new_payment.php');
  if ($GLOBALS['use_charges_panel'] || $GLOBALS['concurrent_layout'] == 2) {
@@ -147,7 +148,7 @@
  // This section decides which navigation items will not appear.
 
  $disallowed = array();
-
+ $disallowed['edi'] = !($GLOBALS['enable_edihistory_in_left_menu'] || acl_check('acct', 'eob'));
  $disallowed['adm'] = !(acl_check('admin', 'calendar') ||
   acl_check('admin', 'database') || acl_check('admin', 'forms') ||
   acl_check('admin', 'practice') || acl_check('admin', 'users') ||
@@ -157,16 +158,15 @@
  $disallowed['bil'] = !(acl_check('acct', 'rep') || acl_check('acct', 'eob') ||
   acl_check('acct', 'bill'));
 
- $tmp = acl_check('patients', 'demo');
- $disallowed['new'] = !($tmp == 'write' || $tmp == 'addonly');
+ $disallowed['new'] = !(acl_check('patients','demo','',array('write','addonly') ));
 
  $disallowed['fax'] = !($GLOBALS['enable_hylafax'] || $GLOBALS['enable_scanner']);
 
  $disallowed['ros'] = !$GLOBALS['athletic_team'];
 
- $disallowed['iss'] = !((acl_check('encounters', 'notes') == 'write' ||
-  acl_check('encounters', 'notes_a') == 'write') &&
-  acl_check('patients', 'med') == 'write');
+ $disallowed['iss'] = !((acl_check('encounters','notes','','write') ||
+  acl_check('encounters','notes_a','','write') ) &&
+  acl_check('patients','med','','write') );
 
  $disallowed['imp'] = $disallowed['new'] ||
   !is_readable("$webserver_root/custom/import.php");
@@ -551,6 +551,23 @@ function goHome() {
     top.frames['RBot'].location='messages/messages.php?form_active=1';
 }
 
+//Function to clear active patient and encounter in the server side
+function clearactive() {
+	top.restoreSession();
+	//Ajax call to clear active patient in session
+	$.ajax({
+	  type: "POST",
+	  url: "<?php echo $GLOBALS['webroot'] ?>/library/ajax/unset_session_ajax.php",
+	  data: { func: "unset_pid"},
+	  success:function( msg ) {
+		clearPatient();
+		top.frames['RTop'].location='<?php echo $GLOBALS['default_top_pane']?>';
+		top.frames['RBot'].location='messages/messages.php?form_active=1';
+	  }
+	});
+    
+	$(parent.Title.document.getElementById('clear_active')).hide();
+}
  // Reference to the search.php window.
  var my_window;
 
@@ -713,6 +730,7 @@ function goHome() {
   }
 
   reloadIssues(pid);
+  $(parent.Title.document.getElementById('clear_active')).show();//To display Clear Active Patient button on selecting a patient
  }
  function setPatientEncounter(EncounterIdArray,EncounterDateArray,CalendarCategoryArray) {
  //This function lists all encounters of the patient.
@@ -790,9 +808,9 @@ function getEncounterTargetFrame( name ) {
   active_pid = 0;
   active_encounter = 0;
   setDivContent('current_patient', '<b><?php xl('None','e'); ?></b>');
-  setTitleContent('current_patient', '<b><?php xl('None','e'); ?></b>');
+  $(parent.Title.document.getElementById('current_patient_block')).hide();
   top.window.parent.Title.document.getElementById('past_encounter').innerHTML='';
-  top.window.parent.Title.document.getElementById('current_encounter').innerHTML="<b><?php echo htmlspecialchars( xl('None'), ENT_QUOTES) ?></b>";
+  $(parent.Title.document.getElementById('current_encounter_block')).hide();
   reloadPatient('');
   syncRadios();
  }
@@ -1177,6 +1195,7 @@ if (!empty($reg)) {
       <?php genMiscLink('RBot','bil','1',xl('Checkout'),'patient_file/pos_checkout.php?framed=1'); ?> 
       <?php if (! $GLOBALS['simplified_demographics']) genTreeLink('RTop','bil',xl('Billing')); ?>
 	  <?php genTreeLink('RTop','npa',xl('Batch Payments'),false,2);?>
+      <?php if ($GLOBALS['enable_edihistory_in_left_menu'] && acl_check('acct', 'eob')) genTreeLink('RTop','edi',xl('EDI History'),false,2);?>
     </ul>
   </li>
   <?php } ?>

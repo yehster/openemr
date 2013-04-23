@@ -1,3 +1,4 @@
+# /var/www/openemr/sites/default/clickoptions.txt
 # CLICKOPTIONS by Mark Leeds
 # This is a new addition to OpenEMR written in April of 2005.
 # The purpose is to minimize typing in places where a select box or drop down menu
@@ -15,10 +16,48 @@
 # The files that had to be altered for this feature to work are in openemr/interface/patient_file/summary.
 # Three statements were added to 5 files marked with a clickoptions comment and two files were added
 # to the directory, 'clickoptions1.php' and 'clickoptions2.php'.
-medical_problem::HTN
-medical_problem::asthma
-medical_problem::diabetes
-medical_problem::hyperlipidemia
+medical_problem::viral upper respiratory infection (URI)
+medical_problem::allergic conjunctivitis
+medical_problem::allergic rhinitis
+medical_problem::anemia, iron deficiency
+medical_problem::asthma, acute exacerbation
+medical_problem::asthma, mild intermittent
+medical_problem::asthma, persistent
+medical_problem::asthma, mild persistent
+medical_problem::asthma, moderate persistent
+medical_problem::asthma, severe persistent
+medical_problem::atopic dermatitis
+medical_problem::bronchiolitis
+medical_problem::bronchospasm
+medical_problem::bronchospasm (by history)
+medical_problem::conjunctivitis, allergic
+medical_problem::conjunctivitis, bacterial
+medical_problem::constipation
+medical_problem::contact dermatitis
+medical_problem::dental caries class I
+medical_problem::dental caries class II
+medical_problem::dental caries class III
+medical_problem::diaper dermatitis (irritant)
+medical_problem::diaper dermatitis (monilial/fungal)
+medical_problem::dysuria
+medical_problem::eczema
+medical_problem::epistaxis
+medical_problem::feeding problem, newborn
+medical_problem::gastroenteritis
+medical_problem::growing pains
+medical_problem::hemoglobin low, likely secondary to current illness
+medical_problem::jaundice, newborn
+medical_problem::obesity
+medical_problem::oral aversion
+medical_problem::overweight
+medical_problem::otitis media, serous
+medical_problem::otitis media, suppurative
+medical_problem::pneumonia, bacterial
+medical_problem::pneumonia, clinical
+medical_problem::pyaryngitis
+medical_problem::refractive error
+medical_problem::speech delay
+medical_problem::viral exanthem
 medication::Norvasc
 medication::Lipitor
 medication::Metformin

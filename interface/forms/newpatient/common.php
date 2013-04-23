@@ -328,7 +328,7 @@ if ($fres) {
       <a href="#" class="css_button_small link_submit"
        onclick="return newissue()"><span><?php echo htmlspecialchars(xl('Add')); ?></span></a>
 <?php } else { ?>
-      <a href="../../patient_file/summary/add_edit_issue.php" class="css_button_small link_submit iframe"
+      <a href="../../patient_file/summary/stats_full.php" class="css_button_small link_submit iframe"
        onclick="top.restoreSession()"><span><?php echo htmlspecialchars(xl('Add')); ?></span></a>
 <?php } ?>
     </div>

@@ -366,7 +366,7 @@ $(document).ready(function(){
 else {
 
     // This is for sorting the records.
-    $sort = array("users.lname", "patient_data.lname", "pnotes.title", "pnotes.date", "pnotes.message_status");
+	$sort = array("pnotes.date", "patient_data.lname", "users.lname", "pnotes.title", "pnotes.message_status");
     $sortby = (isset($_REQUEST['sortby']) && ($_REQUEST['sortby']!="")) ? $_REQUEST['sortby'] : $sort[0];
     $sortorder = (isset($_REQUEST['sortorder'])  && ($_REQUEST['sortorder']!="")) ? $_REQUEST['sortorder']  : "asc";
     $begin = isset($_REQUEST['begin']) ? $_REQUEST['begin'] : 0;

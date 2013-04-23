@@ -299,7 +299,7 @@ function doclick(pfx, id) {
   echo "    <tr class='detail' id='p_$rowid' onclick='doclick(\"p\", $rowid)'>\n";
   echo "     <td valign='top'>" . $ISSUE_TYPES[($row['type'])][1] . "</td>\n";
   echo "     <td valign='top'>" . $row['title'] . "</td>\n";
-  echo "     <td valign='top'>" . $row['comments'] . "</td>\n";
+  echo "     <td valign='top'>" . $row['diagnosis'] . "</td>\n";
   echo "    </tr>\n";
   $endjs .= "pselected['$rowid'] = '';\n";
  }

@@ -59,8 +59,8 @@ var mypcc = '<?php echo $GLOBALS['phone_country_code'] ?>';
 </div>
 
 <select name="note_type">
-<option value="WORK NOTE"><?php xl('WORK NOTE','e'); ?></option>
 <option value="SCHOOL NOTE"><?php xl('SCHOOL NOTE','e'); ?></option>
+<option value="WORK NOTE"><?php xl('WORK NOTE','e'); ?></option>
 </select>
 <br>
 <b><?php xl('MESSAGE:','e'); ?></b>
