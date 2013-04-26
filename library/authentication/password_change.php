@@ -1,5 +1,32 @@
 <?php
 require_once("$srcdir/authentication/common_operations.php");
+function test_password_strength($pwd,&$errMsg)
+{
+    $require_strong=$GLOBALS['secure_password'] !=0;
+    if($require_strong)
+    {
+        if(strlen($newPwd)<8)
+        {
+            $errMsg=xl("Password too short. Minimum 8 characters required.");
+            return false;
+        }
+        $features=0;
+        $reg_security=array("/[a-z]+/","/[A-Z]+/","/\d+/","/[\W_]+/");
+        foreach($reg_security as $expr)
+        {
+            if(preg_match($expr,$newPwd))
+            {
+                $features++;
+            }
+        }
+        if($features<3)
+        {
+            $errMsg=xl("Password does not meet minimum requirements and should contain at least three of the four following items: A number, a lowercase letter, an uppercase letter, a special character (Not a leter or number).");
+            return false;
+        }
+    }
+    return true;
+}
 
 function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
 {
@@ -43,59 +70,53 @@ function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
         $errMsg=xl("Empty Password Not Allowed");
         return false;
     }
-    $require_strong=$GLOBALS['secure_password'] !=0;
-    if($require_strong)
+    if(!test_password_strength($newPwd,$errMsg))
     {
-        if(strlen($newPwd)<8)
+        return false;
+    }
+    if(!$userInfo)
+    {
+        // For a user with an old SHA1 or MD5 password, just migrate to blowfish
+        // don't worry about history/reuse in this situation.
+        $getUserNameSQL="SELECT ".COL_UNM
+                ." FROM ".TBL_USERS
+                ." WHERE ".COL_ID."=?";
+        $unm=privQuery($getUserNameSQL,array($targetUser));
+        initializePassword($unm[COL_UNM],$targetUser,$newPwd);
+        purgeCompatabilityPassword($unm[COL_UNM],$targetUser);
+    }
+    else
+    {
+        
+        $forbid_reuse=$GLOBALS['password_history'] != 0;
+        if($forbid_reuse)
         {
-            $errMsg=xl("Password too short. Minimum 8 characters required.");
-            return false;
-        }
-        $features=0;
-        $reg_security=array("/[a-z]+/","/[A-Z]+/","/\d+/","/[\W_]+/");
-        foreach($reg_security as $expr)
-        {
-            if(preg_match($expr,$newPwd))
+            // password reuse disallowed
+            $hash_current=crypt($newPwd,$userInfo[COL_SALT]);
+            $hash_history1=crypt($newPwd,$userInfo[COL_SALT_H1]);
+            $hash_history2=crypt($newPwd,$userInfo[COL_SALT_H2]);
+            if(($hash_current==$userInfo[COL_PWD]) 
+                ||($hash_history1==$userInfo[COL_PWD_H1]) 
+                || ($hash_history2==$userInfo[COL_PWD_H2]))
             {
-                $features++;
+                $errMsg=xl("Reuse of three previous passwords not allowed!");
+                return false;
             }
         }
-        if($features<3)
-        {
-            $errMsg=xl("Password does not meet minimum requirements and should contain at least three of the four following items: A number, a lowercase letter, an uppercase letter, a special character (Not a leter or number).");
-            return false;
-        }
-    }
+        $newSalt = blowfish_salt();
+        $newHash = crypt($newPwd,$newSalt);
+        $updateParams=array();
+        $updateSQL= "UPDATE ".TBL_USERS_SECURE;
+        $updateSQL.=" SET ".COL_PWD."=?,".COL_SALT."=?"; array_push($updateParams,$newHash); array_push($updateParams,$newSalt);
+        if($forbid_reuse){ 
+            $updateSQL.=",".COL_PWD_H1."=?".",".COL_SALT_H1."=?"; array_push($updateParams,$userInfo[COL_PWD]); array_push($updateParams,$userInfo[COL_SALT]);
+            $updateSQL.=",".COL_PWD_H2."=?".",".COL_SALT_H2."=?"; array_push($updateParams,$userInfo[COL_PWD_H1]); array_push($updateParams,$userInfo[COL_SALT_H1]);
 
-    $forbid_reuse=$GLOBALS['password_history'] != 0;
-    if($forbid_reuse)
-    {
-        // password reuse disallowed
-        $hash_current=crypt($newPwd,$userInfo[COL_SALT]);
-        $hash_history1=crypt($newPwd,$userInfo[COL_SALT_H1]);
-        $hash_history2=crypt($newPwd,$userInfo[COL_SALT_H2]);
-        if(($hash_current==$userInfo[COL_PWD]) 
-            ||($hash_history1==$userInfo[COL_PWD_H1]) 
-            || ($hash_history2==$userInfo[COL_PWD_H2]))
-        {
-            $errMsg=xl("Reuse of three previous passwords not allowed!");
-            return false;
-        }
+            }
+        $updateSQL.=" WHERE ".COL_ID."=?"; array_push($updateParams,$targetUser);
+        privStatement($updateSQL,$updateParams);
     }
-    $newSalt = blowfish_salt();
-    $newHash = crypt($newPwd,$newSalt);
-    $updateParams=array();
-    $updateSQL= "UPDATE ".TBL_USERS_SECURE;
-    $updateSQL.=" SET ".COL_PWD."=?,".COL_SALT."=?"; array_push($updateParams,$newHash); array_push($updateParams,$newSalt);
-    if($forbid_reuse){ 
-        $updateSQL.=",".COL_PWD_H1."=?".",".COL_SALT_H1."=?"; array_push($updateParams,$userInfo[COL_PWD]); array_push($updateParams,$userInfo[COL_SALT]);
-        $updateSQL.=",".COL_PWD_H2."=?".",".COL_SALT_H2."=?"; array_push($updateParams,$userInfo[COL_PWD_H1]); array_push($updateParams,$userInfo[COL_SALT_H1]);
-        
-        }
-    $updateSQL.=" WHERE ".COL_ID."=?"; array_push($updateParams,$targetUser);
-    privStatement($updateSQL,$updateParams);
-
-    
+   
     if($GLOBALS['password_expiration_days'] != 0){
             $exp_days=$GLOBALS['password_expiration_days'];
             $exp_date = date('Y-m-d', strtotime("+$exp_days days"));
