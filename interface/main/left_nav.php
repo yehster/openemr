@@ -354,7 +354,7 @@ function genFindBlock() {
 </style>
 
 <link rel="stylesheet" href="../../library/js/jquery.treeview-1.4.1/jquery.treeview.css" />
-<script src="../../library/js/jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="../../library/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="../../library/js/jquery.treeview-1.4.1/jquery.treeview.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="../../library/dialog.js"></script>
@@ -949,7 +949,8 @@ $(document).ready(function(){
       window.console && console.log("%o was toggled", this);
      }
     });
-  }
+  }setup_analyze();
+  scan_tree();
 });
 
 </script>
@@ -1504,5 +1505,6 @@ if (!$GLOBALS['athletic_team']) {
 syncRadios();
 </script>
 
+<script src="analysis/left_nav.js" type="text/javascript"></script>
 </body>
 </html>
