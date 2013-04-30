@@ -24,25 +24,48 @@ var onclick_headers=
             "return repPopup": parseRepPopup
         }
 
+
+var display_controls =
+        {
+            "adm": "Administration",
+            "edi": "EDI",
+            "bil": "Billing",
+            "new": "Demographics",
+            "pre": "Prescription"
+        }
 function parseLoadFrame(entry,data)
 {
     entry.type="LoadFrame";
     var fields=data.split(",");
-    entry.url=fields[2];
-    entry.id=fields[0];
-    entry.behavior=entry.id.substr(4,1);
+    entry.setUrl(fields[2]);
+    entry.setRequirement(entry.id.substr(3,1));
     entry.target=fields[1];
     if(entry.url.indexOf('patient_file/encounter/load_form.php')>0)
     {
         entry.parent.dynamic="show forms";
     }
-    entry.parent.dynamic="form";
 
 }
 function parseRepPopup(entry,data)
 {
     entry.type="Popup";
-    entry.url=data;
+    entry.setUrl(data);
+}
+function evalUrl(data)
+{
+    
+    this.url=data.replace(/\'/g,"")
+}
+function setRequirement(data)
+{
+    if(data=='1')
+    {
+        this.requirement="Patient";
+    }
+    if(data=='2')
+    {
+        this.requirement="Encounter";
+    }
 }
 function menu_entry(desc)
 {
@@ -65,15 +88,30 @@ function menu_entry(desc)
             }
         }
     }
+    this.setUrl=evalUrl;
+    this.setRequirement=setRequirement;
     return this;
+}
+
+function evaluate_id(entry)
+{
+    if(typeof entry.id==='string')
+    {
+        var key=entry.id.substr(0,3);
+        if(typeof display_controls[key]!=='undefined')
+            {
+                entry.control=display_controls[key];
+            }           
+    }
 }
 function evaluate_entry(parent,idx,elem)
 {
-
     var entry=$(elem);
     var mi=entry.children("a:first");
     var new_parent=new menu_entry(mi.text());
     new_parent.parent=parent;
+    new_parent.id=mi.attr("id");
+    evaluate_id(new_parent);
     new_parent.parse_onclick(mi.attr("onclick"));
     parent.children[idx]=new_parent;
     var sublist=entry.children("ul");
@@ -118,10 +156,14 @@ function scan_tree()
     var root_entries=$("#navigation-slide > li");
     root_entries.each(function(idx,elem){evaluate_entry(root,idx,elem);});
     var xml=pretty_print(root,0);
-    window.alert(xml)
-    var info=$("<div></div>").text(xml);
-    info.appendTo($("body"));
-//    window.alert(info.html());
+    $.post("analysis/process_menu_xml.php",
+            {menu:xml.replace(/&/g,'&amp;')},
+        function(data)
+        {
+            //window.alert(data);
+            loadFrame2("","RTop","main/analysis/menu.xml");
+        }
+    )
 }
 
 function setup_analyze()
