@@ -39,7 +39,7 @@ function parseLoadFrame(entry,data)
     var fields=data.split(",");
     entry.setUrl(fields[2]);
     entry.setRequirement(entry.id.substr(3,1));
-    entry.target=fields[1];
+    entry.target=evalUrl(fields[1]);
     if(entry.url.indexOf('patient_file/encounter/load_form.php')>0)
     {
         entry.parent.dynamic="show forms";
@@ -127,14 +127,16 @@ function pretty_print(entry,depth)
         {
             tab_str+="\t";
         }
-    ret_phrase+=tab_str+"<menuitem>\n";
+    ret_phrase+=tab_str+"<menuitem";
     for(i in entry)
         {
         if(typeof entry[i]==='string')
         {
-            ret_phrase +=tab_str+"\t<"+i+">"+entry[i]+"</"+i+">"+"\n";
+            ret_phrase+=" "+ i+"='"+entry[i]+"' ";
         }
     }
+    
+    ret_phrase+=">\n"
     if(entry.children.length>0)
         {
             ret_phrase +=tab_str+"\t<children>\n";
