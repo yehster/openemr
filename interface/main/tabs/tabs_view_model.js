@@ -69,18 +69,26 @@ function set_tab_title(proxy)
             }
         }
 }
+
 function frame_ready()
 {
     this.frame = window.frames[parseInt(this.idx)+3]; // clunky but works for now!
     set_tab_title(this);
 }
+
 function frame_proxy(default_title,idx,src)
 {
     this.visible=ko.observable(false);
     this.title=ko.observable(default_title);
     this.idx=idx;
     this.src=src;
-    this.watch("location", function(property,oldval,newval){this.frame.location=newval;});
+    this.watch("location", function(property,oldval,newval)
+    {
+        if(typeof this.frame!=='undefined')
+            {
+                    this.frame.location=newval;;
+            }
+        });
     return this;
 }
 function displayInFrame(old_fname,url,title)

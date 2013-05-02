@@ -958,7 +958,6 @@ $(document).ready(function(){
      }
     });
   }setup_analyze();
-  scan_tree();
 });
 
 </script>
