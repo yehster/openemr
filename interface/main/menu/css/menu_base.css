@@ -14,7 +14,7 @@
     width:100%;
     height:1.5em;
     list-style-type: none;
-    font-size: 10pt;
+    cursor: pointer;
 }
 #main_menu > li 
 {
@@ -25,27 +25,31 @@
 {
     background-color: black;
     color: white;
-    padding-right: 0.2em;
-    border: 1px solid black;    
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+    border-right: 2px solid white;    
 }
 
 #main_menu > li > span:hover
 {
-    background-color: lightblue;
+    background-color: blue;
 }
 
-#main_menu > li > ul
+#main_menu > li > div > ul
 {
     display:none;
     list-style-type: none;
 }
 
-#main_menu > li:hover > ul
+#main_menu > li:hover > div> ul
 {
     position:fixed;
-    background-color: yellow;
+    background-color: white;
     color: black;
     display:block;
+    border-width: 0px 1px 1px 1px;
+    border-color: black;
+    border-style: solid;
 }
 
 #main_menu > li:hover > ul span:hover
@@ -54,7 +58,7 @@
     
 }
 
-#main_menu > li > ul ul
+#main_menu > li > div > ul ul
 {
     margin-left: 1em;
     list-style-type: none;

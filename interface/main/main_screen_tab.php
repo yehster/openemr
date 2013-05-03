@@ -75,14 +75,14 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
     <table class="main_window body_top"">
         </tbody>
-            <tr class="header" style="display:none;">
-                <td colspan="2" style="display:none;"><iframe src='main_title_tab.php' name='Title'></iframe></td>               
-            </tr>
             <tr>
                 <td data-bind="template:'menu-base'"></td>
             </tr>
             <tr>
                 <td style="height:1.4em;"></td>
+            </tr>
+            <tr class="header" >
+                <td colspan="2" ><iframe src='main_title_tab.php' name='Title'></iframe></td>               
             </tr>
             <tr>
                 <td class="nav" rowspan="2" style="display:none;">

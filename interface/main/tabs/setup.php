@@ -9,6 +9,7 @@
     require_once("menu/menuitem.php");
     require_once("menu/dom_analysis.php");
     require_once("menu/templates/menu_base.php");
+    require_once("menu/templates/menu_entry.php");
     $xmlsrc="/var/www/openemr/interface/main/analysis/menu.xml";
     $menu_root=build_menu($xmlsrc);
 ?>

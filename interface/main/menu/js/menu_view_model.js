@@ -8,3 +8,8 @@ function menu_view_model(data)
     this.data=data.children;
     return this;
 }
+
+function menuClick()
+{
+    return true;
+}
