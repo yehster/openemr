@@ -74,7 +74,7 @@ $res = sqlQuery("select * from users where username='".$_SESSION{"authUser"}."'"
 
 <table cellspacing="0" cellpadding="0" width="100%" height="100%">
 <tr>
-<td align="left">
+<td align="left" style="display:none;">
 <?php if ($GLOBALS['concurrent_layout']) { ?>
 	<table cellspacing="0" cellpadding="1" style="margin:0px 0px 0px 3px;">
 

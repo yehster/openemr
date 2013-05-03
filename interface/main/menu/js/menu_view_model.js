@@ -9,7 +9,10 @@ function menu_view_model(data)
     return this;
 }
 
-function menuClick()
+function menu_click()
 {
+    
+    //top.displayInFrame(this.target,"",this.url);
+    left_nav.loadFrame2("",this.target,this.url);
     return true;
 }

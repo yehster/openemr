@@ -85,7 +85,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
                 <td colspan="2" ><iframe src='main_title_tab.php' name='Title'></iframe></td>               
             </tr>
             <tr>
-                <td class="nav" rowspan="2">
+                <td class="nav" rowspan="2" style="display:none">
                     <iframe name="left_nav" src="left_nav_tab.php"></iframe>
                 </td>
                 <td  class="right buttons">

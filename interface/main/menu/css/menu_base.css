@@ -21,8 +21,14 @@
     float: left;
 }
 
+
+#main_menu > li > span.header
+{
+    color: lightblue;
+}
 #main_menu > li > span
 {
+    font-weight: bold;
     background-color: black;
     color: white;
     padding-left: 0.1em;
@@ -30,6 +36,10 @@
     border-right: 2px solid white;    
 }
 
+#main_menu > li .header
+{
+    font-weight: bold;
+}
 #main_menu > li > span:hover
 {
     background-color: blue;
@@ -52,10 +62,15 @@
     border-style: solid;
 }
 
-#main_menu > li:hover > div > ul span:hover
+#main_menu > li:hover > div > ul span.LoadFrame:hover
 {
     background-color: lightblue;
     
+}
+
+#main_menu > li:hover > div > ul span.header:hover
+{
+    cursor: default;
 }
 
 #main_menu > li > div > ul ul

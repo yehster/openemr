@@ -41,6 +41,12 @@ class menuitem implements JsonSerializable
         {
             $retval['requirement']=$this->requirement;
         }
+        if(isset($this->target))
+        {
+            $retval['target']=$this->target;
+        }
+
+        
         if(property_exists($this,'dynamic') && $this->dynamic=="show forms")
         {
             //handle the dynamic forms differently in the future.

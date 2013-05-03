@@ -39,7 +39,7 @@ function parseLoadFrame(entry,data)
     var fields=data.split(",");
     entry.setUrl(fields[2]);
     entry.setRequirement(entry.id.substr(3,1));
-    entry.target=evalUrl(fields[1]);
+    entry.target=fields[1].replace(/\'/g,"");
     if(entry.url.indexOf('patient_file/encounter/load_form.php')>=0)
     {
         if(entry.parent.description.indexOf("Visit Forms")>=0)
@@ -183,6 +183,7 @@ function scan_tree()
     var root_entries=$("#navigation-slide > li");
     root_entries.each(function(idx,elem){evaluate_entry(root,idx,elem);});
     var popup_menu=new menu_entry("Popups");
+    popup_menu.type="header";
     root.children.push(popup_menu);
     var popup_entries=$("select[name='popups'] option").each(function(idx,elem){evalute_popups(popup_menu,idx,elem);});
     var xml=pretty_print(root,0);
