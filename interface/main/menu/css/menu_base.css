@@ -52,7 +52,7 @@
     border-style: solid;
 }
 
-#main_menu > li:hover > ul span:hover
+#main_menu > li:hover > div > ul span:hover
 {
     background-color: lightblue;
     
