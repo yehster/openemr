@@ -8,10 +8,13 @@
 
 #main_menu
 {
+    background-color: black;
+    color: white;
     position: fixed;
     width:100%;
     height:1.5em;
     list-style-type: none;
+    font-size: 10pt;
 }
 #main_menu > li 
 {
@@ -20,7 +23,9 @@
 
 #main_menu > li > span
 {
-    padding: 0.2em;
+    background-color: black;
+    color: white;
+    padding-right: 0.2em;
     border: 1px solid black;    
 }
 
@@ -39,6 +44,7 @@
 {
     position:fixed;
     background-color: yellow;
+    color: black;
     display:block;
 }
 
@@ -52,4 +58,6 @@
 {
     margin-left: 1em;
     list-style-type: none;
+    display:block;
 }
+

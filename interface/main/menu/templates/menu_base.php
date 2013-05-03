@@ -1,5 +1,4 @@
 <script type="text/html" id="menu-base">
-    <div>
         <ul id='main_menu' data-bind="foreach: menu">
             <li>
                 <span data-bind="text:description, attr:{'class':$data.type}"></span>
@@ -20,5 +19,4 @@
                 </ul>
             </li>
         </ul>
-    </div>
 </script>
