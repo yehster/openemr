@@ -1,0 +1,55 @@
+/* 
+    Document   : menu_base
+    Created on : May 2, 2013, 7:51:54 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#main_menu
+{
+    position: fixed;
+    width:100%;
+    height:1.5em;
+    list-style-type: none;
+}
+#main_menu > li 
+{
+    float: left;
+}
+
+#main_menu > li > span
+{
+    padding: 0.2em;
+    border: 1px solid black;    
+}
+
+#main_menu > li > span:hover
+{
+    background-color: lightblue;
+}
+
+#main_menu > li > ul
+{
+    display:none;
+    list-style-type: none;
+}
+
+#main_menu > li:hover > ul
+{
+    position:fixed;
+    background-color: yellow;
+    display:block;
+}
+
+#main_menu > li:hover > ul span:hover
+{
+    background-color: lightblue;
+    
+}
+
+#main_menu > li > ul ul
+{
+    margin-left: 1em;
+    list-style-type: none;
+}

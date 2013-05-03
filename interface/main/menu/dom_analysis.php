@@ -1,29 +1,35 @@
 <?php
 
-function recurse_menu_xml(&$parent,$child)
+function recurse_menu_xml(&$parent,$child,$depth)
 {
     if(!empty($child))
     {
-        if($child->hasAttributes())
-        {
-            foreach($child->attributes as $attr)
+        if(($child->nodeName!=="#text"))
+        {   
+//            echo $depth."<br>";
+            if($child->hasAttributes())
             {
-                echo $attr->name.":".$attr->value . "<br>";
-                error_log( $attr->name.":".$attr->value);
+                $entry=new menuitem();
+                foreach($child->attributes as $attr)
+                {
+                    $attr_name=$attr->name;
+                    $entry->$attr_name=$attr->value;
+//                    echo $attr->name.":".$attr->value . "<br>";
+                    error_log( $attr->name.":".$attr->value);
 
-            }            
-        }
-        if($child->hasChildNodes())
-        {
-            foreach($child->childNodes as $sub)
-            {
-                recurse_menu_xml($parent,$sub);
+                }
+                $parent->addChild($entry);
             }
-//            for($idx=0;$idx<$child->childNodes->length;$idx++)
-//            {
-//                recurse_menu_xml($root,$child->childNodes->item($idx));
-//            }                   
+            if($child->hasChildNodes())
+            {
+                foreach($child->childNodes as $sub)
+                {
+                    recurse_menu_xml($entry,$sub,$depth+1);
+                }
+            }
+            return $entry;
         }
+        
     }
     
 }
@@ -34,8 +40,8 @@ function build_menu($filename)
     $root=new menuitem();
     foreach($DOM->childNodes as $child)
     {
-        recurse_menu_xml($root,$child);
+        recurse_menu_xml($root,$child,0);
     }
-    return $root;
+    return $root->firstChild();
 }
 ?>

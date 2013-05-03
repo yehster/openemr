@@ -40,7 +40,7 @@ function parseLoadFrame(entry,data)
     entry.setUrl(fields[2]);
     entry.setRequirement(entry.id.substr(3,1));
     entry.target=evalUrl(fields[1]);
-    if(entry.url.indexOf('patient_file/encounter/load_form.php')>0)
+    if(entry.url.indexOf('patient_file/encounter/load_form.php')>=0)
     {
         entry.parent.dynamic="show forms";
     }
@@ -71,6 +71,7 @@ function menu_entry(desc)
 {
     this.description=desc;
     this.children=new Array();
+    this.requirement="none";
     this.parse_onclick=function(info)
     {
         if(typeof(info)==="undefined")
@@ -136,18 +137,20 @@ function pretty_print(entry,depth)
         }
     }
     
-    ret_phrase+=">\n"
     if(entry.children.length>0)
         {
-            ret_phrase +=tab_str+"\t<children>\n";
+            ret_phrase+=">\n"
             for(var idx=0;idx<entry.children.length;idx++)
             {
                 ret_phrase+=pretty_print(entry.children[idx],depth+1);
             }
-            ret_phrase +=tab_str+"\t</children>\n"
-            
+
+            ret_phrase+=tab_str+"</menuitem>\n";
         }
-    ret_phrase+=tab_str+"</menuitem>\n";
+        else
+            {
+                ret_phrase+="/>\n"
+            }
     return ret_phrase;
 }
 

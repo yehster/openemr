@@ -6,5 +6,5 @@ $xmlsrc="/var/www/openemr/interface/main/analysis/menu.xml";
 
 $menu_root=build_menu($xmlsrc);
 
-echo "Hello World!";
+echo json_encode($menu_root);
 ?>
