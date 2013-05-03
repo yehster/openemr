@@ -42,7 +42,10 @@ function parseLoadFrame(entry,data)
     entry.target=evalUrl(fields[1]);
     if(entry.url.indexOf('patient_file/encounter/load_form.php')>=0)
     {
-        entry.parent.dynamic="show forms";
+        if(entry.parent.description.indexOf("Visit Forms")>=0)
+            {
+                entry.parent.dynamic="show forms";        
+            }
     }
 
 }
@@ -70,6 +73,10 @@ function setRequirement(data)
 function menu_entry(desc)
 {
     this.description=desc;
+    if(this.description.indexOf("Messages (")===0)
+        {
+            this.description="Messages";
+        }
     this.children=new Array();
     this.requirement="none";
     this.parse_onclick=function(info)
@@ -119,7 +126,22 @@ function evaluate_entry(parent,idx,elem)
     sublist.children("li").each(function(idx,elem){evaluate_entry(new_parent,idx,elem);});
 }
 
+function evalute_popups(parent,idx,elem)
+{
+    var jqElem=$(elem);
+    {
+        if(jqElem.val()!=="")
+            {
+                var new_entry=new menu_entry(jqElem.text());
+                new_entry.parent=parent;
+                parent.children.push(new_entry);
+                new_entry.type="Popup";
+                new_entry.setUrl(jqElem.val());
+            }
 
+    }
+    
+}
 function pretty_print(entry,depth)
 {
     var ret_phrase="";
@@ -160,6 +182,9 @@ function scan_tree()
     root.type="root";
     var root_entries=$("#navigation-slide > li");
     root_entries.each(function(idx,elem){evaluate_entry(root,idx,elem);});
+    var popup_menu=new menu_entry("Popups");
+    root.children.push(popup_menu);
+    var popup_entries=$("select[name='popups'] option").each(function(idx,elem){evalute_popups(popup_menu,idx,elem);});
     var xml=pretty_print(root,0);
     $.post("analysis/process_menu_xml.php",
             {menu:xml.replace(/&/g,'&amp;')},

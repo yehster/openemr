@@ -44,10 +44,10 @@ class menuitem implements JsonSerializable
         if(property_exists($this,'dynamic') && $this->dynamic=="show forms")
         {
             //handle the dynamic forms differently in the future.
-            $retval['children']=array();
-                foreach($this->children as $child)
+//            $retval['children']=array();
+//                foreach($this->children as $child)
                 {
-                    array_push($retval['children'],$child);
+//                    array_push($retval['children'],$child);
                 }                
         }
         else
