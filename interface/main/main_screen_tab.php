@@ -73,23 +73,11 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 </head>
 <body>
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
-    <table class="main_window body_top"">
-        </tbody>
-            <tr>
-                <td data-bind="template:'menu-base'"></td>
-            </tr>
-            <tr>
-                <td style="height:1.4em;"></td>
-            </tr>
-            <tr class="header" >
-                <td colspan="2" ><iframe src='main_title_tab.php' name='Title'></iframe></td>               
-            </tr>
-            <tr>
-                <td class="nav" rowspan="2" style="display:none">
-                    <iframe name="left_nav" src="left_nav_tab.php"></iframe>
-                </td>
-                <td  class="right buttons">
-                    <ul data-bind="foreach: tabStates">                      
+        <div data-bind="template:'menu-base'"></div>
+        <div style="height:1.4em;"></div>
+        <div><iframe src='main_title_tab.php' name='Title'></iframe></div>
+        <div class="right buttons">                    
+            <ul data-bind="foreach: tabStates">                      
                         <li data-bind="css: {'active':visible}">
                             <span data-bind="text: title, click: tab_button_click, attr:{'tab_idx': $index}"></span>
                             <span data-bind="attr:{'tab_idx': $index}, click:tab_refresh">&#x27f3;</span>
@@ -97,17 +85,15 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
 
                     </ul>
                     <input id="multiTabs" type="checkbox" title="Enable Multiple Tabs" data-bind="checked: multi"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="right" data-bind="foreach: tabStates">
-                    <div class="main" data-bind="visible: visible,attr:{'tab_idx': $index}">
-                        <iframe class="main" data-bind="attr:{'src': src,'tab_idx': $index,'name': $index},event:{load: frame_ready}"></iframe>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        </div>
+        <div data-bind="foreach: tabStates">
+            <div class="main" data-bind="visible: visible,attr:{'tab_idx': $index}">
+                <iframe class="main" data-bind="attr:{'src': src,'tab_idx': $index,'name': $index},event:{load: frame_ready}"></iframe>
+            </div>
+        </div>
+        <div style="display:none">
+            <iframe name="left_nav" src="left_nav_tab.php"></iframe>
+        </div>
 </body>
 </html>
 <?php require_once("tabs/setup.php"); ?>

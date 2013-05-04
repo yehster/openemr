@@ -72,22 +72,22 @@ iframe
     padding: 0px;
     margin: 0px;
 }
-td.buttons
+.buttons
 {
     height: 1.1em;
     cursor: pointer;
 }
-td.buttons > ul{
+.buttons > ul{
     display:inline;
 }
-td.buttons li
+.buttons li
 {
     background-color: gold;
     padding: 0, 0.5em 0 0.5em;
     border: 1px solid black;
     display: inline;
 }
-td.buttons li{
+.buttons li{
     display: inline;
 }
 
@@ -98,7 +98,7 @@ td.buttons li{
     display: none;
 }
 
-td.buttons .active
+.buttons .active
 {
     background-color: #fefdcf;
 }
