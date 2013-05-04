@@ -1,7 +1,7 @@
 function tab_refresh(data,event)
 {
     var tab_idx=parseInt($(event.target).attr("tab_idx"));
-    var tab_info=view_model.tabStates[tab_idx];
+    var tab_info=view_model.tabStates()[tab_idx];
     tab_info.frame.location.reload(true);
     set_visible(tab_idx,false);
 }
@@ -104,16 +104,16 @@ function set_visible(chosen_idx,toggle)
         {
             if(toggle)
                 {
-                    view_model.tabStates[chosen_idx].visible(!view_model.tabStates[chosen_idx].visible());                   
+                    view_model.tabStates()[chosen_idx].visible(!view_model.tabStates()[chosen_idx].visible());                   
                 }
                 else
                 {
-                    view_model.tabStates[chosen_idx].visible(true);                                       
+                    view_model.tabStates()[chosen_idx].visible(true);                                       
                 }
             var visible=0;
-            for(var idx=0;idx<view_model.tabStates.length;idx++)
+            for(var idx=0;idx<view_model.tabStates().length;idx++)
             {
-                if(view_model.tabStates[idx].visible())
+                if(view_model.tabStates()[idx].visible())
                     {
                         visible++;
                     }
@@ -121,7 +121,7 @@ function set_visible(chosen_idx,toggle)
             if(visible==0)
                 {
                     visible=1;
-                    view_model.tabStates[chosen_idx].visible(true);
+                    view_model.tabStates()[chosen_idx].visible(true);
                 }
             var size=100/visible+"%";
             $("div.main").css("width",size);
@@ -129,15 +129,15 @@ function set_visible(chosen_idx,toggle)
         else
             {
                 $("div.main").css("width","100%");
-                for(var idx=0;idx<view_model.tabStates.length;idx++)
+                for(var idx=0;idx<view_model.tabStates().length;idx++)
                 {
                     if(idx==chosen_idx)
                         {
-                            view_model.tabStates[idx].visible(true);
+                            view_model.tabStates()[idx].visible(true);
                         }
                         else
                         {
-                            view_model.tabStates[idx].visible(false);
+                            view_model.tabStates()[idx].visible(false);
                         }
                 }                
             }
@@ -156,17 +156,17 @@ function tabState(title,visible)
 
 function tabs_view_model()
 {
-    this.tabStates=[new frame_proxy("Calendar","0","main_info.php")
+    this.tabStates=ko.observableArray([new frame_proxy("Calendar","0","main_info.php")
                    ,new frame_proxy("Patient","1","../new/new.php")
-                   ,new frame_proxy("Messages","2","messages/messages.php")];
+                   ,new frame_proxy("Messages","2","messages/messages.php")]);
     this.multi=ko.observable();
     return this;
 }
 
 
 var view_model=new tabs_view_model();
-window.Cal=view_model.tabStates[0];
+window.Cal=view_model.tabStates()[0];
 window.Cal.visible(true);
-window.RTop=view_model.tabStates[1];
-window.RBot=view_model.tabStates[2];    
+window.RTop=view_model.tabStates()[1];
+window.RBot=view_model.tabStates()[2];    
 
