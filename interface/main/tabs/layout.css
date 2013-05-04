@@ -50,15 +50,6 @@ iframe[name='Title']
     height: 3em;
 }
 
-tr.header
-{
-    height: 3em;
-}
-
-td.nav
-{
-    width: 7em;
-}
 div.main
 {
     float:left;
@@ -74,7 +65,6 @@ iframe
 }
 .buttons
 {
-    height: 1.1em;
     cursor: pointer;
 }
 .buttons > ul{
