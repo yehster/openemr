@@ -9,13 +9,14 @@ function menu_view_model(data)
     return this;
 }
 
-function menu_click()
+function menu_click(data,evt)
 {
     
     //top.displayInFrame(this.target,"",this.url);
     if(this.type==="LoadFrame")
     {
-        left_nav.loadFrame2("",this.target,this.url);    
+        view_model.tabStates()[1].src("/openemr/interface/"+data.url);
+        set_visible(1,false);
     }
     return true;
 }

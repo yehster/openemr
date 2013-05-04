@@ -81,12 +81,15 @@ function frame_proxy(default_title,idx,src)
     this.visible=ko.observable(false);
     this.title=ko.observable(default_title);
     this.idx=idx;
-    this.src=src;
+    this.src=ko.observable(src);
     this.watch("location", function(property,oldval,newval)
     {
         if(typeof this.frame!=='undefined')
             {
-                    this.frame.location=newval;;
+                    if(this.frame.location!==newval)
+                        {
+                            this.frame.location=newval;
+                        }
             }
         });
     return this;
