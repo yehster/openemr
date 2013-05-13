@@ -45,13 +45,13 @@
     background-color: blue;
 }
 
-#main_menu > li > div > ul
+#main_menu > li > ul
 {
     display:none;
     list-style-type: none;
 }
 
-#main_menu > li:hover > div> ul
+#main_menu > li:hover > ul
 {
     position:fixed;
     background-color: white;
@@ -62,18 +62,18 @@
     border-style: solid;
 }
 
-#main_menu > li:hover > div > ul span.LoadFrame:hover
+#main_menu > li:hover > ul span.LoadFrame:hover
 {
     background-color: lightblue;
     
 }
 
-#main_menu > li:hover > div > ul span.header:hover
+#main_menu > li:hover > ul span.header:hover
 {
     cursor: default;
 }
 
-#main_menu > li > div > ul ul
+#main_menu > li > ul ul
 {
     margin-left: 1em;
     list-style-type: none;
