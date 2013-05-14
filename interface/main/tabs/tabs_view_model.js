@@ -12,23 +12,10 @@ function goPid(pid)
     top.RTop.location = pathWebroot+'patient_file/summary/demographics.php' + '?set_pid=' + pid;
     set_visible(1,false);
 }
-function override_events(frame)
-{
-    if(typeof frame.goPid!='undefined')
-    {
-        frame.goPid= top.goPid;
-    }
-    if(typeof frame.openNewForm!='undefined') {
-        frame.openNewForm=function(sel)
-        {
-            frame.location.href=sel;
-        }
-    }    
-    $(frame.document).ready(function(){$("a[target='_parent']",frame.document).removeAttr("target")});    
-}
 
 function set_tab_title(proxy)
 {
+    override_events(proxy.frame);
     var title=$(".title",proxy.frame.document).eq(0);
     if(title.length==1)
     {
@@ -68,6 +55,7 @@ function set_tab_title(proxy)
                     }
             }
         }
+
 }
 
 function frame_ready()

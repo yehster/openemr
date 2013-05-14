@@ -5,6 +5,9 @@
 </script>
 <script type='text/javascript' src="tabs/setup.js"></script>
 <script type='text/javascript' src="tabs/tabs_view_model.js"></script>
+<script type='text/javascript' src="tabs/frame_overrides.js"></script>
+
+
 <?php
     require_once("menu/menuitem.php");
     require_once("menu/dom_analysis.php");
