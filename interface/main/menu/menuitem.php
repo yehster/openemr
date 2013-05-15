@@ -10,6 +10,7 @@
  *
  * @author yehster
  */
+$target_map=["Cal"=>0,"RTop"=>1,"RBot"=>2];
 class menuitem implements JsonSerializable
 {
     protected $children;
@@ -43,7 +44,8 @@ class menuitem implements JsonSerializable
         }
         if(isset($this->target))
         {
-            $retval['target']=$this->target;
+            
+            $retval['target']=$GLOBALS['target_map'][$this->target];
         }
 
         

@@ -15,13 +15,14 @@ function menu_click(data,evt)
     //top.displayInFrame(this.target,"",this.url);
     if(this.type==="LoadFrame")
     {
-        tabs_navigate(pathWebroot+data.url);
+        tabs_navigate(pathWebroot+data.url,data.target);
     }
     return true;
 }
 
-function tabs_navigate(url)
+function tabs_navigate(url,target)
 {
-    view_model.tabStates()[view_model.activeIdx()].src(url);
-    set_visible(view_model.activeIdx(),false);
+    var tab_idx=target;
+    view_model.tabStates()[tab_idx].src(url);
+    set_visible(tab_idx,false);
 }

@@ -13,7 +13,7 @@ function set_encounter(data)
     view_model.encounter.id(id);
     view_model.encounter.date(date);
     var url=pathWebroot+'patient_file/encounter/encounter_top.php?set_encounter=' + id;
-    top.tabs_navigate(url);
+    top.tabs_navigate(url,2);
 }
 
 function override_events(frame)
