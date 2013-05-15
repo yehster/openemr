@@ -6,12 +6,7 @@ function tab_refresh(data,event)
     set_visible(tab_idx,false);
 }
 
-function goPid(pid)
-{
-    top.restoreSession();
-    top.RTop.location = pathWebroot+'patient_file/summary/demographics.php' + '?set_pid=' + pid;
-    set_visible(1,false);
-}
+
 
 function set_tab_title(proxy)
 {
@@ -130,7 +125,8 @@ function set_visible(chosen_idx,toggle)
                         {
                             view_model.tabStates()[idx].visible(false);
                         }
-                }                
+                }
+                view_model.activeIdx=chosen_idx;
             }
 }
 function tab_button_click(data,event)
@@ -151,6 +147,7 @@ function tabs_view_model()
                    ,new frame_proxy("Patient","1","../new/new.php")
                    ,new frame_proxy("Messages","2","messages/messages.php")]);
     this.multi=ko.observable();
+    this.activeIdx=ko.observable(0);
     return this;
 }
 

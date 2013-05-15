@@ -1,3 +1,10 @@
+function goPid(pid)
+{
+    top.restoreSession();
+    top.RTop.location = pathWebroot+'patient_file/summary/demographics.php' + '?set_pid=' + pid;
+    set_visible(1,false);
+}
+
 function override_events(frame)
 {
 //    window.alert("Override Events!");
