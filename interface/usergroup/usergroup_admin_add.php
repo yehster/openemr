@@ -199,7 +199,7 @@ if ($fres) {
     $result[$iter] = $frow;
   foreach($result as $iter) {
 ?>
-<option value="<?php echo $iter{id};?>"><?php echo $iter{name};?></option>
+<option value="<?php echo $iter{'id'};?>"><?php echo $iter{'name'};?></option>
 <?php
   }
 }
@@ -236,9 +236,7 @@ if ($fres) {
 <?php
  foreach (array(3 => xl('Outlook'), 1 => xl('Original'), 2 => xl('Fancy')) as $key => $value)
  {
-  echo " <option value='$key'";
-  if ($key == $iter['cal_ui']) echo " selected";
-  echo ">$value</option>\n";
+  echo " <option value='$key'>$value</option>\n";
  }
 ?>
 </select></td>
@@ -250,7 +248,7 @@ if ($fres) {
 <td><input type="text" name="state_license_number" style="width:120px;"></td>
 <td class='text'><?php xl('NewCrop eRX Role','e'); ?>:</td>
 <td>
-  <?php echo generate_select_list("erxrole", "newcrop_erx_role", $iter['newcrop_user_role'],'','--Select Role--','','','',array('style'=>'width:120px')); ?>  
+  <?php echo generate_select_list("erxrole", "newcrop_erx_role", '','','--Select Role--','','','',array('style'=>'width:120px')); ?>  
 </td>
 </tr>
 
