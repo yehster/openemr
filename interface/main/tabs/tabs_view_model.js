@@ -8,23 +8,23 @@ function tab_refresh(data,event)
 
 
 
+var title_selectors=[".title",".main_title","b:first"];
 function set_tab_title(proxy)
 {
     override_events(proxy.frame);
-    var title=$(".title",proxy.frame.document).eq(0);
-    if(title.length==1)
-    {
-        proxy.title(title.text());
-        return;
-    }    
-    title=$(".main_title",proxy.frame.document).eq(0);
-    if(title.length==1)
-    {
-        proxy.title(title.text());
-        return;
-    }     
+    for(idx in title_selectors)
+        {
+            var title=$(title_selectors[idx],proxy.frame.document).eq(0);
+            if(title.length===1)
+            {
+                proxy.title(title.text());
+                return;
+            }    
+            
+        }
+    
     var subFrames=proxy.frame.frames;
-    if(subFrames.length==1) {
+    if(subFrames.length===1) {
             proxy.frame.location=subFrames[0].location.href;
     }
     else
