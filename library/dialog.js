@@ -58,10 +58,19 @@ function grabfocus(w) {
 }
 
 // call this when a "modal" dialog is desired
+function setup_dlgiframe()
+{
+    i.window={};
+    window.i.window.close=function(){
+        alert("yo!");
+    }
+    alert(window.i.window);
+}
 function dlgopen(url, winname, width, height) {
     
 
     // 
+    
     if((typeof i==='undefined') || i===null)
         {
             i=window.document.createElement('iframe');
@@ -69,12 +78,8 @@ function dlgopen(url, winname, width, height) {
         }
     i.src=url;
     i.id="dialog";
-    i.setAttribute("style","height:"+"100%"+";"+"width:"+"100%;position:absolute; top:0;left:0;border: 0px;margin: 0px; padding:0px;");
-    i.window={};
-    i.window.close=function()
-    {
-        top.alert("yo!");
-    };
+    i.name="dialog";
+    i.setAttribute("style","height:"+height+";"+"width:"+width+";position:absolute; top:1em;left:1em;border: 1px solid black;margin: 0px; padding:0px;");
     i.parent=this;
     if(typeof $!=='undefined')
         {
@@ -88,6 +93,6 @@ function dlgopen(url, winname, width, height) {
                     };
                 }            
         }
-        
+    i.setAttribute("onload","setup_dlgiframe()");
     return false;
 }
