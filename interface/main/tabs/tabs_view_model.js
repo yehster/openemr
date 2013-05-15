@@ -144,7 +144,7 @@ function tabState(title,visible)
 function tabs_view_model()
 {
     this.tabStates=ko.observableArray([new frame_proxy("Calendar","0","main_info.php")
-                   ,new frame_proxy("Patient","1","../new/new.php")
+                   ,new frame_proxy("Patient","1","finder/dynamic_finder.php")
                    ,new frame_proxy("Messages","2","messages/messages.php")]);
     this.multi=ko.observable();
     this.activeIdx=ko.observable(0);
