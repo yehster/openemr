@@ -134,7 +134,7 @@ function openNewTopWindow(pid) {
 }
 
 </script>
-
+<title><?php echo xlt("Patient Finder");?></title>
 </head>
 <body class="body_top">
 
