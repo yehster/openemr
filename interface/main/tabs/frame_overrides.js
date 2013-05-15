@@ -5,6 +5,17 @@ function goPid(pid)
     set_visible(1,false);
 }
 
+function set_encounter(data)
+{
+    var parse_data=data.split("~");
+    var id=parse_data[0];
+    var date=parse_data[1];
+    view_model.encounter.id(id);
+    view_model.encounter.date(date);
+    var url=pathWebroot+'patient_file/encounter/encounter_top.php?set_encounter=' + id;
+    top.tabs_navigate(url);
+}
+
 function override_events(frame)
 {
 //    window.alert("Override Events!");
@@ -19,10 +30,7 @@ function override_events(frame)
         };
     }
     if(typeof frame.toencounter!=='undefined') {
-        frame.toencounter=function(data)
-        {
-            window.alert(data);
-        };
+        frame.toencounter=set_encounter;
     }
     $(frame.document).ready(function(){$("a[target='_parent']",frame.document).removeAttr("target")});    
 }

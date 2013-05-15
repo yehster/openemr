@@ -141,6 +141,13 @@ function tabState(title,visible)
     return this;
 }
 
+function encounter_info()
+{
+    this.id=ko.observable(0);
+    this.date=ko.observable();
+    return this;
+}
+
 function tabs_view_model()
 {
     this.tabStates=ko.observableArray([new frame_proxy("Calendar","0","main_info.php")
@@ -148,6 +155,8 @@ function tabs_view_model()
                    ,new frame_proxy("Messages","2","messages/messages.php")]);
     this.multi=ko.observable();
     this.activeIdx=ko.observable(0);
+    this.encounter=new encounter_info();
+    
     return this;
 }
 

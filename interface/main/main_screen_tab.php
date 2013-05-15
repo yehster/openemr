@@ -76,6 +76,7 @@ if (!empty($GLOBALS['gbl_nav_area_width'])) $nav_area_width = $GLOBALS['gbl_nav_
     <iframe src='daemon_frame.php' name='Daemon' style="display:none"></iframe>
         <div data-bind="template:'menu-base'"></div>
         <div style="height:1.4em;"></div>
+        <div data-bind="template:'session-info'"></div>
         <div><iframe src='main_title_tab.php' name='Title'></iframe></div>
         <div class="right buttons">                    
             <ul data-bind="foreach: tabStates">                      

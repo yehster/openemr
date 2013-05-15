@@ -15,8 +15,13 @@ function menu_click(data,evt)
     //top.displayInFrame(this.target,"",this.url);
     if(this.type==="LoadFrame")
     {
-        view_model.tabStates()[1].src(pathWebroot+data.url);
-        set_visible(1,false);
+        tabs_navigate(pathWebroot+data.url);
     }
     return true;
+}
+
+function tabs_navigate(url)
+{
+    view_model.tabStates()[1].src(url);
+    set_visible(1,false);
 }

@@ -9,6 +9,8 @@
 
 
 <?php
+    require_once("tabs/session_info_template.php");
+
     require_once("menu/menuitem.php");
     require_once("menu/dom_analysis.php");
     require_once("menu/templates/menu_base.php");

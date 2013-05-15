@@ -6,7 +6,6 @@ function recurse_menu_xml(&$parent,$child,$depth)
     {
         if(($child->nodeName!=="#text"))
         {   
-//            echo $depth."<br>";
             if($child->hasAttributes())
             {
                 $entry=new menuitem();
@@ -14,8 +13,6 @@ function recurse_menu_xml(&$parent,$child,$depth)
                 {
                     $attr_name=$attr->name;
                     $entry->$attr_name=$attr->value;
-//                    echo $attr->name.":".$attr->value . "<br>";
-                    error_log( $attr->name.":".$attr->value);
 
                 }
                 $parent->addChild($entry);
