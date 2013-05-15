@@ -62,24 +62,32 @@ function dlgopen(url, winname, width, height) {
     
 
     // 
-    if(typeof i==='undefined')
+    if((typeof i==='undefined') || i===null)
         {
             i=window.document.createElement('iframe');
             document.body.appendChild(i);          
         }
     i.src=url;
     i.id="dialog";
-    i.setAttribute("style","height:"+height+";"+"width:"+width+";position:absolute; top:0;left:0;");
-    i.close=function()
+    i.setAttribute("style","height:"+"100%"+";"+"width:"+"100%;position:absolute; top:0;left:0;border: 0px;margin: 0px; padding:0px;");
+    i.window={};
+    i.window.close=function()
     {
-        window.alert("yo!");
-    }
-    if(typeof $.fancybox==='undefined')
+        top.alert("yo!");
+    };
+    i.parent=this;
+    if(typeof $!=='undefined')
         {
-            $.fancybox = {};
-            $.fancybox.close=function(){
-                var iframe=parent.document.getElementById("dialog");
-                parent.document.removeChild(iframe);};
+            if(typeof $.fancybox==='undefined')
+                {
+                    $.fancybox = {};
+                    $.fancybox.close=function(){
+                        var dlg=document.getElementById("dialog");
+                        document.body.removeChild(dlg);
+                        i=null;
+                    };
+                }            
         }
+        
     return false;
 }
