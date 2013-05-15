@@ -19,6 +19,7 @@ $fake_register_globals=false;
 //
 
 require_once( dirname(__FILE__) . "/../../globals.php");
+session_write_close();
 require_once("$srcdir/clinical_rules.php");
 
 //To improve performance and not freeze the session when running this

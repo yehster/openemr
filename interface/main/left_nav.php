@@ -89,6 +89,7 @@
  require_once($GLOBALS['fileroot']."/custom/code_types.inc.php");
  require_once($GLOBALS['fileroot']."/library/patient.inc");
  require_once($GLOBALS['fileroot']."/library/lists.inc");
+ session_write_close();
 
  // This array defines the list of primary documents that may be
  // chosen.  Each element value is an array of 3 values:
