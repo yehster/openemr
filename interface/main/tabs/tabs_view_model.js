@@ -126,7 +126,7 @@ function set_visible(chosen_idx,toggle)
                             view_model.tabStates()[idx].visible(false);
                         }
                 }
-                view_model.activeIdx=chosen_idx;
+                view_model.activeIdx(chosen_idx);
             }
 }
 function tab_button_click(data,event)

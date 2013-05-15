@@ -22,6 +22,6 @@ function menu_click(data,evt)
 
 function tabs_navigate(url)
 {
-    view_model.tabStates()[1].src(url);
-    set_visible(1,false);
+    view_model.tabStates()[view_model.activeIdx()].src(url);
+    set_visible(view_model.activeIdx(),false);
 }
