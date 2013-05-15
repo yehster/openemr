@@ -59,17 +59,27 @@ function grabfocus(w) {
 
 // call this when a "modal" dialog is desired
 function dlgopen(url, winname, width, height) {
- if (top.modaldialog && ! top.modaldialog.closed) {
-  if (window.focus) top.modaldialog.focus();
-  if (top.modaldialog.confirm("OK to close this other popup window?")) {
-   top.modaldialog.close();
-   top.modaldialog = null;
-  } else {
-   return false;
-  }
- }
- top.modaldialog = cascwin(url, winname, width, height,
-  "resizable=1,scrollbars=1,location=0,toolbar=0");
- grabfocus(top);
- return false;
+    
+
+    // 
+    if(typeof i==='undefined')
+        {
+            i=window.document.createElement('iframe');
+            document.body.appendChild(i);          
+        }
+    i.src=url;
+    i.id="dialog";
+    i.setAttribute("style","height:"+height+";"+"width:"+width+";position:absolute; top:0;left:0;");
+    i.close=function()
+    {
+        window.alert("yo!");
+    }
+    if(typeof $.fancybox==='undefined')
+        {
+            $.fancybox = {};
+            $.fancybox.close=function(){
+                var iframe=parent.document.getElementById("dialog");
+                parent.document.removeChild(iframe);};
+        }
+    return false;
 }
