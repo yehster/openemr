@@ -200,7 +200,9 @@
 <br><br>
     <center>
 
-    <?php if (isset($_SESSION['password_update'])) { ?>
+    <?php if (isset($_SESSION['password_update'])||isset($_GET['password_update'])) { 
+        $_SESSION['password_update']=1;
+        ?>
       <div id="wrapper" class="centerwrapper">
         <h2 class="title"><?php echo htmlspecialchars( xl('Please Enter a New Password'), ENT_NOQUOTES); ?></h2>
         <form action="get_patient_info.php" method="POST" onsubmit="return process_new_pass()" >
