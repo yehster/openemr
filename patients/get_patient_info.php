@@ -141,8 +141,12 @@
                                 $code_new=$rsa->decrypt($_POST['code_new']);
                                 $code_new_confirm=$rsa->decrypt($_POST['code_new_confirm']);
                                 if(!(empty($_POST['code_new'])) && !(empty($_POST['code_new_confirm'])) && ($code_new == $code_new_confirm)) {
+                                $new_salt=blowfish_salt();
+                                $new_hash=crypt($code_new,$new_salt);
+
                                 // Update the password and continue (patient is authorized)
-                                //sqlStatement("UPDATE `patient_access_onsite` SET `portal_username`=?,`portal_pwd`=?,portal_pwd_status=1 WHERE pid=?", array($_POST['uname'],$_POST['code_new'],$auth['pid']) );
+                                privStatement("UPDATE ".TBL_PAT_ACC_ON
+                                              ."  SET ".COL_POR_PWD."=?,".COL_POR_SALT."=?,".COL_POR_PWD_STAT."=1 WHERE id=?", array($new_hash,$new_salt,$auth['id']) );
                                 $authorizedPortal = true;
                             }
                         }
