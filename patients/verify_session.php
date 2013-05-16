@@ -1,4 +1,7 @@
 <?php
+
+        // All of the common intialization steps for the get_* patient portal functions are now in this single include.
+
         //SANITIZE ALL ESCAPES
         $sanitize_all_escapes=true;
 

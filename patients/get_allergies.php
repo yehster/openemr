@@ -6,15 +6,8 @@
  // as published by the Free Software Foundation; either version 2
  // of the License, or (at your option) any later version.
 
-        //SANITIZE ALL ESCAPES
-        $sanitize_all_escapes=true;
-
-        //STOP FAKE REGISTER GLOBALS
-        $fake_register_globals=false;
-
         require_once("verify_session.php");
-        
-
+     
 	$sql = "SELECT * FROM lists WHERE pid = ? AND type = 'allergy' ORDER BY begdate";
 
 	$res = sqlStatement($sql, array($pid) );
