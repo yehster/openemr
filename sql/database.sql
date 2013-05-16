@@ -5784,3 +5784,14 @@ CREATE TABLE `product_warehouse` (
 ) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
+
+
+--
+-- Table structure for table `template_users`
+--
+CREATE TABLE `rsa_pairs` (
+  `public` text NOT NULL,
+  `private` text NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
+-- --------------------------------------------------------

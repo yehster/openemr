@@ -48,7 +48,13 @@
 
     //Authentication (and language setting)
 	require_once('../interface/globals.php');
-
+        require_once("$srcdir/authentication/rsa.php");
+        $pubKey=$_REQUEST['login_pk'];
+        error_log($pubKey);
+        $rsa=new rsa_key_manager();
+        $rsa->load_from_db($pubKey);
+        echo $rsa->decrypt($_POST['code']);
+        error_log($rsa->decrypt($_POST['code']));
         // set the language
         if (!empty($_POST['languageChoice'])) {
                 $_SESSION['language_choice'] = $_POST['languageChoice'];

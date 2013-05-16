@@ -20,9 +20,8 @@
 
     //includes
     require_once('../interface/globals.php');
-    require_once("$srcdir/sha1.js");
-    // 
 
+    ini_set("error_log",E_ERROR || ~E_NOTICE);
     //exit if portal is turned off
     if ( !(isset($GLOBALS['portal_onsite_enable'])) || !($GLOBALS['portal_onsite_enable']) ) {
       echo htmlspecialchars( xl('Patient Portal is turned off'), ENT_NOQUOTES);
@@ -94,6 +93,8 @@
 
     <script type="text/javascript" src="../library/js/jquery-1.5.js"></script>
     <script type="text/javascript" src="../library/js/jquery.gritter.min.js"></script>
+    <script src="../library/js/crypt/jsbn.js"></script>
+    <script src="../library/js/crypt/rsa.js"></script>
 
     <link rel="stylesheet" type="text/css" href="css/jquery.gritter.css" />
     <link rel="stylesheet" type="text/css" href="css/base.css" />
@@ -105,8 +106,18 @@
                 alert ('<?php echo addslashes( xl('Field(s) are missing!') ); ?>');
                 return false;
             }
-            document.getElementById('code').value = SHA1(document.getElementById('pass').value);
-            document.getElementById('pass').value='';
+                $.ajax({
+                    url: '<?php echo $webroot; ?>/library/ajax/rsa_request.php',
+                    async: false,
+                    success: function(public_key)
+                    {
+                        var key = RSA.getPublicKey(public_key);
+                        document.getElementById('code').value = RSA.encrypt(document.getElementById('pass').value, key);
+                        document.getElementById('pass').value='';
+                        document.getElementById('login_pk').value=public_key;
+                        
+                    }
+                    });
         }
 	function validate() {
             var pass=true;            
@@ -206,7 +217,7 @@
                     <td class="algnRight"><?php echo htmlspecialchars( xl('Confirm New Password'), ENT_NOQUOTES);?></>
                     <td>
                         <input name="pass_new_confirm" id="pass_new_confirm" type="password" />
-                        <input type="hidden" id="code_new_confirm" name="code_new_confirm" type="hidden" />
+                        <input type="hidden" id="code_new_confirm" name="code_new_confirm"/>
                     </td>
                 </tr>
                 <tr>
@@ -230,7 +241,8 @@
 		    <td class="algnRight"><?php echo htmlspecialchars( xl('Password'), ENT_NOQUOTES);?></>
 		    <td>
 			<input name="pass" id="pass" type="password" />
-			<input type="hidden" id="code" name="code" type="hidden" />
+			<input type="hidden" id="code" name="code" />
+                        <input type="hidden" id="login_pk" name="login_pk"/>                   
 		    </td>
 		</tr>
 

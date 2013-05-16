@@ -461,3 +461,12 @@ CREATE TABLE `users_secure` (
   UNIQUE KEY `USERNAME_ID` (`id`,`username`)
 ) 
 #EndIf
+
+
+#IfNotTable rsa_pairs
+CREATE TABLE `rsa_pairs` (
+  `public` text NOT NULL,
+  `private` text NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
+#EndIf

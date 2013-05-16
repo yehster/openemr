@@ -6,9 +6,7 @@
 
 $ignoreAuth=true;
 include_once("../globals.php");
-include_once("$srcdir/sha1.js");
 include_once("$srcdir/sql.inc");
-include_once("$srcdir/md5.js");
 require_once("../../library/authentication/rsa.php");
 ?>
 <html>
