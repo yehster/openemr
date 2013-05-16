@@ -74,4 +74,19 @@ function initializePassword($username,$userid,&$password)
     privStatement($passwordSQL,$params); 
 }
 
+
+/**
+ * 
+ * @param type $username
+ * @param type $userid
+ */
+function purgeCompatabilityPassword($username,$userid)
+{
+    $purgeSQL = " UPDATE " . TBL_USERS 
+                ." SET ". COL_PWD . "='NoLongerUsed' "
+                ." WHERE ".COL_UNM. "=? "
+                ." AND ".COL_ID. "=?";
+    privStatement($purgeSQL,array($username,$userid));
+}
 ?>
+

@@ -2,19 +2,7 @@
 require_once("$srcdir/authentication/common_operations.php");
 
 
-/**
- * 
- * @param type $username
- * @param type $userid
- */
-function purgeCompatabilityPassword($username,$userid)
-{
-    $purgeSQL = " UPDATE " . TBL_USERS 
-                ." SET ". COL_PWD . "='NoLongerUsed' "
-                ." WHERE ".COL_UNM. "=? "
-                ." AND ".COL_ID. "=?";
-    privStatement($purgeSQL,array($username,$userid));
-}
+
 /**
  * 
  * @param type $username

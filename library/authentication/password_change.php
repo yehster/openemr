@@ -28,15 +28,22 @@ function test_password_strength($pwd,&$errMsg)
     return true;
 }
 
-function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
+function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg,$create=false,$insert_sql="",$new_username=null,&$newid=null)
 {
     $status=false;
     $userSQL="SELECT ".implode(",",array(COL_PWD,COL_SALT,COL_PWD_H1,COL_SALT_H1,COL_PWD_H2,COL_SALT_H2))
             ." FROM ".TBL_USERS_SECURE
             ." WHERE ".COL_ID."=?";
     $userInfo=privQuery($userSQL,array($targetUser));
+    
+    // Verify the active user's password
     if($activeUser==$targetUser)
     {
+        if($create)
+        {
+            $errMsg=xl("Trying to create user with existing username!");
+            return false;
+        }
         // If this user is changing his own password, then confirm that they have the current password correct
         $hash_current=crypt($currentPwd,$userInfo[COL_SALT]);
         if(($hash_current!=$userInfo[COL_PWD]))
@@ -61,10 +68,14 @@ function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
         if(!acl_check('admin', 'users'))
         {
             
-            $errMsg=xl("Not authorized to change password!");
+            $errMsg=xl("Not authorized to manage users!");
             return false;
         }
     }
+    // End active user check
+    
+    
+    //Test password validity
     if(strlen($newPwd)==0)
     {
         $errMsg=xl("Empty Password Not Allowed");
@@ -74,19 +85,45 @@ function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
     {
         return false;
     }
-    if(!$userInfo)
+    // End password validty checks
+    
+    if($userInfo===false)
     {
-        // For a user with an old SHA1 or MD5 password, just migrate to blowfish
-        // don't worry about history/reuse in this situation.
-        $getUserNameSQL="SELECT ".COL_UNM
-                ." FROM ".TBL_USERS
-                ." WHERE ".COL_ID."=?";
-        $unm=privQuery($getUserNameSQL,array($targetUser));
-        initializePassword($unm[COL_UNM],$targetUser,$newPwd);
-        purgeCompatabilityPassword($unm[COL_UNM],$targetUser);
+        // No userInfo means either a new user, or an existing user who has not been migrated to blowfish yet
+        // In these cases don't worry about password history
+        if($create)
+        {
+            privStatement($insert_sql,array());
+            $getUserID=  " SELECT ".COL_ID
+                        ." FROM ".TBL_USERS
+                        ." WHERE ".COL_UNM."=?";
+                $user_id=privQuery($getUserID,array($new_username));
+                initializePassword($new_username,$user_id[COL_ID],$newPwd);
+                $newid=$user_id[COL_ID];
+            }
+            else
+            {
+                $getUserNameSQL="SELECT ".COL_UNM
+                        ." FROM ".TBL_USERS
+                        ." WHERE ".COL_ID."=?";
+                $unm=privQuery($getUserNameSQL,array($targetUser));
+                if($unm===false)
+                {
+                    $errMsg=xl("Unknown user id:".$targetUser);
+                    return false;
+                }
+                initializePassword($unm[COL_UNM],$targetUser,$newPwd);
+                purgeCompatabilityPassword($unm[COL_UNM],$targetUser);            
+                
+            }
     }
     else
     {
+        if($create)
+        {
+            $errMsg=xl("Trying to create user with existing username!");
+            return false;
+        }
         
         $forbid_reuse=$GLOBALS['password_history'] != 0;
         if($forbid_reuse)
@@ -103,6 +140,8 @@ function update_password($activeUser,$targetUser,&$currentPwd,&$newPwd,&$errMsg)
                 return false;
             }
         }
+        
+        // Everything checks out at this point, so update the password record
         $newSalt = blowfish_salt();
         $newHash = crypt($newPwd,$newSalt);
         $updateParams=array();

@@ -140,10 +140,12 @@ if (isset($_GET["privatemode"]) && $_GET["privatemode"] =="user_admin") {
 
         $clearAdminPass=$rsa->decrypt($_GET['userPass']);
         $clearUserPass=$rsa->decrypt($_GET['newauthPass']);
-        $password_err_msg;
-        update_password($_SESSION['authId'],$_GET['id'],$clearAdminPass,$clearUserPass,$password_err_msg);
-
-        error_log($password_err_msg);
+        $password_err_msg="";
+        $success=update_password($_SESSION['authId'],$_GET['id'],$clearAdminPass,$clearUserPass,$password_err_msg);
+        if($password_err_msg)
+        {
+            error_log($password_err_msg);        
+        }
      }
 
       // for relay health single sign-on
@@ -211,35 +213,53 @@ if (isset($_POST["mode"])) {
     }
 
     if ($doit == true) {
-      //if password expiration option is enabled,  calculate the expiration date of the password
-      if($GLOBALS['password_expiration_days'] != 0){
-      $exp_days = $GLOBALS['password_expiration_days'];
-      $exp_date = date('Y-m-d', strtotime("+$exp_days days"));
-      }
-      $prov_id = idSqlStatement("insert into users set " .
-        "username = '"         . trim(formData('rumple'       )) .
-        "', password = '"      . trim(formData('newauthPass'  )) .
-        "', fname = '"         . trim(formData('fname'        )) .
-        "', mname = '"         . trim(formData('mname'        )) .
-        "', lname = '"         . trim(formData('lname'        )) .
-        "', federaltaxid = '"  . trim(formData('federaltaxid' )) .
-	"', state_license_number = '"  . trim(formData('state_license_number' )) .
-	"', newcrop_user_role = '"  . trim(formData('erxrole' )) .
-        "', authorized = '"    . trim(formData('authorized'   )) .
-        "', info = '"          . trim(formData('info'         )) .
-        "', federaldrugid = '" . trim(formData('federaldrugid')) .
-        "', upin = '"          . trim(formData('upin'         )) .
-        "', npi  = '"          . trim(formData('npi'          )).
-        "', taxonomy = '"      . trim(formData('taxonomy'     )) .
-        "', facility_id = '"   . trim(formData('facility_id'  )) .
-        "', specialty = '"     . trim(formData('specialty'    )) .
-        "', see_auth = '"      . trim(formData('see_auth'     )) .
-        "', cal_ui = '"        . trim(formData('cal_ui'       )) .
-        "', default_warehouse = '" . trim(formData('default_warehouse')) .
-        "', irnpool = '"       . trim(formData('irnpool'      )) .
-        "', calendar = '"      . $calvar                         .
-        "', pwd_expiration_date = '" . trim("$exp_date") .
-        "'");
+    require_once("$srcdir/authentication/rsa.php");
+    require_once("$srcdir/authentication/password_change.php");
+    $pubKey=$_POST['pk'];
+    $rsa=new rsa_key_manager();
+    $rsa->load_from_db($pubKey);
+
+    //if password expiration option is enabled,  calculate the expiration date of the password
+    if($GLOBALS['password_expiration_days'] != 0){
+    $exp_days = $GLOBALS['password_expiration_days'];
+    $exp_date = date('Y-m-d', strtotime("+$exp_days days"));
+    }
+    
+    $insertUserSQL=            
+            "insert into users set " .
+            "username = '"         . trim(formData('rumple'       )) .
+            "', password = '"      . 'NoLongerUsed'                  .
+            "', fname = '"         . trim(formData('fname'        )) .
+            "', mname = '"         . trim(formData('mname'        )) .
+            "', lname = '"         . trim(formData('lname'        )) .
+            "', federaltaxid = '"  . trim(formData('federaltaxid' )) .
+            "', state_license_number = '"  . trim(formData('state_license_number' )) .
+            "', newcrop_user_role = '"  . trim(formData('erxrole' )) .
+            "', authorized = '"    . trim(formData('authorized'   )) .
+            "', info = '"          . trim(formData('info'         )) .
+            "', federaldrugid = '" . trim(formData('federaldrugid')) .
+            "', upin = '"          . trim(formData('upin'         )) .
+            "', npi  = '"          . trim(formData('npi'          )).
+            "', taxonomy = '"      . trim(formData('taxonomy'     )) .
+            "', facility_id = '"   . trim(formData('facility_id'  )) .
+            "', specialty = '"     . trim(formData('specialty'    )) .
+            "', see_auth = '"      . trim(formData('see_auth'     )) .
+            "', cal_ui = '"        . trim(formData('cal_ui'       )) .
+            "', default_warehouse = '" . trim(formData('default_warehouse')) .
+            "', irnpool = '"       . trim(formData('irnpool'      )) .
+            "', calendar = '"      . $calvar                         .
+            "', pwd_expiration_date = '" . trim("$exp_date") .
+            "'";
+    
+    $clearAdminPass=$rsa->decrypt($_POST['userPass']);
+    $clearUserPass=$rsa->decrypt($_POST['newauthPass']);
+    $password_err_msg="";
+    $prov_id="";
+    $success=update_password($_SESSION['authId'],0,$clearAdminPass,$clearUserPass,$password_err_msg,true,$insertUserSQL,formData('rumple'),$prov_id);
+    error_log($password_err_msg);
+    $alertmsg .=$password_err_msg;
+    if($success)
+    {
       //set the facility name from the selected facility_id
       sqlStatement("UPDATE users, facility SET users.facility = facility.name WHERE facility.id = '" . trim(formData('facility_id')) . "' AND users.username = '" . trim(formData('rumple')) . "'");
 
@@ -253,6 +273,10 @@ if (isset($_POST["mode"])) {
       }
 
       $ws = new WSProvider($prov_id);
+        
+    }
+
+        
 
     } else {
       $alertmsg .= xl('User','','',' ') . trim(formData('rumple')) . xl('already exists.','',' ');
