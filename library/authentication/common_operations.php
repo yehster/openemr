@@ -1,4 +1,5 @@
 <?php
+require_once("$srcdir/authentication/privDB.php");
 define("TBL_USERS_SECURE","users_secure");
 define("TBL_USERS","users");
 
@@ -13,22 +14,7 @@ define("COL_SALT_H1","salt_history1");
 define("COL_PWD_H2","password_history2");
 define("COL_SALT_H2","salt_history2");
 
-/**
- * mechanism to use "super user" for SQL queries related to password operations
- * 
- * @param type $sql
- * @param type $params
- * @return type
- */
-function privStatement($sql,$params)
-{
-    return sqlStatement($sql,$params);
-}
 
-function privQuery($sql,$params)
-{
-    return sqlQuery($sql,$params); 
-}
 
 function blowfish_salt($rounds='05')
 {

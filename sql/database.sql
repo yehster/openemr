@@ -5267,6 +5267,25 @@ CREATE TABLE `users` (
 --
 -- Table structure for table `user_settings`
 --
+CREATE TABLE `users_secure` (
+  `id` bigint(20) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `password` longtext,
+  `salt` longtext,
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `password_history1` longtext,
+  `salt_history1` longtext,
+  `password_history2` longtext,
+  `salt_history2` longtext,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USERNAME_ID` (`id`,`username`)
+) 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_settings`
+--
 
 CREATE TABLE `user_settings` (
   `setting_user`  bigint(20)   NOT NULL DEFAULT 0,
