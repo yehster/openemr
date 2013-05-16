@@ -142,9 +142,10 @@ if (isset($_GET["privatemode"]) && $_GET["privatemode"] =="user_admin") {
         $clearUserPass=$rsa->decrypt($_GET['newauthPass']);
         $password_err_msg="";
         $success=update_password($_SESSION['authId'],$_GET['id'],$clearAdminPass,$clearUserPass,$password_err_msg);
-        if($password_err_msg)
+        if(!$success)
         {
-            error_log($password_err_msg);        
+            error_log($password_err_msg);    
+            $alertmsg.=$password_err_msg;
         }
      }
 
