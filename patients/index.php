@@ -197,13 +197,14 @@
             <table>
                 <tr>
                     <td class="algnRight"><?php echo htmlspecialchars( xl('User Name'), ENT_NOQUOTES); ?></td>
-                    <td><input name="uname" id="uname" type="text" /></td>
+                    <td><input name="uname" id="uname" type="text" autocomplete="off" /></td>
                 </tr>
                 <tr>
                     <td class="algnRight"><?php echo htmlspecialchars( xl('Current Password'), ENT_NOQUOTES);?></>
                     <td>
-                        <input name="pass" id="pass" type="password" />
+                        <input name="pass" id="pass" type="password" autocomplete="off" />
                         <input type="hidden" id="code" name="code" type="hidden" />
+                        <input type="hidden" id="login_pk" name="login_pk"/>                   
                     </td>
                 </tr>
                 <tr>
@@ -235,12 +236,12 @@
 	    <table>
 		<tr>
 		    <td class="algnRight"><?php echo htmlspecialchars( xl('User Name'), ENT_NOQUOTES); ?></td>
-		    <td><input name="uname" id="uname" type="text" /></td>
+		    <td><input name="uname" id="uname" type="text" autocomplete="off" /></td>
 		</tr>
 		<tr>
 		    <td class="algnRight"><?php echo htmlspecialchars( xl('Password'), ENT_NOQUOTES);?></>
 		    <td>
-			<input name="pass" id="pass" type="password" />
+			<input name="pass" id="pass" type="password" autocomplete="off" />
 			<input type="hidden" id="code" name="code" />
                         <input type="hidden" id="login_pk" name="login_pk"/>                   
 		    </td>

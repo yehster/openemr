@@ -40,7 +40,7 @@ $fake_register_globals=false;
  require_once("$srcdir/classes/postmaster.php");
 
 // Collect portalsite parameter (either off for offsite or on for onsite); only allow off or on
-isset($_GET['portalsite']) ? $portalsite = $_GET['portalsite'] : $portalsite = "off";
+$portalsite = isset($_GET['portalsite']) ? $_GET['portalsite'] : $portalsite = "off";
 if ($portalsite != "off" && $portalsite != "on") $portalsite = "off";
 
  $row = sqlQuery("SELECT pd.*,pao.portal_username,pao.portal_pwd,pao.portal_pwd_status FROM patient_data AS pd LEFT OUTER JOIN patient_access_" . add_escape_custom($portalsite) . "site AS pao ON pd.pid=pao.pid WHERE pd.pid=?",array($pid));
