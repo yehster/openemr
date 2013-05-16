@@ -145,13 +145,23 @@
                 alert ('<?php echo addslashes( xl('The new password can not be the same as the current password.') ); ?>');
                 return false;
             }
-            document.getElementById('code').value = SHA1(document.getElementById('pass').value);
-            document.getElementById('pass').value='';
-            document.getElementById('code_new').value = SHA1(document.getElementById('pass_new').value);
-            document.getElementById('pass_new').value='';
-            document.getElementById('code_new_confirm').value = SHA1(document.getElementById('pass_new_confirm').value);
-            document.getElementById('pass_new_confirm').value='';
+                $.ajax({
+                    url: '<?php echo $webroot; ?>/library/ajax/rsa_request.php',
+                    async: false,
+                    success: function(public_key)
+                    {
+                        var key = RSA.getPublicKey(public_key);
+                        document.getElementById('code').value = RSA.encrypt(document.getElementById('pass').value, key);
+                        document.getElementById('pass').value='';
+                        document.getElementById('login_pk').value=public_key;
+                        document.getElementById('code_new').value = RSA.encrypt(document.getElementById('pass_new').value,key);
+                        document.getElementById('pass_new').value='';
+                        document.getElementById('code_new_confirm').value = RSA.encrypt(document.getElementById('pass_new_confirm').value,key);
+                        document.getElementById('pass_new_confirm').value='';            
+                    }
+                    });
         }
+
         function validate_new_pass() {
             var pass=true;
             if (document.getElementById('uname').value == "") {
@@ -197,7 +207,7 @@
             <table>
                 <tr>
                     <td class="algnRight"><?php echo htmlspecialchars( xl('User Name'), ENT_NOQUOTES); ?></td>
-                    <td><input name="uname" id="uname" type="text" autocomplete="off" /></td>
+                    <td><input name="uname" id="uname" type="text" autocomplete="off" value="<?php echo attr($_SESSION['portal_username']); ?>"/></td>
                 </tr>
                 <tr>
                     <td class="algnRight"><?php echo htmlspecialchars( xl('Current Password'), ENT_NOQUOTES);?></>

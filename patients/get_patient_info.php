@@ -110,7 +110,7 @@
                     }
      
                 }
-
+                $_SESSION['portal_username']=$_POST['uname'];
 		$sql = "SELECT * FROM `patient_data` WHERE `pid` = ?";
 
 		if ($userData = sqlQuery($sql, array($auth['pid']) )) { // if query gets executed
@@ -136,16 +136,18 @@
 				exit;
 			}
 
+                        if ( isset($_SESSION['password_update']))
+                            {
+                                $code_new=$rsa->decrypt($_POST['code_new']);
+                                $code_new_confirm=$rsa->decrypt($_POST['code_new_confirm']);
+                                if(!(empty($_POST['code_new'])) && !(empty($_POST['code_new_confirm'])) && ($code_new == $code_new_confirm)) {
+                                // Update the password and continue (patient is authorized)
+                                //sqlStatement("UPDATE `patient_access_onsite` SET `portal_username`=?,`portal_pwd`=?,portal_pwd_status=1 WHERE pid=?", array($_POST['uname'],$_POST['code_new'],$auth['pid']) );
+                                $authorizedPortal = true;
+                            }
+                        }
 			if ($auth['portal_pwd_status'] == 0) {
-				if ( isset($_SESSION['password_update']))
-                                    {
-                                        if(!(empty($_POST['code_new'])) && !(empty($_POST['code_new_confirm'])) && ($_POST['code_new'] == $_POST['code_new_confirm']) ) {
-					// Update the password and continue (patient is authorized)
-					//sqlStatement("UPDATE `patient_access_onsite` SET `portal_username`=?,`portal_pwd`=?,portal_pwd_status=1 WHERE pid=?", array($_POST['uname'],$_POST['code_new'],$auth['pid']) );
-					$authorizedPortal = true;
-                                    }
-				}
-				else {
+				if(!$authorizedPortal) {
 					// Need to enter a new password in the index.php script
 					$_SESSION['password_update'] = 1;
                                 	header('Location: '.$landingpage);
