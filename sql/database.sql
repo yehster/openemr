@@ -5265,7 +5265,7 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_settings`
+-- Table structure for table `user_secure`
 --
 CREATE TABLE `users_secure` (
   `id` bigint(20) NOT NULL,
