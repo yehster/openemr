@@ -209,6 +209,26 @@ class Installer
     }
     return TRUE;
   }
+    function blowfish_salt($rounds='05')
+    {
+        $Allowed_Chars ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
+        $Chars_Len = 63;
+
+        $Salt_Length = 21;
+
+        $salt = "";
+
+        for($i=0; $i<$Salt_Length; $i++)
+        {
+            $salt .= $Allowed_Chars[mt_rand(0,$Chars_Len)];
+        }    
+
+        //This string tells crypt to apply blowfish $rounds times.
+        $Blowfish_Pre = '$2a$'.$rounds.'$';
+        $Blowfish_End = '$';
+
+        return $Blowfish_Pre.$salt.$Blowfish_End;
+    }
 
   public function add_initial_user() {
     if ($this->execute_sql("INSERT INTO groups (id, name, user) VALUES (1,'$this->igroup','$this->iuser')") == FALSE) {
@@ -216,9 +236,19 @@ class Installer
         "<p>".mysql_error()." (#".mysql_errno().")\n";
       return FALSE;
     }
-    $password_hash = sha1( $this->iuserpass );
+    $password_hash = "NoLongerUsed";
+    $blowfish_salt=$this->blowfish_salt();
+    $blowfish_hash=crypt($this->iuserpass,$blowfish_salt);
     if ($this->execute_sql("INSERT INTO users (id, username, password, authorized, lname, fname, facility_id, calendar, cal_ui) VALUES (1,'$this->iuser','$password_hash',1,'$this->iuname','',3,1,3)") == FALSE) {
       $this->error_message = "ERROR. Unable to add initial user\n" .
+        "<p>".mysql_error()." (#".mysql_errno().")\n";
+      return FALSE;
+      
+    }
+    
+    // Create the new style login credentials with blowfish and salt
+    if ($this->execute_sql("INSERT INTO users_secure (id, username, password, salt) VALUES (1,'$this->iuser','$blowfish_hash','$blowfish_salt')") == FALSE) {
+      $this->error_message = "ERROR. Unable to add initial user login credentials\n" .
         "<p>".mysql_error()." (#".mysql_errno().")\n";
       return FALSE;
     }

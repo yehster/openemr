@@ -21,6 +21,9 @@ $alertmsg = '';
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery.1.3.2.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/common.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/fancybox/jquery.fancybox-1.2.6.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/crypt/jsbn.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/crypt/rsa.js"></script>
+
 <script src="checkpwd_validation.js" type="text/javascript"></script>
 
 <script language="JavaScript">
@@ -53,9 +56,7 @@ function submitform() {
 				}
 			}
 		} //secure_pwd if ends here
-		// ViCareplus : As per NIST standard, SHA1 encryption algorithm is used		
-		document.forms[0].newauthPass.value=SHA1(document.forms[0].stiltskin.value);
-		document.forms[0].stiltskin.value='';
+                
 		<?php if($GLOBALS['erx_enable']){ ?>
 		alertMsg='';
 		f=document.forms[0];
@@ -99,8 +100,25 @@ function submitform() {
 			alert(alertMsg);
 			return false;
 		}
-		<?php } ?>
-		document.forms[0].submit();
+		<?php } // End erx_enable only include block?>
+                    
+                // get a public key to encrypt the password info and send    
+                $.ajax({
+                    url: '<?php echo $webroot; ?>/library/ajax/rsa_request.php',
+                    async: false,
+                    success: function(public_key)
+                    {
+                        var key = RSA.getPublicKey(public_key);
+                        $("input[name='userPass']").val(RSA.encrypt($("input[name='adminPass']").val(), key));
+                        $("input[name='newauthPass']").val(RSA.encrypt($("input[name='stiltskin']").val(), key));
+                        $("input[name='pk']").val(public_key);
+                        $('input[name="adminPass"]').val('');
+                        $('input[name="stiltskin"]').val('');
+                        document.forms[0].submit();
+                        parent.$.fn.fancybox.close(); 
+                    }
+                    });
+                    
 	} else {
 		if (document.forms[0].rumple.value.length<=0)
 		{
@@ -156,14 +174,24 @@ function authorized_clicked() {
 <tr><td valign=top>
 <form name='new_user' method='post'  target="_parent" action="usergroup_admin.php"
  onsubmit='return top.restoreSession()'>
-<input type=hidden name=mode value=new_user>
-<input type=hidden name=secure_pwd value="<?php echo $GLOBALS['secure_password']; ?>">
+<input type='hidden' name='mode' value='new_user'>
+<input type='hidden' name='secure_pwd' value="<?php echo $GLOBALS['secure_password']; ?>">
+
+<INPUT TYPE="HIDDEN" NAME="userPass" VALUE="">
+<INPUT TYPE="HIDDEN" NAME="newauthPass" VALUE="">
+<INPUT TYPE="HIDDEN" NAME="pk" VALUE="">
 <span class="bold">&nbsp;</span>
 </td><td>
 <table border=0 cellpadding=0 cellspacing=0 style="width:600px;">
 <tr>
 <td style="width:150px;"><span class="text"><?php xl('Username','e'); ?>: </span></td><td  style="width:220px;"><input type=entry name=rumple style="width:120px;"> <span class="mandatory">&nbsp;*</span></td>
 <td style="width:150px;"><span class="text"><?php xl('Password','e'); ?>: </span></td><td style="width:250px;"><input type="entry" style="width:120px;" name=stiltskin><span class="mandatory">&nbsp;*</span></td>
+</tr>
+<tr>
+    <td style="width:150px;"></td><td  style="width:220px;"></span></td>
+    <TD style="width:200px;"><span class=text><?php xl('Your Password','e'); ?>: </span></TD>
+    <TD class='text' style="width:280px;"><input type='password' name=adminPass style="width:120px;"  value="" autocomplete='off'><font class="mandatory">*</font></TD>
+
 </tr>
 <tr>
 <td><span class="text"<?php if ($GLOBALS['disable_non_default_groups']) echo " style='display:none'"; ?>><?php xl('Groupname','e'); ?>: </span></td>
@@ -199,7 +227,7 @@ if ($fres) {
     $result[$iter] = $frow;
   foreach($result as $iter) {
 ?>
-<option value="<?php echo $iter{id};?>"><?php echo $iter{name};?></option>
+<option value="<?php echo $iter{'id'};?>"><?php echo $iter{'name'};?></option>
 <?php
   }
 }
@@ -236,9 +264,7 @@ if ($fres) {
 <?php
  foreach (array(3 => xl('Outlook'), 1 => xl('Original'), 2 => xl('Fancy')) as $key => $value)
  {
-  echo " <option value='$key'";
-  if ($key == $iter['cal_ui']) echo " selected";
-  echo ">$value</option>\n";
+  echo " <option value='$key'>$value</option>\n";
  }
 ?>
 </select></td>
@@ -250,7 +276,7 @@ if ($fres) {
 <td><input type="text" name="state_license_number" style="width:120px;"></td>
 <td class='text'><?php xl('NewCrop eRX Role','e'); ?>:</td>
 <td>
-  <?php echo generate_select_list("erxrole", "newcrop_erx_role", $iter['newcrop_user_role'],'','--Select Role--','','','',array('style'=>'width:120px')); ?>  
+  <?php echo generate_select_list("erxrole", "newcrop_erx_role", '','','--Select Role--','','','',array('style'=>'width:120px')); ?>  
 </td>
 </tr>
 

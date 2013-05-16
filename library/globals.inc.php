@@ -811,7 +811,13 @@ $GLOBALS_METADATA = array(
       '0',                              // default
       xl('Means none of last three passwords are allowed when changing a password.')
     ),
-
+    'password_compatibility' => array(
+      xl('Permit MD5/SHA1 Passwords'),
+      'bool',                           // data type
+      '1',                              // default
+      xl('After migration from the old password mechanisms without salt is complete, this flag should be set to false so that only authentication by the new method is possible')
+    ),
+      
     'password_expiration_days' => array(
       xl('Default Password Expiration Days'),
       'num',                            // data type
