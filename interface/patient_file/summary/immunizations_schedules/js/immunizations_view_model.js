@@ -29,11 +29,13 @@ function create_billing(evt)
              justify: justify_string};
     billing_info.procs=JSON.stringify(proc);
     $.post(ajax_billing,
-    billing_info,function()
+    billing_info,function(data)
     {
-    
-    },
-    "json");
+        if(data.length>0)
+            {
+                window.alert(data)
+            }
+    });
 }
 
 function update_immunization_info(code_info)

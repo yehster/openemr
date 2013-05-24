@@ -84,6 +84,15 @@ if($task=='retrieve')
 }
 if($task=='add_diags')
 {
+    if($req_encounter==0)
+    {
+        $req_encounter=$_SESSION['encounter'];
+    }
+    if($req_encounter==0)
+    {
+        echo "No Encounter Specified";   
+        return false;
+    }
     if(isset($_REQUEST['diags']))
     {
         $json_diags=json_decode($_REQUEST['diags']);
