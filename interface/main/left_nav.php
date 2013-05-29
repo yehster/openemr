@@ -381,7 +381,6 @@ function genFindBlock() {
  
  $(document).ready(function (){
    getReminderCount();//
-   parent.loadedFrameCount += 1;
  }) 
  // end of tajemo work dated reminders counter
  
@@ -714,6 +713,15 @@ function clearactive() {
  // of the frame that the call came from, so we know to only reload content
  // from the *other* frame if it is patient-specific.
  function setPatient(pname, pid, pubpid, frname, str_dob) {
+  // If we can't find the div in the Title frame, we need to wait
+  var titleJQ =$("body",parent.Title.document);
+  if((titleJQ.find("#current_patient").length==0))
+  {
+      var callback_string="setPatient('"+pname+"',"+pid +","+pubpid + ",'" +frname +"','" + str_dob + "')";
+      setTimeout(callback_string,200);
+      return;
+  }
+  
   var str = '<a href=\'javascript:;\' onclick="parent.left_nav.loadCurrentPatientFromTitle()" title="PID = ' + pid + '"><b>' + pname + ' (' + pubpid + ')<br /></b></a>';
   setDivContent('current_patient', str);
   setTitleContent('current_patient', str + str_dob);
