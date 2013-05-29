@@ -62,7 +62,8 @@ function imsubmitted() {
 <center>
 
 <form method="POST"
- action="../main/main_screen.php?auth=login&site=<?php echo attr($_SESSION['site_id']); ?>"
+
+ action="../main/main_screen_tab.php?auth=login&site=<?php echo htmlspecialchars($_SESSION['site_id']); ?>"
  target="_top" name="login_form" onsubmit="return imsubmitted();">
 
 <input type='hidden' name='new_login_session_management' value='1' />
