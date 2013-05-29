@@ -47,6 +47,7 @@ while ($row = sqlFetchArray($res)) {
 <style type="text/css">
 @import "../../../library/js/datatables/media/css/demo_page.css";
 @import "../../../library/js/datatables/media/css/demo_table.css";
+@import "dynamic_finder.css";
 .mytopdiv { float: left; margin-right: 1em; }
 </style>
 
@@ -128,7 +129,7 @@ function openNewTopWindow(pid) {
 }
 
 </script>
-
+<title><?php echo xlt("Patient Finder");?></title>
 </head>
 <body class="body_top">
 
