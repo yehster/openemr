@@ -4,6 +4,7 @@
  */
 
 include_once('../globals.php');
+session_write_close();
 ?>
 <html>
 <head>

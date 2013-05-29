@@ -22,6 +22,7 @@ $fake_register_globals=false;
 $sanitize_all_escapes=true;
 
 require_once("../globals.php");
+session_write_close();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <HTML>

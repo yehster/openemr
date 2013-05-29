@@ -51,6 +51,7 @@ $fake_register_globals=false;
     $active_reminders = active_alert_summary($pid,"reminders-due");
   }
 
+session_write_close();
 function print_as_money($money) {
 	preg_match("/(\d*)\.?(\d*)/",$money,$moneymatches);
 	$tmp = wordwrap(strrev($moneymatches[1]),3,",",1);
