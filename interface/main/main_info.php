@@ -52,7 +52,6 @@ function GetInnerX () {
 }
 
 var x = GetInnerX();
-var framesrc = '<frame ';
 
 <?php
 
@@ -96,11 +95,9 @@ else {
 }
 ?>
 
-framesrc += ' src="<?php echo $framesrc; ?>';
-framesrc += '&framewidth='+x+'"   name="Calendar" scrolling="auto" frameborder="YES">';
+window.location="<?php echo $framesrc;?>&framewidth="+x+"'";
 
 </script>
-<!-- END (CHEMED) -->
 </HEAD>
 
 <!-- (CHEMED) -->
@@ -117,5 +114,6 @@ framesrc += '&framewidth='+x+'"   name="Calendar" scrolling="auto" frameborder="
 <noframes><body bgcolor="#FFFFFF">
 <?php echo xlt('Frame support required'); ?>
 </body></noframes>
+
 
 </HTML>
