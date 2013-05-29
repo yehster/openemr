@@ -29,7 +29,6 @@ function GetInnerX () {
 }
 
 var x = GetInnerX();
-var framesrc = '<frame ';
 
 <?php
 
@@ -73,26 +72,10 @@ else {
 }
 ?>
 
-framesrc += ' src="<?php echo $framesrc; ?>';
-framesrc += '&framewidth='+x+'"   name="Calendar" scrolling="auto" frameborder="YES">';
+window.location="<?php echo $framesrc;?>&framewidth="+x+"'";
 
 </script>
-<!-- END (CHEMED) -->
 </HEAD>
 
-<!-- (CHEMED) -->
-<script type='text/javascript' language='JavaScript'>
-    document.write('<frameset rows="*" cols="*" name="Main" frameborder="NO" border="0" framespacing="0"  <?php if ($_SESSION['cal_ui'] == 2) {echo 'onResize="window.location.href = window.location.href;"'; }?> >');
-    document.write(framesrc);
-    document.write('</frameset>');
-    document.close();
-
-</script>
-<!-- END (CHEMED) -->
-
-
-<noframes><body bgcolor="#FFFFFF">
-Frame support required
-</body></noframes>
 
 </HTML>
