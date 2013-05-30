@@ -1249,7 +1249,7 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
 	  "openemr_postcalendar_categories AS c WHERE " .
 	  "e.pc_pid = ? AND e.pc_eventDate < CURRENT_DATE AND " .
 	  "u.id = e.pc_aid AND e.pc_catid = c.pc_catid " .
-	  "ORDER BY e.pc_eventDate, e.pc_startTime DESC LIMIT 3";
+	  "ORDER BY e.pc_eventDate DESC, e.pc_startTime DESC LIMIT 3";
 	
      $pres = sqlStatement($query, array($pid) );
 
