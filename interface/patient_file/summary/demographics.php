@@ -1320,3 +1320,4 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
 
 </body>
 </html>
+<script type="text/javascript" src="demographics_ordering.js"></script>
