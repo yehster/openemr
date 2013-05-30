@@ -148,22 +148,31 @@ function encounter_info()
     return this;
 }
 
+function patient_data(name,pid,pubpid,age_info)
+{
+    this.name=name;
+    this.pid=pid;
+    this.pubpid=pubpid;
+    this.age_info=age_info;
+    return this;
+}
 function tabs_view_model()
 {
     this.tabStates=ko.observableArray([new frame_proxy("Calendar","0","main_info.php")
                    ,new frame_proxy("Patient","1","finder/dynamic_finder.php")
+//                   ,new frame_proxy("Patient","1","../patient_file/summary/demographics.php?pid=1")
                    ,new frame_proxy("Messages","2","messages/messages.php")]);
     this.multi=ko.observable();
     this.activeIdx=ko.observable(0);
     this.encounter=new encounter_info();
-    
+    this.patient=ko.observable(false);
     return this;
 }
 
 
 var view_model=new tabs_view_model();
 window.Cal=view_model.tabStates()[0];
-window.Cal.visible(true);
 window.RTop=view_model.tabStates()[1];
+window.RTop.visible(true);
 window.RBot=view_model.tabStates()[2];    
 

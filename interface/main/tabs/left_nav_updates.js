@@ -48,6 +48,7 @@ function loadCurrentEncounterFromTitle()
 }
 
 
+
 function updateElements()
 {
     navForm=$("body > form");
@@ -64,3 +65,13 @@ function updateElements()
     $.fx.speeds._default=0;
 }
 $(document).ready(updateElements);
+
+setRadio = function(frame,id)
+{
+    // NOP in new interface
+    return;
+};
+setPatient = function(pname, pid, pubpid, frname, str_dob)
+{
+    top.view_model.patient(new top.patient_data(pname,pid,pubpid,str_dob));
+};

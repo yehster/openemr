@@ -8,12 +8,12 @@ if(rawdata==='')
 }
 else if(rawdata==='New Encounter')
 {
-    top.tabs_navigate(pathWebroot+'forms/newpatient/new.php?autoloaded=1&calenc=',2);
+    top.tabs_navigate(top.pathWebroot+'forms/newpatient/new.php?autoloaded=1&calenc=',2);
     return true;
 }
 else if(rawdata==='Past Encounter List')
 {
-    top.tabs_navigate(pathWebroot+'patient_file/history/encounters.php',2);
+    top.tabs_navigate(top.pathWebroot+'patient_file/history/encounters.php',2);
     return true;
 }
     top.set_encounter(rawdata);
