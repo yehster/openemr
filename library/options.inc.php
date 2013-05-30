@@ -1690,7 +1690,10 @@ function display_layout_tabs($formtype, $result1, $result2='') {
 	  $first = false;
   }
 }
-
+function label_to_class($label)
+{
+    return preg_replace("/[^A-Za-z0-9]/", '', $label);
+}
 function display_layout_tabs_data($formtype, $result1, $result2='') {
   global $item_count, $cell_count, $last_group, $CPR;
 
@@ -1781,7 +1784,8 @@ function display_layout_tabs_data($formtype, $result1, $result2='') {
 					if ($datacols > 0) {
 					  disp_end_cell();
 					  $datacols_esc = htmlspecialchars( $datacols, ENT_QUOTES);
-					  echo "<td class='text data' colspan='$datacols_esc'";
+                      $class = 'text data '.label_to_class($group_fields['title']);
+					  echo "<td class='".$class. "' colspan='$datacols_esc'";
 					  echo ">";
 					  $cell_count += $datacols;
 					}
