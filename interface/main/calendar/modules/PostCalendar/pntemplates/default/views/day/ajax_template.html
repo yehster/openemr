@@ -643,7 +643,8 @@ foreach ($providers as $provider) {
                     $link_title = htmlspecialchars($fname,ENT_QUOTES)." ".htmlspecialchars($lname,ENT_QUOTES). " \n";
                     $link_title .= xl('Age') . ": ".$patient_age."\n" . xl('DOB') . ": ".$patient_dob.htmlspecialchars($comment, ENT_QUOTES)."\n";
                     $link_title .= "(" . xl('Click to view') . ")";
-                    $content .= "<a href='javascript:goPid($patientid)' title='$link_title'>";
+                    $status_class="status".ord($event['apptstatus'][0]);  // KHY - convert the character to a number for use as a valid class name.  
+                    $content .= "<a href='javascript:goPid($patientid)' title='$link_title' class='$status_class'>";
                     $content .= "<img src='$TPL_IMAGE_PATH/user-green.gif' border='0' title='$link_title' alt='View Patient' />";
                     if ($catid == 1) $content .= "<strike>";
                     $content .= htmlspecialchars($lname);
@@ -657,6 +658,9 @@ foreach ($providers as $provider) {
                         }
                     }
                     if ($catid == 1) $content .= "</strike>";
+                    $month_loc=strpos($patient_age,"month"); // KHY - Format the patient age for display on the calendar
+                    $age_display =  $month_loc===false ? trim($patient_age)."Y" : substr($patient_age,0,$month_loc-1)."M";
+                    $content .= " <span class='patient_age'>".$age_display."</span> ";                
                     $content .= "</a>";
                 }
                 else {
