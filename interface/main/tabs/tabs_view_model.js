@@ -64,7 +64,8 @@ function frame_proxy(default_title,idx,src)
     this.visible=ko.observable(false);
     this.title=ko.observable(default_title);
     this.idx=idx;
-    this.src=ko.observable(src).extend({notify: 'always'});
+    this.src=ko.observable(src);
+    this.src.extend({notify: 'always'});
     this.watch("location", function(property,oldval,newval)
     {
         if(typeof this.frame!=='undefined')
