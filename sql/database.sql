@@ -5540,5 +5540,18 @@ CREATE TABLE `product_warehouse` (
   `pw_min_level` float       DEFAULT 0,
   `pw_max_level` float       DEFAULT 0,
   PRIMARY KEY  (`pw_drug_id`,`pw_warehouse`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment_encounter`
+--
+CREATE TABLE `appointment_encounter` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `eid` int NOT NULL,
+  `encounter` int not null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
 

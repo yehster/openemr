@@ -23,6 +23,12 @@
  $fake_register_globals=false;
  $sanitize_all_escapes=true;
 
+    $arrived=0;
+    $arrived_enc=0;
+    if(isset($_REQUEST['eid']))
+       $created_eid=$_REQUEST['eid'];
+    else
+       $created_eid=0; 
  require_once("../../globals.php");
  require_once("$srcdir/patient.inc");
  require_once("$srcdir/forms.inc");
@@ -76,7 +82,7 @@
 
 function InsertEventFull()
  {
-	global $new_multiple_value,$provider,$event_date,$duration,$recurrspec,$starttime,$endtime,$locationspec;
+	global $new_multiple_value,$provider,$event_date,$duration,$recurrspec,$starttime,$endtime,$locationspec,$created_eid;
 	// =======================================
 	// multi providers case
 	// =======================================
@@ -98,7 +104,8 @@ function InsertEventFull()
                 $args['starttime'] = $starttime;
                 $args['endtime'] = $endtime;
                 $args['locationspec'] = $locationspec;
-                InsertEvent($args);
+                $created_eid = InsertEvent($args);
+		
             }
 
         // ====================================
@@ -114,12 +121,13 @@ function InsertEventFull()
             $args['starttime'] = $starttime;
             $args['endtime'] = $endtime;
             $args['locationspec'] = $locationspec;
-            InsertEvent($args);
+            $created_eid = InsertEvent($args);
+	    
         }
  }
 function DOBandEncounter()
  {
-   global $event_date,$info_msg;
+   global $event_date,$info_msg,$created_eid;
 	 // Save new DOB if it's there.
 	 $patient_dob = trim($_POST['form_dob']);
 	 if ($patient_dob && $_POST['form_pid']) {
@@ -129,14 +137,44 @@ function DOBandEncounter()
 
 	 // Auto-create a new encounter if appropriate.
 	 //
-	 if ($GLOBALS['auto_create_new_encounters'] && ($_POST['form_apptstatus'] == '@' || $_POST['form_apptstatus'] =='~') && $event_date == date('Y-m-d'))
+	 if ($GLOBALS['auto_create_new_encounters'] && ($_POST['form_apptstatus'] == '@' || $_POST['form_apptstatus'] =='~') && $event_date == date('Y-m-d') && !$_POST['status_before_post'])
+
 	 {
 		 $encounter = todaysEncounterCheck($_POST['form_pid'], $event_date, $_POST['form_comments'], $_POST['facility'], $_POST['billing_facility'], $_POST['form_provider'], $_POST['form_category'], false);
 		 if($encounter){
 				 $info_msg .= xl("New encounter created with id"); 
 				 $info_msg .= " $encounter";
+				 //ViSolve:-Mapping the Postcalendar appointment and encounter created - in a table 'appointment_encounter'
+				 sqlInsert("Insert into appointment_encounter SET eid= ? , encounter= ?", array($created_eid,$encounter));
 		 }
 	 }
+	// ViSolve:-Edit Appointment(@) - instead of creating new encounter, it will update already created encounter
+	else if($GLOBALS['auto_create_new_encounters'] && $_POST['form_apptstatus'] == '@' && $event_date == date('Y-m-d') && $_POST['status_before_post'] && $_POST['created_encounter'] )	
+	{
+		$event_date = date('Y-m-d');
+		$visit_reason = $_POST['form_comments'] ? $_POST['form_comments'] : 'Please indicate visit reason';
+  		$tmprow = sqlQuery("SELECT username, facility, facility_id FROM users WHERE id = ?", array($_SESSION["authUserID"]) );
+ 		$username = $tmprow['username'];
+  		$facility = $tmprow['facility'];
+  		$facility_id = $_POST['facility'] ? (int)$_POST['facility'] : $tmprow['facility_id'];
+        	$billing_facility = $_POST['billing_facility'] ? (int)$_POST['billing_facility'] : $tmprow['facility_id'];
+        	$visit_provider = $_POST['form_provider'] ? (int)$_POST['form_provider'] : '(NULL)';
+        	$visit_cat = $_POST['form_category'] ? $_POST['form_category'] : '(NULL)';
+		$patient_id = $_POST['form_pid'];
+		$tmprow = sqlQuery("SELECT encounter FROM form_encounter WHERE " .
+    		"pid = ? AND date = ? " .
+    		"ORDER BY encounter DESC LIMIT 1",array($patient_id,"$event_date 00:00:00"));
+  		$encounter =  $_POST['created_encounter'];	
+		sqlInsert("UPDATE form_encounter SET " .
+      			"date = ?, " .
+      			"reason = ?, " .
+      			"facility = ?, " .
+      			"facility_id = ?, " .
+      			"billing_facility = ?, " .
+                        "provider_id = ?, " .
+      			"pid = ?, " .
+                        "pc_catid = ? where encounter = ?",array($event_date,$visit_reason,$facility,$facility_id,$billing_facility,$visit_provider,$patient_id,$visit_cat,$encounter));
+	}
  }
 //================================================================================================================
 
@@ -518,7 +556,7 @@ if ($_POST['form_action'] == "save") {
          * ======================================================*/
 
 		InsertEventFull();
-		
+
     }
 
     // done with EVENT insert/update statements
@@ -686,6 +724,30 @@ if ($_POST['form_action'] == "save") {
   $repeattype = $rspecs['event_repeat_freq_type'];
   $repeatfreq = $rspecs['event_repeat_freq'];
   $repeatexdate = $rspecs['exdate']; // repeating date exceptions
+
+
+  // Adjustments for repeat type 2, a particular weekday of the month.
+  if ($repeats == 2) {
+    $repeatfreq = $rspecs['event_repeat_on_freq'];
+    if ($rspecs['event_repeat_on_num'] < 5) {
+      $repeattype = 5;
+    }
+    else {
+      $repeattype = 6;
+    }
+  }
+//ViSolve:-Save the appointment status (in edit mode) and if the status is "@" then saves the encounter too
+if(($row['pc_apptstatus']=='@') || $row['pc_apptstatus']=='~')
+{
+$enc_val = sqlQuery("select encounter from appointment_encounter where eid= ?",array($eid));
+$arrived_enc = htmlspecialchars($enc_val['encounter'], ENT_NOQUOTES);
+$arrived = 1;
+}
+else
+{
+$arrived = 0;
+$arrived_enc = 0;
+}
 
   $hometext = $row['pc_hometext'];
   if (substr($hometext, 0, 6) == ':text:') $hometext = substr($hometext, 6);
@@ -1365,6 +1427,10 @@ if ($repeatexdate != "") {
   </td>
   <td colspan='4' nowrap>
    <input type='text' size='40' name='form_comments' style='width:100%' value='<?php echo attr($hometext); ?>' title='<?php echo xla('Optional information about this event');?>' />
+<!--//ViSolve: Save the appointment status and encounter -->
+	<input type='hidden' value='<?php echo attr($arrived); ?>' name='status_before_post' />
+	 <input type='hidden' value='<?php echo attr($arrived_enc); ?>' name='created_encounter' />
+
   </td>
  </tr>
 
