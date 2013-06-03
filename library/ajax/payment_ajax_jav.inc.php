@@ -27,7 +27,9 @@
 //===============================================================================
 //This section handles ajax functions for insurance,patient and for encounters.
 //===============================================================================
+require_once("$srcdir/ajax/payment_ajax/payment_ajax_js.php");
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo $webroot;?>/library/ajax/payment_ajax/payment_ajax_js.css" />
 <script type="text/javascript">
 $(document).ready(function(){	
   $("#type_code").keyup(function(e){
@@ -40,7 +42,12 @@ $(document).ready(function(){
 		   ajaxFunction('non','Simple',document.getElementById('type_code'));
 		   return;
 		 }
-  });	
+  });
+  var patient_search_timer=null;
+  function execute_patient_search()
+  {
+		   ajaxFunction('patient','Submit',document.getElementById('patient_code'));      
+  }
   $("#patient_code").keyup(function(e){
 	  if (e.which == 9 || e.which == 13)
 		 {//tab key,enter key.Prevent ajax activity.
@@ -48,7 +55,11 @@ $(document).ready(function(){
 		 }
 		else
 		 {
-		   ajaxFunction('patient','Submit',document.getElementById('patient_code'));
+           if(patient_search_timer!==null)
+            {
+                clearTimeout(patient_search_timer);           
+            }
+           patient_search_timer=setTimeout(execute_patient_search,300);
 		   return;
 		 }
   });	
@@ -81,8 +92,6 @@ $(document).ready(function(){
    }
   else if(Source=='patient')
    {
-	  if(SourceObject.value.length<3)
-	   return false;
 	  document.getElementById('ajax_mode').value='set_patient';
    }
    //For the below two cases, same text box is used for both insurance and patient.
@@ -106,6 +115,7 @@ $(document).ready(function(){
     data: {
      ajax_mode: document.getElementById('ajax_mode').value,
      patient_code: Source=='patient' ? SourceObject.value : '',
+     search_type: $("input[name='patient_search_type']:checked").val(),
     insurance_text_ajax: document.getElementById('type_code') ? document.getElementById('type_code').value : '',
 	encounter_patient_code:Source=='encounter' ? document.getElementById('hidden_patient_code').value : '',
 	submit_or_simple_type:SubmitOrSimple
@@ -120,15 +130,10 @@ $(document).ready(function(){
 	 {
 		ThedataArray=thedata.split('~`~`');
 		thedata=ThedataArray[1];
-		if(Source=='patient')
+		if(Source!=='patient')
 		 {
-		   if(ThedataArray[0]!=SourceObject.value.length)
-			{
-			 return;//To deal with speedy typing.
-			}
-		 }
-		else
-		 {
+            // Throttle non-patient searchs by old HACK method - KHY
+            // Patient based search to be throttled by timer
 		   if(ThedataArray[0]!=document.getElementById('type_code').value.length)
 			{
 			 return;//To deal with speedy typing.
@@ -179,6 +184,8 @@ $(document).ready(function(){
    });
    return;		
   }
+  
+  setup_overrides();
  });
 //==============================================================================================================================================
 //Following functions are needed for other tasks related to ajax.

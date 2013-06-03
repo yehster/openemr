@@ -30,6 +30,7 @@
 require_once("../../interface/globals.php");
 require_once("$srcdir/sql.inc");
 require_once("$srcdir/formatting.inc.php");
+require_once("payment_ajax/patient_search.php");
 //=================================
 if (isset($_REQUEST["ajax_mode"]))
  {
@@ -118,22 +119,23 @@ function AjaxDropDownCode()
 	$CountIndex=1;
 	$StringForAjax="<div id='AjaxContainerPatient'><table width='452' border='1' cellspacing='0' cellpadding='0'>
 	  <tr class='text' bgcolor='#dddddd'>
-		<td width='50'>".htmlspecialchars( xl('Code'), ENT_QUOTES)."</td>
+		<td width='50'>".htmlspecialchars( xl('PID'), ENT_QUOTES)."</td>
+		<td width='100'>".htmlspecialchars( xl('External ID'), ENT_QUOTES)."</td>
 		<td width='100'>".htmlspecialchars( xl('Last Name'), ENT_QUOTES)."</td>
 	    <td width='100'>".htmlspecialchars( xl('First Name'), ENT_QUOTES)."</td>
 	    <td width='100'>".htmlspecialchars( xl('Middle Name'), ENT_QUOTES)."</td>
 	    <td width='100'>".htmlspecialchars( xl('Date of Birth'), ENT_QUOTES)."</td>
-	  </tr>".
+	    <td width='100'>".htmlspecialchars( xl('Primary Policy#'), ENT_QUOTES)."</td>
+
+    </tr>".
 	//ProcessKeyForColoring(event,$CountIndex)==>Shows the navigation in the listing by change of colors and focus.Happens when down or up arrow is pressed.
 	  "<tr class='text' height='20'  bgcolor='$bgcolor' id=\"tr_insurance_$CountIndex\"
 	  onkeydown=\"ProcessKeyForColoring(event,$CountIndex);$StringToAppend2(event,'&nbsp;','')\"   onclick=\"$StringToAppend('&nbsp;','')\">
-			<td colspan='5' align='center'><a id='anchor_insurance_code_$CountIndex' href='#'></a></td>
+			<td colspan='7' align='center'><a id='anchor_insurance_code_$CountIndex' href='#'></a></td>
 	  </tr>
 
 	  ";
-	$res = sqlStatement("SELECT pid as id,fname,lname,mname,DOB FROM patient_data
-			 where  fname like '$patient_code%' or lname like '$patient_code%' or mname like '$patient_code%' or 
-			 CONCAT(lname,' ',fname,' ',mname) like '$patient_code%' or pid like '$patient_code%' ORDER BY lname");
+    $res = payment_patient_search($patient_code,$_REQUEST['search_type']);
 	while ($row = sqlFetchArray($res))
 	 {
 		if($CountIndex%2==1)
@@ -146,18 +148,23 @@ function AjaxDropDownCode()
 		 }
 		$CountIndex++;
 		$Id=$row['id'];
+        $EID=$row['pubpid'];
 		$fname=$row['fname'];
 		$lname=$row['lname'];
 		$mname=$row['mname'];
 		$Name=$lname.' '.$fname.' '.$mname;
 		$DOB=oeFormatShortDate($row['DOB']);
+        $policy_num=$row['policy_number'];
 		$StringForAjax.="<tr class='text'  bgcolor='$bgcolor' id=\"tr_insurance_$CountIndex\"
 		 onkeydown='ProcessKeyForColoring(event,$CountIndex);$StringToAppend2(event,\"".htmlspecialchars($Id,ENT_QUOTES)."\",\"".htmlspecialchars($Name,ENT_QUOTES)."\")' onclick=\"$StringToAppend('".addslashes($Id)."','".htmlspecialchars(addslashes($Name),ENT_QUOTES)."')\">
 			<td><a id='anchor_insurance_code_$CountIndex' href='#' >".htmlspecialchars($Id)."</a></td>
+			<td><a id='anchor_insurance_code_$CountIndex' href='#' >".htmlspecialchars($EID)."</a></td>
 			<td><a href='#'>".htmlspecialchars($lname)."</a></td>
 		    <td><a href='#'>".htmlspecialchars($fname)."</a></td>
             <td><a href='#'>".htmlspecialchars($mname)."</a></td>
             <td><a href='#'>".htmlspecialchars($DOB)."</a></td>
+            <td><a href='#'>".htmlspecialchars($policy_num)."</a></td>
+                
   </tr>";
 	 }
 	$StringForAjax.="</table></div>";

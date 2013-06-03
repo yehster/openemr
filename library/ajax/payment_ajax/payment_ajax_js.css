@@ -1,0 +1,25 @@
+/* 
+    Document   : payment_ajax_js
+    Created on : Jun 3, 2013, 1:48:55 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#td_patient_info:hover #patient_info
+{
+    display: block;
+}
+#patient_info
+{
+    position: relative;
+    display: none;
+}
+#patient_search_options
+{
+    z-index:100;
+    background-color:white;
+    width: 10em;
+    position: absolute;
+    top: 1.5em;
+}
