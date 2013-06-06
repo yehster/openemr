@@ -10,6 +10,7 @@ function payment_patient_search($patient_code,$mode)
     $query_base.="LEFT JOIN insurance_data as id ON id.pid=pd.pid and id.type='primary' ";
     $query_base.=" WHERE ";
     
+    $res=false;
     if(isset($search_fields[$mode]))
     {
         $query_string=$query_base." ".$search_fields[$mode]." LIKE ? ";
@@ -18,7 +19,7 @@ function payment_patient_search($patient_code,$mode)
         error_log($query_string);
         $res = sqlStatement($query_string,$query_parameters);
     }
-    if(($mode=="Name") || (sqlNumRows($res)==0))
+    if(($mode=="Name") || $res===false || (sqlNumRows($res)==0))
     {
         $fields=preg_split("/[\s,]+/",$patient_code,-1,PREG_SPLIT_NO_EMPTY);
         $query_string=$query_base;
