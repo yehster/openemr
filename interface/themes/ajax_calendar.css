@@ -277,7 +277,7 @@ div.tiny { width:1px; height:1px; font-size:1px; }
 }
 .event_appointment {
     background-color: white;
-    z-index:2;
+    z-index:3;
     overflow: hidden;
     border: 1px solid #ccc;
 }

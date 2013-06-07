@@ -803,6 +803,7 @@ return false;
 				$allowedtot=0;
 				if($RowSearchSub = sqlFetchArray($ResultSearchSub))
 				 {
+                    $header_shown==false;
 					do 
 					 {
 						$CountPatient++;
@@ -837,8 +838,9 @@ return false;
 						 ORDER BY form_encounter.`date`,form_encounter.encounter,billing.code,billing.modifier");
 						if(sqlNumRows($ResultSearch)>0)
 						 {
-						if($CountPatient==1)
+						if(($CountPatient>=1)&& ($header_shown==false))
 						 {
+                            $header_shown=true;
 						 $Table='yes';
 						?>
 						<table width="1004"  border="0" cellpadding="0" cellspacing="0" align="center" id="TableDistributePortion">
