@@ -1516,22 +1516,8 @@ function deleteEvent() {
 
 function SubmitForm() {
  var f = document.forms[0];
- <?php if (!($GLOBALS['select_multi_providers'])) { // multi providers appt is not supported by check slot avail window, so skip ?>
-  if (f.form_action.value != 'delete') {
-    // Check slot availability.
-    var mins = parseInt(f.form_hour.value) * 60 + parseInt(f.form_minute.value);
-    if (f.form_ampm.value == '2' && mins < 720) mins += 720;
-    find_available('&cktime=' + mins);
-  }
-  else {
-    top.restoreSession();
-    f.submit();
-  }
- <?php } else { ?>
   top.restoreSession();
   f.submit();
- <?php } ?>
-
   return true;
 }
 
