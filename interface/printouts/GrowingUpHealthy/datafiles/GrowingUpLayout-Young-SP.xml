@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <font filename="/var/www/openemr/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
+    <field id="today" xpos="652" ypos="288"/>
+    <field id="name" xpos="630" ypos="310"/>
+    <field id="age" xpos="630" ypos="334"/>
+    <field id="length" xpos="622" ypos="357"/>
+    <field id="weight" xpos="715" ypos="357"/>
+    <field id="appt_date" xpos="618" ypos="413"/>
+    <field id="appt_time" xpos="715" ypos="413"/>
+</layout>
