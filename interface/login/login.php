@@ -7,7 +7,6 @@
 $ignoreAuth=true;
 include_once("../globals.php");
 include_once("$srcdir/sql.inc");
-require_once("../../library/authentication/rsa.php");
 ?>
 <html>
 <head>
@@ -16,37 +15,10 @@ require_once("../../library/authentication/rsa.php");
 <link rel=stylesheet href="../themes/login.css" type="text/css">
 
 <script language='JavaScript' src="../../library/js/jquery-1.4.3.min.js"></script>
-<script src="../../library/js/crypt/jsbn.js"></script>
-<script src="../../library/js/crypt/rsa.js"></script>
 <script language='JavaScript'>
-function RSAProblem()
+function transmit_form()
 {
-	window.alert("Server Configuration Problem!");
-};
-
-$(document).ajaxError(RSAProblem);
-
-function encrypt_form()
-{
-
-    var rsa_ajax='<?php echo $webroot;?>/library/ajax/rsa_request.php';
-    $.post(rsa_ajax,{},
-        function(data)
-        {
-            var key = RSA.getPublicKey(data);
-            var encryptedPass=RSA.encrypt(document.forms[0].clearPass.value, key);
-            if(encryptedPass==false)
-            {
-                RSAProblem();
-                return;
-            }
-            document.forms[0].authPass.value=encryptedPass;
-
-            document.forms[0].clearPass.value='';
-            document.forms[0].pk.value=data;   
-            document.forms[0].submit();
-        }
-    );
+    document.forms[0].submit();
 }
 function imsubmitted() {
 <?php if (!empty($GLOBALS['restore_sessions'])) { ?>
@@ -200,9 +172,7 @@ if (count($result3) != 1) { ?>
 <?php }} ?>
 
 <tr><td>&nbsp;</td><td>
-<input type="hidden" name="authPass">
-<input type="hidden" name="pk">
-<input class="button large" type="submit" onClick="encrypt_form()" value="<?php xl('Login','e');?>">
+<input class="button large" type="submit" onClick="transmit_form()" value="<?php xl('Login','e');?>">
 </td></tr>
 <tr><td colspan='2' class='text' style='color:red'>
 <?php
