@@ -41,5 +41,5 @@ $filename=PDF_OUTPUT_DIR.$_REQUEST['filename'];
 error_log($filename);
 header('Content-type: application/pdf'); 
 readfile($filename);
-unset($filename);
+unlink($filename);
 ?>
