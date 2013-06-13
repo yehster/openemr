@@ -728,11 +728,12 @@ if ($_POST['form_action'] == "save") {
 
  // If we have a patient ID, get the name and phone numbers to display.
  if ($patientid) {
-  $prow = sqlQuery("SELECT lname, fname, phone_home, phone_biz, DOB " .
+  $prow = sqlQuery("SELECT lname, fname, phone_home,phone_cell, phone_biz, DOB " .
    "FROM patient_data WHERE pid = ?", array($patientid) );
   $patientname = $prow['lname'] . ", " . $prow['fname'];
-  if ($prow['phone_home']) $patienttitle .= " H=" . $prow['phone_home'];
-  if ($prow['phone_biz']) $patienttitle  .= " W=" . $prow['phone_biz'];
+  if ($prow['phone_home']) $patienttitle .= " H=" ."<b>".$prow['phone_home']."</b>";
+  if ($prow['phone_cell']) $patienttitle  .= " M=" ."<b>". $prow['phone_cell']."</b>";
+  if ($prow['phone_biz']) $patienttitle  .= " W=" ."<b>". $prow['phone_biz']."</b>";
  }
 
  // Get the providers list.
