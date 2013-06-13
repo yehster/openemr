@@ -108,9 +108,9 @@
      $vitals_data = sqlQuery($sqlVitals,array($pid));
      if($vitals_data!==false)
      {
-         $patient_info['weight']=$vitals_data['weight']." lb";
-         $patient_info['length']=$vitals_data['height']." in";
-         $patient_info['bmi']=$vitals_data['BMI'];
+         if($vitals_data['weight']!=0) $patient_info['weight']=$vitals_data['weight']." lb";
+         if($vitals_data['length']!=0) $patient_info['length']=$vitals_data['height']." in";
+         if($vitals_data['BMI']!=0) $patient_info['bmi']=$vitals_data['BMI'];
      }
 
      $layoutOption="Young";
