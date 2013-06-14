@@ -1,0 +1,43 @@
+/* 
+    Document   : pm160
+    Created on : Jun 13, 2013, 10:31:51 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#dem_data
+{
+    display: none;
+}
+.dem_header
+{
+    font-weight: bold;
+}
+#dem_display table
+{
+    font-size: small;
+    margin: 1px;
+    background-color: lightgray;
+    width: 600px;
+}
+.label
+{
+    color: darkblue;
+}
+body > button
+{
+    float:left;
+}
+body > div
+{
+    float:left;
+}
+#res_display table
+{
+    font-size: small;
+}

@@ -27,7 +27,7 @@ $auth_demo     = acl_check('patients'  , 'demo');
 <script type="text/javascript" src="../../../library/dynarch_calendar_setup.js"></script>
 
 <!-- include jQuery support -->
-<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery-1.7.2.min.js"></script>
 
 <script language='JavaScript'>
 
@@ -495,7 +495,8 @@ function issueClick(issue) {
             
     });
 }
-
+$("#include_demographics").prop("checked",false);
+$("#include_billing").prop("checked",false);
 </script>
 
 </html>
