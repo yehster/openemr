@@ -39,6 +39,24 @@
         }
     }    
     
+    function format_weight($weight,$age)
+    {
+        
+        $retval="";
+        if($weight!=0)
+        {
+            if($age>=24.0)
+            {
+                $retval= sprintf("%d lb",$weight);
+            }
+            else {
+                    $pounds_int=floor($weight);
+                    return sprintf("%dlb %doz",$pounds_int,($weight-$pounds_int)*16);
+            }            
+        }
+        return $retval;
+    
+    }
     $pid= isset($_REQUEST['pid']) ? $_REQUEST['pid']: $_SESSION['pid'];
 ?>
 
@@ -108,8 +126,8 @@
      $vitals_data = sqlQuery($sqlVitals,array($pid));
      if($vitals_data!==false)
      {
-         if($vitals_data['weight']!=0) $patient_info['weight']=$vitals_data['weight']." lb";
-         if($vitals_data['length']!=0) $patient_info['length']=$vitals_data['height']." in";
+         $patient_info['weight']=format_weight($vitals_data['weight'],$age_info['age_in_months']);
+         if($vitals_data['height']!=0) $patient_info['length']=$vitals_data['height']." in";
          if($vitals_data['BMI']!=0) $patient_info['bmi']=$vitals_data['BMI'];
      }
 
