@@ -98,6 +98,7 @@ if ($printable) {
 <?php echo $facility['phone'] ?><br>
 </p>
 <a href="javascript:window.close();"><span class='title'><?php echo $titleres['fname'] . " " . $titleres['lname']; ?></span></a><br>
+<span class='text'><?php echo xl('DOB').":".$titleres['DOB_TS'] ?></span><br>
 <span class='text'><?php xl('Generated on','e'); ?>: <?php echo oeFormatShortDate(); ?></span>
 <br><br>
 
