@@ -35,6 +35,17 @@ function find_forms($pid,array $forms)
    return $retval;
 }
 
+function format_vision($value)
+{
+    return "20/".$value;
+}
+function set_data(&$array,$index,$value,$format)
+{
+    if(($value!==null)&&($value!==""))
+    {
+        array_push($array,array("name"=>$index,"value"=>$format($value)));
+    }
+}
 function get_form_data($form_id,$formdir)
 {
     if(strpos($formdir,"LBF")===0)
@@ -55,7 +66,23 @@ function get_form_data($form_id,$formdir)
        }
        return $retval;        
     }
-    echo $formdir;
-    return array();
+    if($formdir=="snellen")
+    {
+        $sqlQuery=" SELECT left_1,left_2,right_1,right_2,notes from form_snellen WHERE ID=?";
+        $res=sqlQuery($sqlQuery,array($form_id));
+        if($res)
+        {
+            $retval=array();
+            set_data($retval,'Left Uncorrected',$res['left_1'],format_vision);
+            set_data($retval,'Left Corrected',$res['left_2'],format_vision);
+            set_data($retval,'Right Uncorrected',$res['right_1'],format_vision);
+            set_data($retval,'Right Uncorrected',$res['right_2'],format_vision);
+            return $retval;
+        }
+        else
+        {
+            return array();
+        }
+    }
 }
 ?>
