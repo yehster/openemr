@@ -3,7 +3,7 @@ require_once("../globals.php");
 require_once("directory_definitions.php");
 
 //Prefix of allowable files to be viewed in this manner.
-$prefixes=array("GrowingUpHealthy_");
+$prefixes=array("GrowingUpHealthy_","WIC_");
 if(isset($_REQUEST['filename']))
 {
     $filename=$_REQUEST['filename'];
@@ -15,7 +15,6 @@ if(isset($_REQUEST['filename']))
 
     // confirm this is a .pdf
     $pdf_loc=strpos($filename,".pdf");
-    echo $pdf_loc.":".strlen($filename);
     if($pdf_loc!==strlen($filename)-4)
     {
         exit();
@@ -30,6 +29,7 @@ if(isset($_REQUEST['filename']))
     }
     if(!$valid)
     {
+        echo "Attempt to view unrecognized file prefix.";
         exit();
     }
 }

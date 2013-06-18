@@ -25,6 +25,12 @@ function setupPrintouts()
     pm160.attr("href","../../printouts/PM160/generate.php");
     printoutsTD.append(pm160);
     pm160.before(separator);
+
+    var WIC=$("<a>WIC</a>");
+    WIC.attr("href","../../printouts/WIC/generate.php");
+    printoutsTD.append(WIC);
+    WIC.before(separator);
+    
     
 }
 setupPrintouts();

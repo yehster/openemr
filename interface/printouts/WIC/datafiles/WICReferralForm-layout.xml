@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <font filename="/var/www/openemr/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
+    <field id="fname" xpos="25" ypos="130"/>
+    <field id="lname" xpos="180" ypos="130"/>
+    <field id="today" xpos="220" ypos="750"/>
+</layout>
