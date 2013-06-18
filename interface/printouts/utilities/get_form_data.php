@@ -19,6 +19,7 @@ function find_forms($pid,array $forms)
     }
     $sqlQuery = "SELECT ".$columns." FROM forms WHERE pid=? "
                 ." AND form_name in (".$params.")"
+                ." AND deleted=0 "
                 ." GROUP BY form_name, formdir";
    $res=sqlStatement($sqlQuery,$query_params);
    $retval=array();
@@ -36,20 +37,25 @@ function find_forms($pid,array $forms)
 
 function get_form_data($form_id,$formdir)
 {
-    $query_params=array($form_id,$formdir);
-    $sqlQuery = "SELECT lay.title field, lay.field_id,lbf.field_value, lis.title FROM lbf_data lbf"
-                    ." JOIN layout_options lay ON lbf.field_id=lay.field_id"
-                    ." LEFT JOIN list_options lis ON lbf.field_value=lis.option_id AND lay.list_id=lis.list_id"
-                    ." WHERE lbf.form_id=? AND lay.form_id=?  "
-                    ." ORDER BY lay.seq";
-   $res=sqlStatement($sqlQuery,$query_params);
-   $retval=array();
-   while($data=sqlFetchArray($res))
-   {
-       $field_name = $data['field']==""?  $data['field_id'] : $data['field'];
-       $field_value= $data['title']==""? $data['field_value'] : $data['title'];
-       array_push($retval,array("name"=>$field_name,"value"=>$field_value));
-   }
-   return $retval;
+    if(strpos($formdir,"LBF")===0)
+    {
+        $query_params=array($form_id,$formdir);
+        $sqlQuery = "SELECT lay.title field, lay.field_id,lbf.field_value, lis.title FROM lbf_data lbf"
+                        ." JOIN layout_options lay ON lbf.field_id=lay.field_id"
+                        ." LEFT JOIN list_options lis ON lbf.field_value=lis.option_id AND lay.list_id=lis.list_id"
+                        ." WHERE lbf.form_id=? AND lay.form_id=?  "
+                        ." ORDER BY lay.seq";
+       $res=sqlStatement($sqlQuery,$query_params);
+       $retval=array();
+       while($data=sqlFetchArray($res))
+       {
+           $field_name = $data['field']==""?  $data['field_id'] : $data['field'];
+           $field_value= $data['title']==""? $data['field_value'] : $data['title'];
+           array_push($retval,array("name"=>$field_name,"value"=>$field_value));
+       }
+       return $retval;        
+    }
+    echo $formdir;
+    return array();
 }
 ?>
