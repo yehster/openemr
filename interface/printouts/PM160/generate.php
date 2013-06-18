@@ -17,6 +17,7 @@
 */
 
     require_once("../../globals.php");
+    require_once("../utilities/get_form_data.php");
     require_once("$srcdir/patient.inc");
     require_once("$srcdir/options.inc.php");    
     require_once("load_data.php");
@@ -38,6 +39,30 @@
     $forms=array("Snellen Eye Exam","Hearing Screening","Hemoglobin Result","Tuberculin Skin Test (TST)");
     $patient_data  = getPatientData($pid, "*, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD");
     $employer_data = getEmployerData($pid);
+    $forms_data=find_forms($pid,$forms);
+    for($idx=0;$idx<count($forms);$idx++)
+    {
+        if(isset($forms_data[$forms[$idx]]))
+        {
+            $form_data=$forms_data[$forms[$idx]];
+            $header=create_row($DOM,$forms[$idx],$form_data['date']);
+            $divTBODY->appendChild($header);
+            $values=get_form_data($form_data['form_id'],$form_data['formdir']);
+            for($valIdx=0;$valIdx<count($values);$valIdx++)
+            {
+                $dataRow=create_row($DOM,$values[$valIdx]['name'],$values[$valIdx]['value']);
+                $divTBODY->appendChild($dataRow);
+            }
+            
+        }
+        else
+        {
+            $header=create_row($DOM,$forms[$idx],"NONE");
+            $divTBODY->appendChild($header);
+        }
+        $header->setAttribute("class","form_header");
+        
+    }
 ?>
     <link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css">
     <link rel="stylesheet" href="pm160.css" type="text/css">
