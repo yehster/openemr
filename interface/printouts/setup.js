@@ -4,6 +4,15 @@
  */
 
 
+function addItem(caption,link,parent)
+{
+    var separator="&nbsp;|&nbsp;";
+    var item=$("<A>"+caption+"</a>");
+    item.attr("href",link);
+    parent.append(item);
+    item.before(separator)
+    return item;
+}
 function setupPrintouts()
 {
     var separator="&nbsp;|&nbsp;";
@@ -31,6 +40,22 @@ function setupPrintouts()
     printoutsTD.append(WIC);
     WIC.before(separator);
     
+    var SchoolNote=addItem("School Note","#",printoutsTD);
+    SchoolNote.click(function()
+    {
+        $.post("../../printouts/DirectSchool/generate.php",{}
+            ,function(data)
+            {
+                if(data!="Not Found!")
+                {
+                    window.open(data);                   
+                }
+                else
+                {
+                    window.alert("No note found");
+                }
+            });
+    });
     
 }
 setupPrintouts();
