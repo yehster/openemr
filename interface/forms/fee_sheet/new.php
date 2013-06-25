@@ -1233,10 +1233,6 @@ if (true) {
 <?php if (!$isBilled) { ?>
 <input type='submit' name='bn_save' value='<?php echo xla('Save');?>' />
 &nbsp;
-<?php if (!$hasCharges) { ?>
-<input type='submit' name='bn_save_close' value='<?php echo xla('Save and Close');?>' />
-&nbsp;
-<?php } ?>
 <input type='submit' name='bn_refresh' value='<?php echo xla('Refresh');?>'>
 &nbsp;
 <?php } ?>
