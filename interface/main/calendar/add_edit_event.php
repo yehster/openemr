@@ -129,7 +129,7 @@ function DOBandEncounter()
 
 	 // Auto-create a new encounter if appropriate.
 	 //
-	 if ($GLOBALS['auto_create_new_encounters'] && $_POST['form_apptstatus'] == '@' && $event_date == date('Y-m-d'))
+	 if ($GLOBALS['auto_create_new_encounters'] && ($_POST['form_apptstatus'] == '@' || $_POST['form_apptstatus'] =='~') && $event_date == date('Y-m-d'))
 	 {
 		 $encounter = todaysEncounterCheck($_POST['form_pid'], $event_date, $_POST['form_comments'], $_POST['facility'], $_POST['billing_facility'], $_POST['form_provider'], $_POST['form_category'], false);
 		 if($encounter){
