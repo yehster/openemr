@@ -42,18 +42,18 @@ function appointment_info(DOMDocument $DOM, DOMElement $parent,$pid)
 
 function stature_info(DOMDocument $DOM, DOMElement $parent,$pid)
 {
-     $sqlVitals = "SELECT height,weight,BMI FROM form_vitals WHERE pid=? ORDER BY date desc LIMIT 1";
-     $vitals_data = sqlQuery($sqlVitals,array($pid));
-         if($vitals_data['weight']!=0) 
-         {
-            $pounds_int=floor($vitals_data['weight']);            
-            $parent->appendChild(create_row($DOM,"Weight",sprintf("%dlb %doz",$pounds_int,($vitals_data['weight']-$pounds_int)*16)));             
-         }
-         if($vitals_data['height']!=0) 
-             $parent->appendChild(create_row($DOM,"Height",$vitals_data['height']." in"));
-         if($vitals_data['BMI']!=0) 
-             $parent->appendChild(create_row($DOM,"BMI",$vitals_data['BMI']));
-     
+    $sqlVitals = "SELECT height,weight,BMI FROM form_vitals WHERE pid=? ORDER BY date desc LIMIT 1";
+    $vitals_data = sqlQuery($sqlVitals,array($pid));
+    if($vitals_data['weight']!=0) 
+    {
+       $pounds_int=floor($vitals_data['weight']);            
+       $parent->appendChild(create_row($DOM,"Weight",sprintf("%dlb %doz",$pounds_int,($vitals_data['weight']-$pounds_int)*16)));             
+    }
+    if($vitals_data['height']!=0) 
+        $parent->appendChild(create_row($DOM,"Height",$vitals_data['height']." in"));
+    if($vitals_data['BMI']!=0) 
+    $parent->appendChild(create_row($DOM,"BMI",$vitals_data['BMI']));
+
      if($vitals_data!==false)
      {
          if($vitals_data['length']!=0) $patient_info['length']=$vitals_data['height']." in";

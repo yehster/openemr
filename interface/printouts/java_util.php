@@ -8,6 +8,8 @@
         {
             $command.=" ".escapeshellarg($key."|".$value);
         }
+        error_log($command);
         $result=exec($command);
+        error_log($result);
     }
 ?>
