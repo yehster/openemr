@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <font filename="/var/www/openemr/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
+    <font filename="/var/www/opentest/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
     <field id="fname" xpos="25" ypos="130" />
     <field id="lname" xpos="175" ypos="130"/>
     <field id="DOB_MDY" xpos="425" ypos="130"/>
@@ -12,8 +12,11 @@
     <field id="hgb-date" xpos="225" ypos="215" />
 
     <field id="lead" xpos="240" ypos="235"/>
-
+    <field id="office-address-1" xpos="330" ypos="700"/>
+    <field id="office-address-2" xpos="330" ypos="711"/>
+    <field id="office-address-3" xpos="330" ypos="722"/>
     
 
+    <field id="phone" xpos="25" ypos="750" font-size="8"/>
     <field id="today" xpos="220" ypos="750"/>
 </layout>
