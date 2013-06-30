@@ -55,8 +55,8 @@ if ($is_expired) {
   //display the php file containing the password expiration message.
   $frame1url = "pwd_expires_alert.php";
 }
-else if (!empty($_POST['patientID'])) {
-  $patientID = 0 + $_POST['patientID'];
+else if (!empty($_REQUEST['patientID'])) {
+  $patientID = 0 + $_REQUEST['patientID'];
   $frame1url = "../patient_file/summary/demographics.php?set_pid=".attr($patientID);
 }
 else if ($GLOBALS['athletic_team']) {
