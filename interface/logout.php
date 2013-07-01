@@ -1,5 +1,6 @@
 <?php
 require_once("globals.php");
+authCloseSession();
 ?>
 
 <html>
