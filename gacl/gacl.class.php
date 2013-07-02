@@ -167,7 +167,7 @@ class gacl {
 			$this->db = ADONewConnection($this->_db_type);
 			//Use NUM for slight performance/memory reasons.
 			$this->db->SetFetchMode(ADODB_FETCH_NUM);
-			$this->db->PConnect($this->_db_host, $this->_db_user, $this->_db_password, $this->_db_name);
+			$this->db->PConnect($this->_db_host.":".$GLOBALS['sqlconf']['port'], $this->_db_user, $this->_db_password, $this->_db_name);
 
 		        // Modified 5/2009 by BM for UTF-8 project
 		        if ($this->_db_utf8_flag) {
