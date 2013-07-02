@@ -16,7 +16,6 @@ class Installer
     $this->igroup                   = $cgi_variables['igroup'];
     $this->server                   = $cgi_variables['server']; // mysql server (usually localhost)
     $this->loginhost                = $cgi_variables['loginhost']; // php/apache server (usually localhost)
-    $this->port                     = $cgi_variables['port'];
     $this->root                     = $cgi_variables['root'];
     $this->rootpass                 = $cgi_variables['rootpass'];
     $this->login                    = $cgi_variables['login'];
@@ -99,7 +98,7 @@ class Installer
 
   public function root_database_connection()
   {
-    $this->dbh = $this->connect_to_database( $this->server, $this->root, $this->rootpass, $this->port );
+    $this->dbh = $this->connect_to_database( $this->server, $this->root, $this->rootpass);
     if ( $this->dbh ) {
       return TRUE;
     } else {
@@ -110,7 +109,7 @@ class Installer
 
   public function user_database_connection()
   {
-    $this->dbh = $this->connect_to_database( $this->server, $this->login, $this->pass, $this->port );
+    $this->dbh = $this->connect_to_database( $this->server, $this->login, $this->pass);
     if ( ! $this->dbh ) {
       $this->error_message = "unable to connect to database as user: '$this->login'";
       return FALSE;
@@ -272,7 +271,6 @@ class Installer
 
     fwrite($fd,$string) or $it_died++;
     fwrite($fd,"\$host\t= '$this->server';\n") or $it_died++;
-    fwrite($fd,"\$port\t= '$this->port';\n") or $it_died++;
     fwrite($fd,"\$login\t= '$this->login';\n") or $it_died++;
     fwrite($fd,"\$pass\t= '$this->pass';\n") or $it_died++;
     fwrite($fd,"\$dbase\t= '$this->dbname';\n\n") or $it_died++;
@@ -285,7 +283,6 @@ $string = '
 $sqlconf = array();
 global $sqlconf;
 $sqlconf["host"]= $host;
-$sqlconf["port"] = $port;
 $sqlconf["login"] = $login;
 $sqlconf["pass"] = $pass;
 $sqlconf["dbase"] = $dbase;
@@ -450,12 +447,9 @@ $config = 1; /////////////
     }
   }
 
-  private function connect_to_database( $server, $user, $password, $port )
+  private function connect_to_database( $server, $user, $password)
   {
-    if ($server == "localhost")
-      $dbh = mysql_connect($server, $user, $password);
-    else
-      $dbh = mysql_connect("$server:$port", $user, $password);
+    $dbh = mysql_connect($server, $user, $password);
     return $dbh;
   }
 
