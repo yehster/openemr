@@ -2,7 +2,7 @@
 
     require_once("../../globals.php");
     require_once("../utilities/get_form_data.php");    
-    require_once("load_data.php");
+    require_once("../utilities/stature_data.php");
     require_once("../java_util.php");
     require_once("../viewer.php");
     require_once("$srcdir/patient.inc");

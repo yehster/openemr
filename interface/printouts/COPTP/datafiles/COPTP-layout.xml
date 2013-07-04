@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <font filename="/var/pdfgeneration/fonts/GildaDisplay-Regular.ttf"/>
+    <field id="today" xpos="110" ypos="150"/>
+
+    <field id="pname" xpos="135" ypos="190" />
+
+    <field id="sex_Female" xpos="105" ypos="208" font-size="10"/>
+    <field id="sex_Male" xpos="159" ypos="208" font-size="10"/>
+
+    <field id="phone" xpos="25" ypos="750" font-size="8"/>
+    
+    <field id="DOB_MDY" xpos="320" ypos="207" />
+    
+    <field id="address" xpos="143" ypos="226" font-size='7' />
+    <field id="city" xpos="391" ypos="226" font-size='7' />
+    <field id="zip" xpos="540" ypos="226" font-size='7' />
+    
+    <field id="Physician" xpos="219" ypos="360" font-size="10"/>
+    
+    <field id="height" xpos="50" ypos="150" font-size="8"/>
+    <field id="weight_lbs" xpos="139" ypos="150" font-size="8"/>
+    <field id="weight_ozs" xpos="172" ypos="150" font-size="8"/>
+    <field id="stature_date" xpos="330" ypos="155"/>
+    <field id="hgb" xpos="90" ypos="215" suffix=" gm/dL" />
+    <field id="hgb-date" xpos="225" ypos="215" />
+
+    <field id="lead" xpos="240" ypos="235"/>
+    
+    
+    <field id="provider-name" xpos="162" ypos="381"/>
+    <field id="provider-address" xpos="162" ypos="398"/>
+    <field id="provider-city-zip" xpos="162" ypos="415"/>
+    
+    <field id="provider-id" xpos="478" ypos="381"/>
+    <field id="provider-phone" xpos="478" ypos="398"/>
+    <field id="provider-fax" xpos="478" ypos="415"/>
+
+</layout>

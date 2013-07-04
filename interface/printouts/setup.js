@@ -57,5 +57,6 @@ function setupPrintouts()
             });
     });
     
+    var CalOptima=addItem("COPTP","../../printouts/COPTP/generate.php",printoutsTD);
 }
 setupPrintouts();

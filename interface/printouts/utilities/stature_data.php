@@ -8,6 +8,7 @@ function stature_info($pid,&$patient_info)
         $patient_info['height']=$vitals_data['height'];
         $pounds_int=floor($vitals_data['weight']);
         $ounces_int=floor(($vitals_data['weight']-$pounds_int)*16);
+        $patient_info['weight']=$vitals_data['weight'];
         $patient_info['weight_lbs']=$pounds_int;
         $patient_info['weight_ozs']=$ounces_int;
         $patient_info['stature_date']=$vitals_data['date'];

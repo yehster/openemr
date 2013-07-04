@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <font filename="/var/www/opentest/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
+    <font filename="/var/www/opendev/kay/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
     <field id="fname" xpos="25" ypos="130" />
     <field id="lname" xpos="175" ypos="130"/>
     <field id="DOB_MDY" xpos="425" ypos="130"/>
