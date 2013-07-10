@@ -1,0 +1,15 @@
+/* 
+    Document   : COPTP
+    Created on : Jul 10, 2013, 4:17:08 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+div.info{
+    float: left;
+}
+div.display
+{
+    clear: both;
+}
