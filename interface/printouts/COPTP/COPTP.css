@@ -13,3 +13,7 @@ div.display
 {
     clear: both;
 }
+div.info > table
+{
+    border: 1px solid black;
+}

@@ -50,13 +50,24 @@
     $patient_info['today']=date("m-d-Y");    
     $patient_info['signature-date']=$patient_info['today'];    
     
-    $patient_data  = getPatientData($pid, "CONCAT(fname,' ',lname) as pname,city,sex,language, postal_code as zip, street as address, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD, DATE_FORMAT(DOB,'%m-%d-%Y') as DOB_MDY");    
+    $patient_data  = getPatientData($pid, "CONCAT(fname,' ',lname) as pname,city,sex,language, postal_code as zip, street as address, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD, DATE_FORMAT(DOB,'%m-%d-%Y') as DOB_MDY,phone_home,phone_cell");    
     foreach($patient_data as $key=>$value)
     {
         echo $key.":".$value;
         $patient_info[$key]=$value;
-    }    
+    }   
     
+    if($patient_data['phone_home'])
+    {
+        $patient_info['phone'].=" H:".$patient_data['phone_home'];
+    }
+    if($patient_data['phone_cell'])
+    {
+        $patient_info['phone'].=" C:".$patient_data['phone_cell'];
+    }
+    unset($patient_info['phone_home']);
+    unset($patient_info['phone_cell']);
+
     set_checkbox($patient_info,"sex",$patient_data['sex']);
     
     

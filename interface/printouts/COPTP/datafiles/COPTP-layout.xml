@@ -8,7 +8,7 @@
     <field id="sex_Female" xpos="105" ypos="208" font-size="10"/>
     <field id="sex_Male" xpos="159" ypos="208" font-size="10"/>
 
-    <field id="phone" xpos="25" ypos="750" font-size="8"/>
+    <field id="phone" xpos="477" ypos="208" font-size="7"/>
     
     <field id="DOB_MDY" xpos="320" ypos="207" />
     
