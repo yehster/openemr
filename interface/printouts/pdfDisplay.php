@@ -3,7 +3,7 @@ require_once("../globals.php");
 require_once("directory_definitions.php");
 
 //Prefix of allowable files to be viewed in this manner.
-$prefixes=array("GrowingUpHealthy_","WIC_","COPTP_");
+$prefixes=array("GrowingUpHealthy_","WIC_","COPTP_","SchoolEntry_");
 if(isset($_REQUEST['filename']))
 {
     $filename=$_REQUEST['filename'];

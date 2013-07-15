@@ -58,5 +58,7 @@ function setupPrintouts()
     });
     
     var CalOptima=addItem("COPTP","../../printouts/COPTP/generate.php",printoutsTD);
+    
+    var SchoolEntry=addItem("School/PE","../../printouts/SchoolEntry/generate.php",printoutsTD);
 }
 setupPrintouts();

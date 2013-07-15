@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <font filename="/var/pdfgeneration/fonts/GildaDisplay-Regular.ttf"/>
+    <portrait/>
+    <field id="lname" xpos="26" ypos="98" />
+    <field id="fname" xpos="236" ypos="98" />
+    <field id="mname" xpos="447" ypos="98" />
+
+    <field id="DOB_MDY" xpos="615" ypos="98" />
+    
+    <field id="address" xpos="26" ypos="123"/>
+    <field id="city" xpos="272" ypos="123"/>
+    <field id="zip" xpos="447" ypos="123"/>
+
+
+    <field id="today" xpos="677" ypos="532"/>
+    
+    <field id="office-address-1" xpos="420" ypos="480"/>
+    <field id="office-address-2" xpos="420" ypos="495"/>
+    <field id="office-address-3" xpos="420" ypos="510"/>
+    
+    <field id="hgb-date_month" xpos="200" ypos="299" font-size='8'/>
+    <field id="hgb-date_day" xpos="227" ypos="299" font-size='8'/>
+    <field id="hgb-date_year" xpos="248" ypos="299" font-size='8'/>
+
+    <field id="lead-date_month" xpos="200" ypos="323" font-size='8'/>
+    <field id="lead-date_day" xpos="227" ypos="323" font-size='8'/>
+    <field id="lead-date_year" xpos="248" ypos="323" font-size='8'/>
+    
+    <field id="vision_month" xpos="200" ypos="263" font-size='8'/>
+    <field id="vision_day" xpos="227" ypos="263" font-size='8'/>
+    <field id="vision_year" xpos="248" ypos="263" font-size='8'/>
+    
+    <field id="hearing-date_month" xpos="200" ypos="275" font-size='8'/>
+    <field id="hearing-date_day" xpos="227" ypos="275" font-size='8'/>
+    <field id="hearing-date_year" xpos="248" ypos="275" font-size='8'/>
+
+    
+    <field id="tb-info" xpos="195" ypos="287" font-size='7'/>
+
+    <field id="history-date_month" xpos="200" ypos="203" font-size='8'/>
+    <field id="history-date_day" xpos="227" ypos="203" font-size='8'/>
+    <field id="history-date_year" xpos="248" ypos="203" font-size='8'/>
+ 
+    <field id="pe-date_month" xpos="200" ypos="215" font-size='8'/>
+    <field id="pe-date_day" xpos="227" ypos="215" font-size='8'/>
+    <field id="pe-date_year" xpos="248" ypos="215" font-size='8'/>   
+
+    <field id="dental-date_month" xpos="200" ypos="227" font-size='8'/>
+    <field id="dental-date_day" xpos="227" ypos="227" font-size='8'/>
+    <field id="dental-date_year" xpos="248" ypos="227" font-size='8'/>   
+
+    <field id="nutrition-date_month" xpos="200" ypos="238" font-size='8'/>
+    <field id="nutrition-date_day" xpos="227" ypos="238" font-size='8'/>
+    <field id="nutrition-date_year" xpos="248" ypos="238" font-size='8'/>  
+
+    <field id="developmental-date_month" xpos="200" ypos="251" font-size='8'/>
+    <field id="developmental-date_day" xpos="227" ypos="251" font-size='8'/>
+    <field id="developmental-date_year" xpos="248" ypos="251" font-size='8'/>  
+    
+    <field id="immunizations" xpos="420" ypos="152" />  
+    
+</layout>
