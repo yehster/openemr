@@ -28,12 +28,26 @@ function create_billing(evt)
              units: 1,
              justify: justify_string};
     billing_info.procs=JSON.stringify(proc);
-    $.post(ajax_billing,
-    billing_info,function()
-    {
-    
-    },
-    "json");
+    $.ajax(
+            {
+                type: 'POST',
+                url: ajax_billing,
+                data:billing_info,
+                async: false,
+                success: function(data,textStatus)
+                {
+                    if(data=="No Encounter Specified")
+                    {
+                        window.alert(data);
+                    }
+                    else
+                    {
+                        $("#add_immunization").get(0).submit();
+                    }
+                }
+            }
+            );
+    return false;
 }
 
 function update_immunization_info(code_info)

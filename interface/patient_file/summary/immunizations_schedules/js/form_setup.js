@@ -39,7 +39,7 @@ function add_immunzation_schedule_controls()
         ,"json"
     );
         
-    $("#save").on("click",create_billing);
+    $("#add_immunization").on("submit",create_billing);
 }
 
 var sch_vm;
