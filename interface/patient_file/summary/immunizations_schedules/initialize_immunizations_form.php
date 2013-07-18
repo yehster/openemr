@@ -40,8 +40,8 @@
 </script>
 
 <script type="text/javascript" src="<?php echo $web_root;?>/library/js/knockout/knockout-2.2.1.js"></script>
-<script type="text/javascript" src="<?php echo $web_root;?>/interface/patient_file/summary/immunizations_schedules/js/form_setup.js"></script>
-<script type="text/javascript" src="<?php echo $web_root;?>/interface/patient_file/summary/immunizations_schedules/js/immunizations_view_model.js"></script>
+<script type="text/javascript" src="<?php echo $web_root;?>/interface/patient_file/summary/immunizations_schedules/js/form_setup.js?v=20130718"></script>
+<script type="text/javascript" src="<?php echo $web_root;?>/interface/patient_file/summary/immunizations_schedules/js/immunizations_view_model.js?v=20130718"></script>
 
 
 <link rel="stylesheet" href="<?php echo $web_root;?>/interface/patient_file/summary/immunizations_schedules/immunizations_schedules.css" type="text/css">
