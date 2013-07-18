@@ -94,11 +94,6 @@ if ($_POST['formaction']=='save' && $list_id) {
             $id = formTrim($iter['id']);
             if (strlen($id) > 0) {
 
-              // Special processing for the immunizations list
-              // Map the entered cvx codes into the immunizations table cvx_code
-              sqlStatement ("UPDATE `immunizations` " .
-                            "SET `cvx_code`='".$value."' " .
-                            "WHERE `immunization_id`='".$id."'");
 
               // Force List Based Form names to start with LBF.
               if ($list_id == 'lbfnames' && substr($id,0,3) != 'LBF')
