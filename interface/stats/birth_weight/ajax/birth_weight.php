@@ -61,7 +61,7 @@ else if($mode==="get")
     }
     else
     {
-        return 0;
+        echo 0;
     }
 }
 else
