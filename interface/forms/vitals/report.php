@@ -49,6 +49,17 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
         if ($key == "BMI Status") {
           if ($patient_age <= 20 || (preg_match('/month/', $patient_age))) { 
             $value = "See Growth-Chart"; 
+            $ageYMD=getPatientAgeYMD($patient_data['DOB'],$data['date']);
+            $age_in_months = $ageYMD['age_in_months'];
+            if($age_in_months>=23.5)
+            {
+                require_once($GLOBALS['include_root']."/stats/calculations.php");
+                require_once($GLOBALS['include_root']."/stats/cdc_growth_stats.php");
+                $sex=$patient_data['sex']==='Male' ? 1 : 2;
+                $pct=number_format(cdc_age_percentile($data['BMI'],$age_in_months,$sex,"bmi"),1);
+                $value=$pct."%";
+                $value.=" (".bmi_pct_to_status($pct).")";
+            }
           }
         }
         $vitals .= "<td><span class=bold>" . xl($key) . ": </span><span class=text>" . xl($value) . "</span></td>"; 

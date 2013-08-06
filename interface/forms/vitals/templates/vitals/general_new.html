@@ -229,14 +229,23 @@ td,th {
 		<td class='historicalvalues'>{if $result.BMI != 0}{$result.BMI|substr:0:5}{/if}</td>
 	{/foreach}</tr>
 
+  {if $patient_age <= 20 || (preg_match('/month/', $patient_age))}
+    <tr>
+        <td>{xl t="BMI Pct"}</td>
+        <td></td>
+        <td class='currentvalues'><span id="BMI_pct">&nbsp;</span></td>
+        {foreach item=result from=$results}
+          <td  class='historicalvalues'>{$result.BMI_pct}</td>
+        {/foreach}      
+    </tr>
+  {/if}
   <tr><td>{xl t="BMI Status"}</td><td>{xl t="Type"}</td>
     <td class='currentvalues'><input type="text" size='15'
-    name="BMI_status" id="BMI_status' value="{$vitals->get_BMI_status()}"/></td>
+    name="BMI_status" id="BMI_status" value="{$vitals->get_BMI_status()}"/></td>
   {foreach item=result from=$results}
     <td  class='historicalvalues'>{if $result.BMI_status}{xl t=$result.BMI_status}{/if}</td>
   {/foreach}
   </tr>
-
   <tr><td>{xl t="Other Notes"}<td></td></td>
     <td class='currentvalues'><input type="text" size='20'
       name="note" id='note' value="{$vitals->get_note()}" /></td>
@@ -283,6 +292,7 @@ vitals[vitals.length] = '{$result.date|date_format:"%Y%m%d"}-{$result.height}-{$
 {/foreach}
 var patientAge='{$patient_age}';
 var patient_dob='{$patient_dob}';
+var patient_sex='{$patient_sex}';
 var webroot = '{$FORM_ACTION}';
 var pid = '{$vitals->get_pid()}';
 var cancellink = '{$DONT_SAVE_LINK}';
@@ -485,12 +495,37 @@ function calculateBMI() {
         bmi = weight/height/height*703;
         bmi = bmi.toFixed(1);
         $("#BMI_input").val(bmi);
+        getBMIPercent(bmi);
     }
     else {
         $("#BMI_input").val("");
     }
 }
 
+function getBMIPercent(bmi)
+{
+    var ajax=webroot+"/interface/stats/ajax/percentiles.php";
+    var date=$("#date").val();
+    $.ajax(
+        {
+            url:ajax,
+            dataType:"json",
+            data:{
+                dob:patient_dob,
+                pid:pid,
+                date: date,
+                sex: patient_sex,
+                stat_choice:"bmi",
+                stat_value:bmi
+                
+            },
+            success: function(data)
+            {
+                $("#BMI_pct").text(data.pct);
+                $("#BMI_status").val(data.status);
+            }
+        });
+}
 Calendar.setup({inputField:"date", ifFormat:"%Y-%m-%d %H:%M", button:"img_date", showsTime:true});
 
 </script>

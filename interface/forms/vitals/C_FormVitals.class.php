@@ -53,32 +53,49 @@ class C_FormVitals extends Controller {
         // get the patient's current age
     	$patient_data = getPatientData($GLOBALS['pid']);
         $patient_dob=$patient_data['DOB'];
+        $patient_sex=$patient_data['sex']==='Male' ? 1 : 2;
         $patient_age = getPatientAge($patient_dob);
     	$this->assign("patient_age", $patient_age);
         $this->assign("patient_dob",$patient_dob);
-
+        $this->assign("patient_sex",$patient_sex);  
+        
     	$i = 1;
     	while($result && !$result->EOF)
     	{
-    		$results[$i]['id'] = $result->fields['id'];
-    		$results[$i]['encdate'] = substr($result->fields['encdate'], 0, 10);
-        $results[$i]['date'] = $result->fields['date'];
-    		$results[$i]['activity'] = $result->fields['activity'];
-    		$results[$i]['bps'] = $result->fields['bps'];
-    		$results[$i]['bpd'] = $result->fields['bpd'];
-    		$results[$i]['weight'] = $result->fields['weight'];
-    		$results[$i]['height'] = $result->fields['height'];
-    		$results[$i]['temperature'] = $result->fields['temperature'];
-    		$results[$i]['temp_method'] = $result->fields['temp_method'];
-    		$results[$i]['pulse'] = $result->fields['pulse'];
-    		$results[$i]['respiration'] = $result->fields['respiration'];
-    		$results[$i]['BMI'] = $result->fields['BMI'];
-    		$results[$i]['BMI_status'] = $result->fields['BMI_status'];
-                $results[$i]['note'] = $result->fields['note'];
-    		$results[$i]['waist_circ'] = $result->fields['waist_circ'];
-    		$results[$i]['head_circ'] = $result->fields['head_circ'];
-    		$results[$i++]['oxygen_saturation'] = $result->fields['oxygen_saturation'];
-    		$result->MoveNext();
+            $results[$i]['id'] = $result->fields['id'];
+            $results[$i]['encdate'] = substr($result->fields['encdate'], 0, 10);
+            $results[$i]['date'] = $result->fields['date'];
+            $results[$i]['activity'] = $result->fields['activity'];
+            $results[$i]['bps'] = $result->fields['bps'];
+            $results[$i]['bpd'] = $result->fields['bpd'];
+            $results[$i]['weight'] = $result->fields['weight'];
+            $results[$i]['height'] = $result->fields['height'];
+            $results[$i]['temperature'] = $result->fields['temperature'];
+            $results[$i]['temp_method'] = $result->fields['temp_method'];
+            $results[$i]['pulse'] = $result->fields['pulse'];
+            $results[$i]['respiration'] = $result->fields['respiration'];
+            $results[$i]['BMI'] = $result->fields['BMI'];
+            $results[$i]['note'] = $result->fields['note'];
+            $results[$i]['waist_circ'] = $result->fields['waist_circ'];
+            $results[$i]['head_circ'] = $result->fields['head_circ'];
+            $results[$i]['oxygen_saturation'] = $result->fields['oxygen_saturation'];
+            $ageYMD=getPatientAgeYMD($patient_data['DOB'],$result->fields['date']);
+            $age_in_months = $ageYMD['age_in_months'];
+            if($age_in_months>=23.5)
+            {
+                require_once($GLOBALS['include_root']."/stats/calculations.php");
+                require_once($GLOBALS['include_root']."/stats/cdc_growth_stats.php");                
+                $bmi_pct=number_format(cdc_age_percentile($result->fields['BMI'],$age_in_months,$patient_sex,"bmi"),1);
+                $results[$i]['BMI_pct']=$bmi_pct;
+                $results[$i]['BMI_status'] = bmi_pct_to_status($bmi_pct);
+                    
+            }
+            elseif($age_in_months>=241)
+            {
+                $results[$i]['BMI_status'] = $result->fields['BMI_status'];    
+            }
+            $i++;
+            $result->MoveNext();
     	}
 
     	$this->assign("vitals",$vitals);
