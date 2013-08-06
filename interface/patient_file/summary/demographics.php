@@ -1321,4 +1321,5 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
 </body>
 <script type="text/javascript" src="demographics_ordering.js"></script>
 <?php require_once("../../printouts/chooser.php"); ?>
+<?php require_once("../../stats/demographics_setup.php"); ?>
 </html>
