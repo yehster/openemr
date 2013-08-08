@@ -16,7 +16,7 @@ function cdc_age_percentile($x,$age,$sex,$stat)
     $lms=sqlQuery($sql_get_lms,$parameters); 
     if($lms===false) // If we can't lookup the proper parameters to use, return null
     {
-        return null;
+        return 0;
     }
 //    echo $lms['L'].":".$lms['M'].":".$lms['S'];
 
@@ -27,6 +27,10 @@ function cdc_age_percentile($x,$age,$sex,$stat)
 
 function bmi_pct_to_status($pct)
 {
+        if($pct==0)
+        {
+            return "Undefined";
+        }
         if($pct<5)
         {
             return "Underweight";

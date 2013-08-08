@@ -495,7 +495,12 @@ function calculateBMI() {
         bmi = weight/height/height*703;
         bmi = bmi.toFixed(1);
         $("#BMI_input").val(bmi);
-        getBMIPercent(bmi);
+        {/literal}
+        {if $patient_age <= 20 || (preg_match('/month/', $patient_age))}        
+            getBMIPercent(bmi);
+        {/if}
+        {literal}
+
     }
     else {
         $("#BMI_input").val("");
@@ -510,6 +515,7 @@ function getBMIPercent(bmi)
         {
             url:ajax,
             dataType:"json",
+            type: "POST",
             data:{
                 dob:patient_dob,
                 pid:pid,
@@ -527,7 +533,11 @@ function getBMIPercent(bmi)
         });
 }
 Calendar.setup({inputField:"date", ifFormat:"%Y-%m-%d %H:%M", button:"img_date", showsTime:true});
-
+{/literal}
+        {if $patient_age <= 20 || (preg_match('/month/', $patient_age))}        
+            getBMIPercent($("#BMI_input").val());
+        {/if}    
+{literal}
 </script>
 {/literal}
 
