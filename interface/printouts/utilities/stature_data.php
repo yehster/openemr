@@ -17,7 +17,8 @@ function stature_info($pid,&$patient_info,$DOB,$sex)
         if($vitals_data['BMI']>0)
         {
             $patient_info['BMI']=$vitals_data['BMI'];
-            $age_in_months=getPatientAgeYMD($DOB,$vitals_data['date'])['age_in_months'];
+            $age_info=getPatientAgeYMD($DOB,$vitals_data['date']);
+            $age_in_months=$age_info['age_in_months'];
             if($age_in_months>=23.5)
             {
                 $patient_info['bmi_pct']=number_format(cdc_age_percentile($vitals_data['BMI'],$age_in_months,$sex,'bmi'),1);
