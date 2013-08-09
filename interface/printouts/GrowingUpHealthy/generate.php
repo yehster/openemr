@@ -9,6 +9,7 @@
  require_once("../viewer.php");
  require_once("$srcdir/patient.inc");
  require_once("../directory_definitions.php");
+ require_once("../utilities/stature_data.php");
  ?>
 <?php
     function age_to_filenum($months)
@@ -78,7 +79,7 @@
     }
     
 
-    $patient_data  = getPatientData($pid, "fname,lname, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD");
+    $patient_data  = getPatientData($pid, "fname,lname,sex, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD");
     $pname = $patient_data['fname']." ".$patient_data['lname'];
     $patient_info['name']=$pname;
     $age_info=getPatientAgeYMD($patient_data['DOB_YMD']);
@@ -122,13 +123,15 @@
      }
      
      
-     $sqlVitals = "SELECT height,weight,BMI FROM form_vitals WHERE pid=? ORDER BY date desc LIMIT 1";
-     $vitals_data = sqlQuery($sqlVitals,array($pid));
+     $vitals_data=array();
+     stature_info($pid,$vitals_data,$patient_data['DOB_YMD'],$patient_data['sex']);
      if($vitals_data!==false)
      {
          $patient_info['weight']=format_weight($vitals_data['weight'],$age_info['age_in_months']);
          if($vitals_data['height']!=0) $patient_info['length']=$vitals_data['height']." in";
-         if($vitals_data['BMI']!=0) $patient_info['bmi']=$vitals_data['BMI'];
+         if($vitals_data['BMI']!=0) {
+             $patient_info['bmi']=$vitals_data['BMI'] . " (".$vitals_data['bmi_pct']."%)";
+         }
      }
 
      $layoutOption="Young";

@@ -6,7 +6,7 @@
     <field id="age" xpos="620" ypos="325"/>
     <field id="length" xpos="623" ypos="345"/>
     <field id="weight" xpos="715" ypos="345"/>
-    <field id="bmi" xpos="715" ypos="380"/>
+    <field id="bmi" xpos="715" ypos="380" font-size="10"/>
     <field id="appt_date" xpos="620" ypos="420"/>
     <field id="appt_time" xpos="715" ypos="420"/>
 </layout>
