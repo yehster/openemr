@@ -37,7 +37,9 @@
     <field id="height" xpos="555" ypos="540"/>
     <field id="weight" xpos="423" ypos="540"/>
     <field id="bmi" xpos="315" ypos="540"/>
-    <field id="vitals-date" xpos="198" ypos="540"/>
+
+    <field id="bmi_pct" xpos="550" ypos="588"/>
+    <field id="stature_date" xpos="198" ypos="540"/>
 
     <field id="lead" xpos="240" ypos="235"/>
     

@@ -8,6 +8,7 @@
     require_once("$srcdir/patient.inc");
     require_once("../directory_definitions.php");
 
+    require_once($include_root."/stats/birth_weight/birth_weight_queries.php");
     $files_dir=$include_root."/printouts/WIC/datafiles/";
     $source_file=$files_dir."WICReferralForm.pdf";
     $layout_file=$files_dir."WICReferralForm-layout.xml";
@@ -19,15 +20,18 @@
     
     $patient_info['today']=date("m-d-Y");    
     
+    $birthweight=get_birth_weight($pid);
+    $patient_info['birth_lbs']=$birthweight['pounds_int'];
+    $patient_info['birth_ozs']=$birthweight['ounces'];
     
-    $patient_data  = getPatientData($pid, "fname,lname, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD, DATE_FORMAT(DOB,'%m-%d-%Y') as DOB_MDY");    
+    $patient_data  = getPatientData($pid, "fname,lname,sex, DATE_FORMAT(DOB,'%Y-%m-%d') as DOB_YMD, DATE_FORMAT(DOB,'%m-%d-%Y') as DOB_MDY");    
     foreach($patient_data as $key=>$value)
     {
         echo $key.":".$value;
         $patient_info[$key]=$value;
     }
     
-    stature_info($pid,$patient_info);
+    stature_info($pid,$patient_info,$patient_data['DOB_YMD'],$patient_data['sex']);
 
     $forms=array("Hemoglobin Result","Lead");
     $field_map=array($forms[0]=>array("gm/dl"=>"hgb"),$forms[1]=>array("mcg/dL"=>"lead"));

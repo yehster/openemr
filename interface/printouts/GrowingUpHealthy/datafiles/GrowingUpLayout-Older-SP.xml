@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <font filename="/var/www/openemr/interface/printouts/GrowingUpHealthy/datafiles/GildaDisplay-Regular.ttf"/>
+    <font filename="/var/pdfgeneration/fonts/GildaDisplay-Regular.ttf"/>
     <field id="today" xpos="655" ypos="284"/>
     <field id="name" xpos="630" ypos="305"/>
     <field id="age" xpos="620" ypos="325"/>

@@ -87,16 +87,18 @@
     $patient_info['contact-phone']="949-364-2229";
     $patient_info['contact-name']="Ana Gutierrez";
 
-    
-     $sqlVitals = "SELECT height,weight,BMI,DATE_FORMAT(date,'%m-%d-%Y') as vitals_date FROM form_vitals WHERE pid=? ORDER BY date desc LIMIT 1";
-     $vitals_data = sqlQuery($sqlVitals,array($pid));
-     if($vitals_data!==false)
-     {
-         if($vitals_data['weight']!=0) $patient_info['weight']=$vitals_data['weight'];
-         if($vitals_data['height']!=0) $patient_info['height']=$vitals_data['height'];
-         if($vitals_data['BMI']!=0) $patient_info['bmi']=$vitals_data['BMI'];
-         $patient_info['vitals-date']=$vitals_data['vitals_date'];
-     }
+    stature_info($pid,$patient_info,$patient_data['DOB_YMD'],$patient_data['sex']);
+    if($patient_info['bmi_pct']>=85)
+    {
+        if($patient_info['bmi_pct']>=95)
+        {
+             set_checkbox($patient_info,"coptp-secondary","V85.54");            
+        }
+        else
+        {
+             set_checkbox($patient_info,"coptp-secondary","V85.53");
+        }
+    }
      
     $target_dir=PDF_OUTPUT_DIR;
     $target_file="COPTP_".uniqid().".pdf";    

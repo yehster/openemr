@@ -3,6 +3,15 @@ define('COL_AGE_MOS','agemos');
 define('COL_SEX','sex');
 function cdc_age_percentile($x,$age,$sex,$stat)
 {
+    if($sex==='Male')
+    {
+        $sex=1;
+    }
+    if($sex==='Female')
+    {
+        $sex=2;
+    }
+
     $table="cdc_bmi_age";
     $difference="(".COL_AGE_MOS."-?)";
     $delta="ABS".$difference;
@@ -27,10 +36,6 @@ function cdc_age_percentile($x,$age,$sex,$stat)
 
 function bmi_pct_to_status($pct)
 {
-        if($pct==0)
-        {
-            return "Undefined";
-        }
         if($pct<5)
         {
             return "Underweight";
