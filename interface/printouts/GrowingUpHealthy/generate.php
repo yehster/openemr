@@ -135,7 +135,7 @@
      }
 
      $layoutOption="Young";
-     if($filenum>=8)
+     if($filenum>=7)
      {
          $layoutOption="Older";
      }
