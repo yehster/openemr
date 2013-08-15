@@ -2,7 +2,7 @@
 include_once("../../globals.php");
 include_once($GLOBALS["srcdir"]."/api.inc");
 include_once ($GLOBALS['fileroot']."/library/patient.inc");
-
+require_once($GLOBALS['fileroot']."/interface/stats/growth_stats.php");
 
 function US_weight($pounds,$mode=1)
 {
@@ -24,9 +24,26 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
   $data = formFetch("form_vitals", $id);
   $patient_data = getPatientData($GLOBALS['pid']);
   $patient_age = getPatientAge($patient_data['DOB']);
-
+  $ageYMD=getPatientAgeYMD($patient_data['DOB'],$data['date']);
+  $age_in_months = $ageYMD['age_in_months'];
+  error_log("Age:".$age_in_months);
+  if($age_in_months<=24)
+  {
+      $who_data=get_who_stats($age_in_months,$patient_data['sex'],$data['weight']/2.204,$data['height']*2.54,$data['head_circ']*2.54);
+      $data["Height %ile"]=number_format($who_data['height_pct'],1)."%";
+      $data["Weight %ile"]=number_format($who_data['weight_pct'],1)."%";
+      $data["Weight for Height %ile"]=number_format($who_data['weight_height_pct'],1)."%";
+      $data["Head Circ %ile"]=number_format($who_data['head_pct'],1)."%";
+  }
+  if(($age_in_months>=23.5) && ($age_in_months<240.5))
+  {
+      $cdc_data=get_cdc_stats($age_in_months,$patient_data['sex'],$data['weight']/2.204,$data['height']*2.54,$data['BMI']);
+      $data["Height %ile"]=number_format($cdc_data['height_pct'],1)."%";
+      $data["Weight %ile"]=number_format($cdc_data['weight_pct'],1)."%";
+      $data["Weight for Height %ile"]=number_format($cdc_data['weight_height_pct'],1)."%";
+  }
   if ($data) {
-    $vitals .= "<table><tr>";
+    $vitals = "<table><tr>";
 
     foreach($data as $key => $value) {
 
@@ -49,16 +66,12 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
         if ($key == "BMI Status") {
           if ($patient_age <= 20 || (preg_match('/month/', $patient_age))) { 
             $value = "See Growth-Chart"; 
-            $ageYMD=getPatientAgeYMD($patient_data['DOB'],$data['date']);
-            $age_in_months = $ageYMD['age_in_months'];
             if($age_in_months>=23.5)
             {
-                require_once($GLOBALS['include_root']."/stats/calculations.php");
-                require_once($GLOBALS['include_root']."/stats/cdc_growth_stats.php");
-                $sex=$patient_data['sex']==='Male' ? 1 : 2;
-                $pct=number_format(cdc_age_percentile($data['BMI'],$age_in_months,$sex,"bmi"),1);
+
+                $pct=number_format($cdc_data['bmi_pct'],1);
                 $value=$pct."%";
-                $value.=" (".bmi_pct_to_status($pct).")";
+                $value.=" (".$cdc_data['bmi_status'].")";
             }
           }
         }
