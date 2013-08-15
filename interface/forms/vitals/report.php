@@ -69,9 +69,9 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
             if($age_in_months>=23.5)
             {
 
-                $pct=number_format($cdc_data['bmi_pct'],1);
+                $pct=number_format($cdc_data['BMI_pct'],1);
                 $value=$pct."%";
-                $value.=" (".$cdc_data['bmi_status'].")";
+                $value.=" (".$cdc_data['BMI_status'].")";
             }
           }
         }

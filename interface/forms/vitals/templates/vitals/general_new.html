@@ -238,6 +238,7 @@ td,th {
           <td  class='historicalvalues'>{$result.BMI_pct}</td>
         {/foreach}      
     </tr>
+
   {/if}
   <tr><td>{xl t="BMI Status"}</td><td>{xl t="Type"}</td>
     <td class='currentvalues'><input type="text" size='15'
@@ -246,6 +247,42 @@ td,th {
     <td  class='historicalvalues'>{if $result.BMI_status}{xl t=$result.BMI_status}{/if}</td>
   {/foreach}
   </tr>
+  {if $patient_age_months <= 240}
+    <tr>
+        <td>{xl t="Weight Pct"}</td>
+        <td></td>
+        <td class='currentvalues'><span id="weight_pct">&nbsp;</span></td>
+        {foreach item=result from=$results}
+          <td  class='historicalvalues'>{$result.weight_pct}</td>
+        {/foreach}      
+    </tr>
+    <tr>
+        <td>{xl t="Height Pct"}</td>
+        <td></td>
+        <td class='currentvalues'><span id="height_pct">&nbsp;</span></td>
+        {foreach item=result from=$results}
+          <td  class='historicalvalues'>{$result.height_pct}</td>
+        {/foreach}      
+    </tr>
+    <tr>
+        <td>{xl t="Weight for Height"}</td>
+        <td></td>
+        <td class='currentvalues'><span id="weight_height_pct">&nbsp;</span></td>
+        {foreach item=result from=$results}
+          <td  class='historicalvalues'>{$result.weight_height_pct}</td>
+        {/foreach}      
+    </tr>       
+  {/if}
+  {if $patient_age_months <= 24}
+    <tr>
+        <td>{xl t="Head Circ Pct"}</td>
+        <td></td>
+        <td class='currentvalues'><span id="head_pct">&nbsp;</span></td>
+        {foreach item=result from=$results}
+          <td  class='historicalvalues'>{$result.head_pct}</td>
+        {/foreach}      
+    </tr>         
+  {/if}
   <tr><td>{xl t="Other Notes"}<td></td></td>
     <td class='currentvalues'><input type="text" size='20'
       name="note" id='note' value="{$vitals->get_note()}" /></td>

@@ -3,6 +3,7 @@
 require_once ($GLOBALS['fileroot'] . "/library/classes/Controller.class.php");
 require_once ($GLOBALS['fileroot'] . "/library/forms.inc");
 require_once ($GLOBALS['fileroot'] . "/library/patient.inc");
+require_once($GLOBALS['include_root']."/stats/growth_stats.php");                
 require_once("FormVitals.class.php");
 
 class C_FormVitals extends Controller {
@@ -55,6 +56,8 @@ class C_FormVitals extends Controller {
         $patient_dob=$patient_data['DOB'];
         $patient_sex=$patient_data['sex']==='Male' ? 1 : 2;
         $patient_age = getPatientAge($patient_dob);
+        $patient_age_YMD=getPatientAgeYMD($patient_data['DOB']);
+        $this->assign("patient_age_months",$patient_age_YMD['age_in_months']);
     	$this->assign("patient_age", $patient_age);
         $this->assign("patient_dob",$patient_dob);
         $this->assign("patient_sex",$patient_sex);  
@@ -81,16 +84,30 @@ class C_FormVitals extends Controller {
             $results[$i]['oxygen_saturation'] = $result->fields['oxygen_saturation'];
             $ageYMD=getPatientAgeYMD($patient_data['DOB'],$result->fields['date']);
             $age_in_months = $ageYMD['age_in_months'];
-            if($age_in_months>=23.5)
+            if($age_in_months<24)
             {
-                require_once($GLOBALS['include_root']."/stats/calculations.php");
-                require_once($GLOBALS['include_root']."/stats/cdc_growth_stats.php");                
-                $bmi_pct=number_format(cdc_age_percentile($result->fields['BMI'],$age_in_months,$patient_sex,"bmi"),1);
+                $who_stats=get_who_stats($age_in_months,$patient_data['sex'],$results[$i]['weight']/2.204,$results[$i]['height']*2.54,$results[$i]['head_circ']*2.54);
+                foreach($who_stats as $field=>$stat)
+                {
+                    $results[$i][$field]=number_format($stat,1);
+                }
+            }
+            else if($age_in_months>=23.5)
+            {
+                $cdc_stats=get_cdc_stats($age_in_months,$patient_sex,$results[$i]['weight']/2.204,$results[$i]['height']*2.54,$results[$i]['BMI']);
+                foreach($cdc_stats as $field=>$stat)
+                {
+                    if($field!='BMI_status')
+                    {
+                        $results[$i][$field]=number_format($stat,1);                    
+                    }
+                }                
+                $bmi_pct=number_format($cdc_stats['BMI_pct'],1);
                 $results[$i]['BMI_pct']=$bmi_pct;
                 $results[$i]['BMI_status'] = bmi_pct_to_status($bmi_pct);
                     
             }
-            elseif($age_in_months>=241)
+            else if($age_in_months>=240.5)
             {
                 $results[$i]['BMI_status'] = $result->fields['BMI_status'];    
             }
