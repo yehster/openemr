@@ -91,6 +91,7 @@ class C_FormVitals extends Controller {
                 {
                     $results[$i][$field]=number_format($stat,1);
                 }
+                $results[$i]['BMI_status'] = "Undefined";
             }
             else if($age_in_months>=23.5)
             {

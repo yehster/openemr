@@ -24,6 +24,7 @@
     <field id="office-address-2" xpos="330" ypos="711"/>
     <field id="office-address-3" xpos="330" ypos="722"/>
     
+    <field id="provider" xpos="25" ypos="700"/>
 
     <field id="phone" xpos="25" ypos="750" font-size="8"/>
     <field id="today" xpos="220" ypos="750"/>

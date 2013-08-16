@@ -30,17 +30,17 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
   if($age_in_months<=24)
   {
       $who_data=get_who_stats($age_in_months,$patient_data['sex'],$data['weight']/2.204,$data['height']*2.54,$data['head_circ']*2.54);
-      $data["Height %ile"]=number_format($who_data['height_pct'],1)."%";
-      $data["Weight %ile"]=number_format($who_data['weight_pct'],1)."%";
-      $data["Weight for Height %ile"]=number_format($who_data['weight_height_pct'],1)."%";
-      $data["Head Circ %ile"]=number_format($who_data['head_pct'],1)."%";
+      $data["Height %ile"]=number_format($who_data['height_pct'],1);
+      $data["Weight %ile"]=number_format($who_data['weight_pct'],1);
+      $data["Weight for Height %ile"]=number_format($who_data['weight_height_pct'],1);
+      $data["Head Circ %ile"]=number_format($who_data['head_pct'],1);
   }
   if(($age_in_months>=23.5) && ($age_in_months<240.5))
   {
       $cdc_data=get_cdc_stats($age_in_months,$patient_data['sex'],$data['weight']/2.204,$data['height']*2.54,$data['BMI']);
-      $data["Height %ile"]=number_format($cdc_data['height_pct'],1)."%";
-      $data["Weight %ile"]=number_format($cdc_data['weight_pct'],1)."%";
-      $data["Weight for Height %ile"]=number_format($cdc_data['weight_height_pct'],1)."%";
+      $data["Height %ile"]=number_format($cdc_data['height_pct'],1);
+      $data["Weight %ile"]=number_format($cdc_data['weight_pct'],1);
+      $data["Weight for Height %ile"]=number_format($cdc_data['weight_height_pct'],1);
   }
   if ($data) {
     $vitals = "<table><tr>";
@@ -66,12 +66,16 @@ function vitals_report( $pid, $encounter, $cols, $id, $print = true) {
         if ($key == "BMI Status") {
           if ($patient_age <= 20 || (preg_match('/month/', $patient_age))) { 
             $value = "See Growth-Chart"; 
-            if($age_in_months>=23.5)
+            if($age_in_months>=24)
             {
 
                 $pct=number_format($cdc_data['BMI_pct'],1);
                 $value=$pct."%";
                 $value.=" (".$cdc_data['BMI_status'].")";
+            }
+            if($age_in_months<24)
+            {
+                $value = "Undefined";
             }
           }
         }

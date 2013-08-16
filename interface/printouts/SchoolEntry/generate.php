@@ -23,6 +23,9 @@
     {
         $patient_info[$key]=$value;
     }
+
+    $ageYMD=getPatientAgeYMD($patient_data['DOB_YMD']);
+    $age_in_months = $ageYMD['age_in_months'];
     
     $patient_info['today']=date("m/d/Y");        
 
@@ -32,7 +35,9 @@
 
     
     $forms=array("Hemoglobin Result","Lead","Snellen Eye Exam","Hearing Screening","Tuberculosis Risk");
-    $field_map=array($forms[0]=>array("gm/dl"=>"hgb"),$forms[1]=>array("mcg/dL"=>"lead"));
+    $field_map=array($forms[0]=>array("gm/dl"=>"hgb"),$forms[1]=>array("mcg/dL"=>"lead")
+            ,$forms[3]=>array('Left_Ear'=>'left_ear','Right_Ear'=>'right_ear')
+        );
     $dates_map=array($forms[0]=>"hgb-date",$forms[1]=>"lead-date",$forms[2]=>"vision",$forms[3]=>"hearing-date");
     $forms_data=find_forms($pid,$forms);
     for($idx=0;$idx<count($forms);$idx++)
@@ -64,9 +69,39 @@
         }
         
     }
-    
+    if(isset($patient_info['hgb']))
+    {
+        if((($age_in_months<12) && ($patient_info['hgb']<11)) || (($age_in_months>=12) && ($patient_info['hgb']<11.5)))
+        {
+            echo "<b>Anemia: hgb ".$patient_info['hgb']."gm/dl<b><br>";
+        }
+    }
+    $hearing_notes_left="";
+    $hearing_notes_right="";
+    if(isset($patient_info['left_ear']))
+    {
+        if($patient_info['left_ear']!=='PASSED')
+        {
+            $hearing_notes_left="L:".$patient_info['left_ear'];
+        }
+    }
+
+    if(isset($patient_info['right_ear']))
+    {
+        if($patient_info['right_ear']!=='PASSED')
+        {
+            $hearing_notes_right="R:".$patient_info['right_ear'];
+        }
+    }
+    if(($hearing_notes_left!="")||($hearing_notes_right!=""))
+    {
+        echo "<b>Hearing:".$hearing_notes_left."&nbsp;".$hearing_notes_right."<b><br>";
+        $patient_info['hearing_notes_left']=$hearing_notes_left;
+        $patient_info['hearing_notes_right']=$hearing_notes_right;
+    }
     process_physical($patient_info,$pid);
     
+    $patient_info['urine']="Not Applicable";
     $patient_info['office-address-1']="Santiago Pediatrics";
     $patient_info['office-address-2']="27800 Medical Center Road, Suite 300";
     $patient_info['office-address-3']="Mission Viejo, CA 92691";

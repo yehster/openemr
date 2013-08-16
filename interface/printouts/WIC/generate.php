@@ -7,7 +7,45 @@
     require_once("../viewer.php");
     require_once("$srcdir/patient.inc");
     require_once("../directory_definitions.php");
-
+    
+    $provider=isset($_REQUEST['provider']) ? $_REQUEST['provider'] : "";
+?>
+<form action="generate.php" method="post">
+    <select name='provider'>
+        <?php
+            $sqlProviders="SELECT username,fname,lname from users where authorized=1 ORDER BY id ASC";
+            $providers = sqlStatement($sqlProviders,array());
+            $found=false;
+            $first=true;
+            while($row = sqlFetchArray($providers))
+            {
+                ?>
+                <option value='<?php echo $row['username'];?>'
+                <?php
+                if($first)
+                {
+                    $first_provider_name=$row['fname']." ".$row['lname'];
+                    $first=false;
+                }
+                if((($provider=="")  && $row['username']==$_SESSION['authUser'] ) || $provider==$row['username'])
+                {
+                    $found=true;
+                    $provider_name=$row['fname']." ".$row['lname'];
+                    echo " selected";
+                }
+                ?>
+                ><?php echo $row['fname'].'&nbsp;'.$row['lname']?></option>
+                <?php
+            }
+            if(!$found)
+            {
+                $provider_name=$first_provider_name;
+            }
+        ?>
+    </select>
+    <input type='submit'/>
+</form>
+<?php
     require_once($include_root."/stats/birth_weight/birth_weight_queries.php");
     $files_dir=$include_root."/printouts/WIC/datafiles/";
     $source_file=$files_dir."WICReferralForm.pdf";
@@ -69,6 +107,7 @@
     
     $patient_info['phone']="Phone: 949-364-2229; Fax 949-364-1104";
     
+    $patient_info['provider']=$provider_name;
     stamp_pdf($source_file,$target_dir.$target_file,$layout_file,$patient_info);
     echo "<br>";
     echo embed_pdf($target_file);

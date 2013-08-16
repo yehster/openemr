@@ -17,6 +17,14 @@ function who_weight_height($weight,$height,$sex)
     {
         $table=TBL_WHO_WEIGHT_LENGTH_FEMALE;        
     }
+    else if($sex==1)
+    {
+        $table=TBL_WHO_WEIGHT_LENGTH_MALE;
+    }
+    else if($sex==2)
+    {
+        $table.=TBL_WHO_WEIGHT_LENGTH_FEMALE;
+    }
     else 
     {
             return 0;    
@@ -61,6 +69,14 @@ function who_age_percentile($x,$age,$sex,$stat)
     if(($sex==='male')||($sex==='female'))
     {
         $table.="_".$sex;
+    }
+    if($sex==1)
+    {
+        $table.="_male";
+    }
+    if($sex==2)
+    {
+        $table.="_female";
     }
 
     $difference="(?-".COL_AGE.")";

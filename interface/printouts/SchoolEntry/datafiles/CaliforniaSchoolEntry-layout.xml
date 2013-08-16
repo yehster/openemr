@@ -23,6 +23,9 @@
     <field id="hgb-date_day" xpos="227" ypos="299" font-size='8'/>
     <field id="hgb-date_year" xpos="248" ypos="299" font-size='8'/>
 
+    <field id="urine" xpos="200" ypos="311" font-size='8'/>
+
+
     <field id="lead-date_month" xpos="200" ypos="323" font-size='8'/>
     <field id="lead-date_day" xpos="227" ypos="323" font-size='8'/>
     <field id="lead-date_year" xpos="248" ypos="323" font-size='8'/>
@@ -35,6 +38,10 @@
     <field id="hearing-date_day" xpos="227" ypos="275" font-size='8'/>
     <field id="hearing-date_year" xpos="248" ypos="275" font-size='8'/>
 
+
+    <field id="hearing_notes_left" xpos="150" ypos="274" font-size='5'/>
+    <field id="hearing_notes_right" xpos="150" ypos="279" font-size='5'/>
+    
     
     <field id="tb-info" xpos="195" ypos="287" font-size='7'/>
 

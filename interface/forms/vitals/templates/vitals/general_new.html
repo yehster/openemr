@@ -328,6 +328,7 @@ vitals[0] = formdate+'-{$vitals->get_height()}-{$vitals->get_weight()}-{$vitals-
 vitals[vitals.length] = '{$result.date|date_format:"%Y%m%d"}-{$result.height}-{$result.weight}-{$result.head_circ}';
 {/foreach}
 var patientAge='{$patient_age}';
+var patientAgeMos='{$patient_age_months}';
 var patient_dob='{$patient_dob}';
 var patient_sex='{$patient_sex}';
 var webroot = '{$FORM_ACTION}';
@@ -532,19 +533,17 @@ function calculateBMI() {
         bmi = weight/height/height*703;
         bmi = bmi.toFixed(1);
         $("#BMI_input").val(bmi);
-        {/literal}
-        {if $patient_age <= 20 || (preg_match('/month/', $patient_age))}        
-            getBMIPercent(bmi);
-        {/if}
-        {literal}
-
+        if(patientAgeMos<240)
+        {
+            getPercentiles(weight/2.204,height*2.54,bmi,$("#head_circ_input").val()*2.54);
+        }
     }
     else {
         $("#BMI_input").val("");
     }
 }
 
-function getBMIPercent(bmi)
+function getPercentiles(weight,height,bmi,head)
 {
     var ajax=webroot+"/interface/stats/ajax/percentiles.php";
     var date=$("#date").val();
@@ -558,21 +557,27 @@ function getBMIPercent(bmi)
                 pid:pid,
                 date: date,
                 sex: patient_sex,
-                stat_choice:"bmi",
-                stat_value:bmi
+                weight: weight,
+                height: height,
+                bmi:bmi,
+                head:head
                 
             },
             success: function(data)
             {
-                $("#BMI_pct").text(data.pct);
-                $("#BMI_status").val(data.status);
+                $("#BMI_pct").text(data.BMI_pct);
+                $("#BMI_status").val(data.BMI_status);
+                $("#weight_pct").text(data.weight_pct);
+                $("#height_pct").text(data.height_pct);
+                $("#weight_height_pct").text(data.weight_height_pct);
+                $("#head_pct").text(data.head_pct);
             }
         });
 }
 Calendar.setup({inputField:"date", ifFormat:"%Y-%m-%d %H:%M", button:"img_date", showsTime:true});
 {/literal}
-        {if $patient_age <= 20 || (preg_match('/month/', $patient_age))}        
-            getBMIPercent($("#BMI_input").val());
+        {if patient_age_months <= 240 }        
+            getPercentiles($("#weight_input").val()/2.204,$("#height_input").val()*2.54,$("#BMI_input").val(),$("#head_circ_input").val()*2.54);
         {/if}    
 {literal}
 </script>
