@@ -2,10 +2,11 @@ function displayChart()
 {
     var hidden_vitals=$("#hidden_vitals");
     var vitals_document=hidden_vitals.get(0).contentDocument;    
-    $("#pdfchart",vitals_document).click();
+    $("#htmlchart",vitals_document).click();
 }
 function showGrowthChart()
 {
+    top.restoreSession();
     var hidden_vitals=$("#hidden_vitals");
     if(hidden_vitals.length==0)
     {

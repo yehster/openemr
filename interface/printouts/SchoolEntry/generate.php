@@ -13,7 +13,10 @@
     
 ?>
 
-
+<form action="generate.php" method="post">
+    <?php require_once("../utilities/provider_select.php");?>
+    <input type='submit'/>
+</form>
 
 <?php
     $patient_info=array();
@@ -96,12 +99,13 @@
     if(($hearing_notes_left!="")||($hearing_notes_right!=""))
     {
         echo "<b>Hearing:".$hearing_notes_left."&nbsp;".$hearing_notes_right."<b><br>";
-        $patient_info['hearing_notes_left']=$hearing_notes_left;
-        $patient_info['hearing_notes_right']=$hearing_notes_right;
+        $patient_info['hearing_notes']='Needs further evaluation';
     }
     process_physical($patient_info,$pid);
     
     $patient_info['urine']="Not Applicable";
+    
+    $patient_info['provider-name']=$provider_name;
     $patient_info['office-address-1']="Santiago Pediatrics";
     $patient_info['office-address-2']="27800 Medical Center Road, Suite 300";
     $patient_info['office-address-3']="Mission Viejo, CA 92691";
