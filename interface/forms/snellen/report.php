@@ -7,11 +7,18 @@
 //------------Forms generated from formsWiz
 include_once("../../globals.php");
 include_once($GLOBALS["srcdir"] . "/api.inc");
+include_once("snellen_interpretation.php");
+include_once ($GLOBALS['fileroot']."/library/patient.inc");
+
 function snellen_report( $pid, $encounter, $cols, $id) {
   $count = 0;
   $cols = 2;
   $data = formFetch("form_snellen", $id);
   $width = 100/$cols;
+  $patient_data = getPatientData($pid);
+  $patient_age = getPatientAge($patient_data['DOB']);
+  $ageYMD=getPatientAgeYMD($patient_data['DOB'],$data['date']);
+  $age_in_months = $ageYMD['age_in_months'];  
   if ($data) {
 	?>
 
@@ -31,7 +38,12 @@ function snellen_report( $pid, $encounter, $cols, $id) {
 			<td>20/<?php echo $data['right_1'] ? $data['right_1'] : "__"; ?></td>
 			<td>20/<?php echo $data['right_2'] ? $data['right_2'] : "__"; ?></td>
 		</tr>	
-
+            <?php if(needs_referral($age_in_months,$data['left_1'],$data['right_1'],$data['left_2'],$data['right_2'])) { ?>
+                <tr>
+                    <td colspan="3"><b>Needs Optometry Visit</b>
+                    </td>
+                </tr>
+            <?php }?>
 	</table>
 
 	<?php if ($data['notes'] != '') {?>

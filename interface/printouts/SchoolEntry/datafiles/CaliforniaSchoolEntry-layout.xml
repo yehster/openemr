@@ -31,7 +31,9 @@
     <field id="lead-date_month" xpos="200" ypos="323" font-size='8'/>
     <field id="lead-date_day" xpos="227" ypos="323" font-size='8'/>
     <field id="lead-date_year" xpos="248" ypos="323" font-size='8'/>
-    
+
+    <field id="vision-referral" xpos="110" ypos="265" font-size='6'/>    
+        
     <field id="vision_month" xpos="200" ypos="263" font-size='8'/>
     <field id="vision_day" xpos="227" ypos="263" font-size='8'/>
     <field id="vision_year" xpos="248" ypos="263" font-size='8'/>

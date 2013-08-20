@@ -9,6 +9,7 @@
     require_once("$srcdir/patient.inc");
     require_once("../directory_definitions.php");
     require_once("load_data.php");
+    require_once("../../forms/snellen/snellen_interpretation.php");
     
     
 ?>
@@ -65,7 +66,18 @@
                     error_log($form_map[$values[$valIdx]['name']].":".$values[$valIdx]['value']);
                     $patient_info[$form_map[$values[$valIdx]['name']]]=$values[$valIdx]['value'];
                 }
-            }               
+            }
+            if($form_data['formdir']==='snellen')
+            {
+                $sqlQuery=" SELECT left_1,left_2,right_1,right_2,notes from form_snellen WHERE ID=?";
+                $res=sqlQuery($sqlQuery,array($form_data['form_id']));
+                $left_1=$res['left_1'];
+                $left_2=$res['left_2'];
+                $right_1=$res['right_1'];
+                $right_2=$res['right_2'];
+                error_log($left_1.":".$left_2.":".$right_1.":".$right_2);
+                $need_referral=needs_referral($age_in_months,$left_1,$right_1,$left_2,$right_2);
+            }
         }
         else
         {
@@ -100,6 +112,12 @@
     {
         echo "<b>Hearing:".$hearing_notes_left."&nbsp;".$hearing_notes_right."<b><br>";
         $patient_info['hearing_notes']='Needs further evaluation';
+    }
+    
+    if($need_referral)
+    {
+         echo "<b>Needs Optometry Visit<br>";
+         $patient_info['vision-referral']="Needs Optometry Visit";
     }
     process_physical($patient_info,$pid);
     

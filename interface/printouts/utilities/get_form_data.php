@@ -73,10 +73,10 @@ function get_form_data($form_id,$formdir)
         if($res)
         {
             $retval=array();
-            set_data($retval,'Left Uncorrected',$res['left_1'],format_vision);
-            set_data($retval,'Left Corrected',$res['left_2'],format_vision);
-            set_data($retval,'Right Uncorrected',$res['right_1'],format_vision);
-            set_data($retval,'Right Uncorrected',$res['right_2'],format_vision);
+            set_data($retval,'Left Uncorrected',$res['left_1'],'format_vision');
+            set_data($retval,'Left Corrected',$res['left_2'],'format_vision');
+            set_data($retval,'Right Uncorrected',$res['right_1'],'format_vision');
+            set_data($retval,'Right Uncorrected',$res['right_2'],'format_vision');
             return $retval;
         }
         else
