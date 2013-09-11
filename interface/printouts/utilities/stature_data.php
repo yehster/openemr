@@ -3,7 +3,9 @@ require_once($include_root."/stats/calculations.php");
 require_once($include_root."/stats/cdc_growth_stats.php");
 function stature_info($pid,&$patient_info,$DOB,$sex)
 {
-    $sqlVitals = "SELECT height,weight,BMI,date,DATE_FORMAT(date,'%m-%d-%Y') as date_string FROM form_vitals WHERE pid=? ORDER BY date desc LIMIT 1";
+    $sqlVitals = "SELECT height,weight,BMI,form_vitals.date,DATE_FORMAT(form_vitals.date,'%m-%d-%Y') as date_string FROM form_vitals,forms WHERE form_vitals.pid=? "
+                ." AND forms.form_id=form_vitals.id AND forms.deleted=0"
+                ." ORDER BY form_vitals.date desc LIMIT 1";
     $vitals_data = sqlQuery($sqlVitals,array($pid));
     if($vitals_data!==false)
     {
