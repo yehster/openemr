@@ -427,7 +427,7 @@ function convLbtoKg(name) {
         $("#"+name+"_metric").val("");
     }
 
-    if (name == "weight") {
+    if (name == "weight_input") {
         calculateBMI();
     }
 } 
@@ -447,7 +447,7 @@ function convKgtoLb(name) {
         $("#"+name).val("");
     }
 
-    if (name == "weight_input") {
+    if (name == "weight_input_metric") {
         calculateBMI();
     }
 }
@@ -533,13 +533,15 @@ function calculateBMI() {
         bmi = weight/height/height*703;
         bmi = bmi.toFixed(1);
         $("#BMI_input").val(bmi);
-        if(patientAgeMos<240)
-        {
-            getPercentiles(weight/2.204,height*2.54,bmi,$("#head_circ_input").val()*2.54);
-        }
     }
     else {
         $("#BMI_input").val("");
+    }
+
+    // Calculate the percentiles
+    if(patientAgeMos<240)
+    {
+        getPercentiles(weight/2.204,height*2.54,bmi,$("#head_circ_input").val()*2.54);
     }
 }
 
