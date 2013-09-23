@@ -85,7 +85,7 @@
     $patient_info['provider-fax']="949-364-1104";
 
     $patient_info['contact-phone']="949-364-2229";
-    $patient_info['contact-name']="Ana Gutierrez";
+    $patient_info['contact-name']="Sonia Sedano, RN ";
 
     stature_info($pid,$patient_info,$patient_data['DOB_YMD'],$patient_data['sex']);
     if($patient_info['bmi_pct']>=85)
