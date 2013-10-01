@@ -90,17 +90,5 @@ a {
 </html>
 {literal}
 <script type="text/javascript" src="../../../library/js/jquery-2.0.3.min.js"></script>
-<script type="text/javascript">
-    $("#optometry_ref").click( function()
-        {
-            var notes=$("textarea[name='notes']");
-            var phrase="Referred to optometry.";
-            if(notes.val().indexOf(phrase)===-1)
-                {
-                    var text=notes.val()+phrase;
-                    notes.val(text);    
-                }
-            $("input[name='Submit']").click();
-        });
-</script>
+<script type="text/javascript" src="../../forms/snellen/templates/events.js"></script>
 {/literal}
