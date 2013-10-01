@@ -1281,6 +1281,7 @@ if (!empty($reg)) {
           <?php if (acl_check('patients', 'med')) genMiscLink('RTop','rep','0',xl('Clinical'),'reports/clinical_reports.php'); ?>
 	  <?php genMiscLink('RTop','rep','0',xl('Referrals'),'reports/referrals_report.php'); ?>
 	  <?php genMiscLink('RTop','rep','0',xl('Immunization Registry'),'reports/immunization_report.php'); ?>
+          <?php genMiscLink('RTop','rep','0',xl('Asthma/Influenza'),'reports/flu_asthma/flu_asthma.php'); ?>            
         </ul>
       </li>
       <li><a class="collapsed_lv2"><span><?php xl('Clinic','e') ?></span></a>
@@ -1347,6 +1348,20 @@ if (!empty($reg)) {
         </ul>
       </li>
 <?php } ?>
+      
+<?php
+// QUEST START
+if ($GLOBALS['lab_quest_enable']) { ?>
+      <li><a class="collapsed_lv2"><span><?php xl('Quest Lab','e') ?></span></a>
+        <ul>
+          <?php genMiscLink('RTop','lab','0',xl('Quest Lab Report'),'reports/myreports/lab_forms.php'); ?>
+          <?php genMiscLink('RTop','lab','0',xl('Orphan Lab Results'),'reports/myreports/lab_results.php'); ?>
+          <?php if (acl_check('admin', 'users'   )) genMiscLink('RTop','lab','0',xl('Quest Batch Process'),'reports/myreports/lab_batch.php'); ?>
+          <?php if (acl_check('admin', 'users'   )) genMiscLink('RTop','lab','0',xl('Quest CDC Update'),'reports/myreports/lab_update.php'); ?>
+        </ul>
+      </li>
+<?php }
+// QUEST END ?>
 <?php if (!empty($GLOBALS['code_types']['IPPF'])) { ?>
       <li><a class="collapsed_lv2"><span><?php xl('Statistics','e') ?></span></a>
         <ul>

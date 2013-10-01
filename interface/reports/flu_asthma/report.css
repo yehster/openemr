@@ -1,0 +1,27 @@
+/* 
+    Document   : report
+    Created on : Oct 1, 2013, 1:35:27 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+table.patient_list
+{
+    cursor: pointer;
+}
+
+table.patient_list tr:nth-child(even)
+{
+    background-color: lightgrey;
+}
+
+table.patient_list tr:nth-child(odd)
+{
+    background-color: white;
+}
+
+table.patient_list tr:hover
+{
+    background-color: yellow;
+}
