@@ -166,7 +166,13 @@ class FormVitals extends ORDataObject {
                 if($GLOBALS['us_weight_format']==2)
                 {
                     $pounds_int=floor($pounds);
-                    return $pounds_int." ".xl('lb') ." " .round(($pounds-$pounds_int)*16)." ".xl('oz');
+                    $ounces_int=round(($pounds-$pounds_int)*16);
+                    if($ounces_int==16)
+                    {
+                        $ounces_int=0;
+                        $pounds_int++;
+                    }
+                    return $pounds_int." ".xl('lb') ." " .$ounces_int." ".xl('oz');
                 }
                 else
                 {
