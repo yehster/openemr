@@ -18,7 +18,7 @@ function US_weight($pounds,$mode=1)
         if($ounces==16)
         {
             $ounces=0;
-            $pounds++;
+            $pounds_int++;
         }
         return $pounds_int . " " . xl('lb') . " " . $ounces . " " . xl('oz');
     }
