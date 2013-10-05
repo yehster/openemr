@@ -1,0 +1,48 @@
+/* 
+    Document   : infant_sick_edit
+    Created on : Oct 14, 2013, 7:34:37 PM
+    Author     : yehster
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+div.section > span.label
+{
+    font-weight: bold;
+}
+
+.child > *:first-child
+{
+    margin-left: 2em;
+}
+
+.child .child > *:first-child
+{
+    margin-left: 4em;
+}
+
+
+.child .child .child > *:first-child
+{
+    margin-left: 6em;
+}
+
+input.quantity, input.duration
+{
+    width: 3em;
+}
+
+.text_history > input[type='text'],.text_finding > input[type='text']
+{
+    width:30em;
+}
+
+input[type='text'].date
+{
+    width:6em;
+}
+
+div.phrase:after{
+    content: "\00a0";
+    display: block;
+}
