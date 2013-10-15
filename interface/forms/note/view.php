@@ -73,6 +73,8 @@ function PrintForm() {
 <option value="WORK NOTE" <?php if ($obj['note_type']=="WORK NOTE") echo " SELECTED"; ?>><?php xl('WORK NOTE','e'); ?></option>
 <option value="SCHOOL NOTE" <?php if ($obj['note_type']=="SCHOOL NOTE") echo " SELECTED"; ?>><?php xl('SCHOOL NOTE','e'); ?></option>
 <option value="PROVIDER COMMUNICATION" <?php if ($obj['note_type']=="PROVIDER COMMUNICATION") echo " SELECTED"; ?>><?php xl('PROVIDER COMMUNICATION','e'); ?></option>
+<option value="REFERRAL" <?php if ($obj['note_type']=="REFERRAL") echo " SELECTED"; ?>><?php xl('REFERRAL','e'); ?></option></select>
+
 </select>
 <br>
 <b><?php xl('MESSAGE:','e'); ?></b>
@@ -125,6 +127,6 @@ $(document).ready(function(){
 });
 
 </script>
-
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms/note/updates.js"></script>
 </html>
 

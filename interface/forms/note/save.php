@@ -25,14 +25,29 @@ include_once("$srcdir/forms.inc");
  */
 $table_name = "form_note";
 
+$print=false;
 if ($encounter == "") $encounter = date("Ymd");
-
+if(isset($_POST["print"]))
+{
+    if  ($_POST["print"]=="print"){
+        $print=true;
+    }
+    unset($_POST["print"]);
+}
 if ($_GET["mode"] == "new") {
     $newid = formSubmit($table_name, $_POST, $_GET["id"], $userauthorized);
     addForm($encounter, "Work/School Note", $newid, "note", $pid, $userauthorized);
 } 
 elseif ($_GET["mode"] == "update") {
     $success = formUpdate($table_name, $_POST, $_GET["id"], $userauthorized);
+}
+
+if($print){
+    ?>
+<script>
+ newwin = window.open("<?php echo $rootdir."/forms/note/print.php?id=".$_GET["id"]; ?>");
+</script>
+    <?php
 }
 $_SESSION["encounter"] = $encounter;
 formHeader("Redirecting....");
