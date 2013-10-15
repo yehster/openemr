@@ -33,6 +33,10 @@ if ($obj['date_of_signature'] != "") {
     {
         $title="Provider Communication";
     }
+    else if($obj['note_type']=="REFERRAL")
+    {
+        $title="Referral";
+    }
     xl($title,'e'); ?>
 </span><br></br>
 <?php xl('Printed','e'); ?> <?php echo dateformat(); ?>
