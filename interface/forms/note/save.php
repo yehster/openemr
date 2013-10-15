@@ -45,7 +45,7 @@ elseif ($_GET["mode"] == "update") {
 if($print){
     ?>
 <script>
- newwin = window.open("<?php echo $rootdir."/forms/note/print.php?id=".$_GET["id"]; ?>");
+ newwin = window.open("<?php echo $rootdir."/patient_file/report/custom_report.php?printable=1&note_".$_GET["id"]."=".$encounter; ?>");
 </script>
     <?php
 }

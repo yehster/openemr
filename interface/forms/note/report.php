@@ -22,6 +22,8 @@ function note_report( $pid, $encounter, $cols, $id) {
     $count = 0;
     $data = formFetch("form_note", $id);
     if ($data) {
+        print "<script src=".$GLOBALS['webroot']."/library/js/jquery-2.0.3.min.js></script>";
+        print "<span class='work_note_marker" .$id."'></span>";
         print "<table><tr>";
         foreach($data as $key => $value) {
             if ($key == "id" || 
@@ -44,6 +46,19 @@ function note_report( $pid, $encounter, $cols, $id) {
             print("<tr>\n");
 	    if ($key == "Note Type") {
                 print "<td><span class=bold>" . xl($key) . ": </span><span class=text>" . xl($value) . "</span></td>";
+                if($value=="REFERRAL")
+                {
+                    $title= "Referral";
+                }else if ($value=="PROVIDER COMMUNICATION")
+                {
+                    $title= "Provider Communication";
+                }
+                if(isset($title))
+                {
+                    print "<script>";
+                    print "$('.work_note_marker".$id."').parent().children('h1').text('".$title."');";
+                    print "</script>";
+                }
 	    }
 	    else {
 	        print "<td><span class=bold>" . xl($key) . ": </span><span class=text>$value</span></td>";	
