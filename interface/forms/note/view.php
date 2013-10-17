@@ -52,7 +52,7 @@ if ($obj['date_of_signature'] != "") {
 var mypcc = '<?php echo $GLOBALS['phone_country_code'] ?>';
 
 function PrintForm() {
-    newwin = window.open("<?php echo $rootdir."/forms/".$form_name."/print.php?id=".$_GET["id"]; ?>","mywin");
+    newwin = window.open("<?php echo $rootdir."/patient_file/report/custom_report.php?printable=1&note_".$_GET["id"]."=".$encounter; ?>");
 }
 
 </script>
