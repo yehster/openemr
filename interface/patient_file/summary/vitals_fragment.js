@@ -39,7 +39,7 @@ function title_weight()
             var pos=weight.indexOf('kg');
             var numStr=weight.substring(0,pos);
             var kg=parseFloat(numStr);
-            var weight_info=$("<span class='weight'>&nbsp;&nbsp;&nbsp;Weight:"+kg+ " kg<span style='font-size:10px'>&nbsp;"+date_text+"</span></span>");
+            var weight_info=$("<span class='weight'>&nbsp;&nbsp;&nbsp;Weight: "+kg+ " kg<span style='font-size:10px'>&nbsp;("+date_text+")</span></span>");
             title_info.append(weight_info);
 
         }
