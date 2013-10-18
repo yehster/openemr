@@ -19,3 +19,27 @@ function showGrowthChart()
         vitals_document.src=vitals_document.src;
     }
 }
+
+function title_weight()
+{
+    // find weight. Zero it out if can't find it
+    var vitals=$("div#vitals");
+    var title_frame=top.window["Title"];
+    var title_info=$("#current_patient",title_frame.document);
+    title_info.find(".weight").remove();
+    var weight_label=vitals.find("span:contains('Weight:')");
+    if(weight_label.length>0)
+        {
+            var weight_value=weight_label.siblings(":contains('kg')");
+            var weight=weight_value.text();
+            var pos=weight.indexOf('kg');
+            var numStr=weight.substring(0,pos);
+            var kg=parseFloat(numStr);
+            var weight_info=$("<span class='weight'>&nbsp;&nbsp;&nbsp;Weight:"+kg+ " kg</span>");
+            title_info.append(weight_info);
+
+        }
+    
+}
+
+title_weight();
