@@ -30,12 +30,16 @@ function title_weight()
     var weight_label=vitals.find("span:contains('Weight:')");
     if(weight_label.length>0)
         {
+            var date_marker='Most recent vitals from:';
+            var date=vitals.find("b:contains('"+date_marker+"')");
+            var date_text=date.text();
+            date_text=date_text.substring(date_marker.length+date_text.indexOf(date_marker)+1);
             var weight_value=weight_label.siblings(":contains('kg')");
             var weight=weight_value.text();
             var pos=weight.indexOf('kg');
             var numStr=weight.substring(0,pos);
             var kg=parseFloat(numStr);
-            var weight_info=$("<span class='weight'>&nbsp;&nbsp;&nbsp;Weight:"+kg+ " kg</span>");
+            var weight_info=$("<span class='weight'>&nbsp;&nbsp;&nbsp;Weight:"+kg+ " kg<span style='font-size:10px'>&nbsp;"+date_text+"</span></span>");
             title_info.append(weight_info);
 
         }
