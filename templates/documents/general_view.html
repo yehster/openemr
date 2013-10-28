@@ -39,6 +39,18 @@
 	{literal}}{/literal}
  {literal}}{/literal}
 
+{literal}
+    function reviewed()
+    {
+
+        var note=document.getElementsByName("note");
+        if(note.length==1)
+            {
+                note[0].value="Reviewed";
+                document.forms['notes'].submit();
+            }
+    }
+{/literal}
 </script>
 
 </head>
@@ -148,7 +160,7 @@
                     </div>
                     <div style="float:none">
                         <a href="javascript:;" onclick="document.forms['notes'].submit();">(<span>{xl t='add'}</span>)</a>
-                    </div>
+                        <a href="javascript:;" onclick="reviewed();">(<span>{xl t='reviewed'}</span>)</a>
                 <div>
                     <textarea cols="53" rows="8" wrap="virtual" name="note" style="width:100%"></textarea><br>
                     <input type="hidden" name="process" value="{$PROCESS}" />
@@ -194,4 +206,6 @@
 </table>
 <script language='JavaScript'>
  Calendar.setup({literal}{{/literal}inputField:"docdate", ifFormat:"%Y-%m-%d", button:"img_docdate"{literal}}{/literal});
+
+ }
 </script>
