@@ -217,10 +217,11 @@ function document_phrase(name,parent,def)
     var retval=new document_metadata(name,parent);
     retval.type="phrase";
     retval.value=ko.observable(def);
+    retval.editing=ko.observable(false);
     retval.default=def;
-
     return retval;
 }
+
 
 function document_date(name,parent)
 {
@@ -234,6 +235,7 @@ function document_date(name,parent)
 
 function apply_metadata(md,entry)
 {
+
     for (var prop in entry)
     {
         if(prop=='value')
@@ -241,19 +243,30 @@ function apply_metadata(md,entry)
             md[prop](entry[prop]);
         }
     }
+    var vm_map={};
+    for(var idx=0;idx<md.children().length;idx++)
+    {
+        var vm_entry=md.children()[idx];
+        vm_map[vm_entry.name]=vm_entry;
+    }         
     for(var idx=0;idx<entry.children.length;idx++)
     {
-        apply_metadata(md.children()[idx],entry.children[idx]);
+   
+        apply_metadata(vm_map[entry.children[idx].name],entry.children[idx]);
     }
 }
 
 function apply_to_view(view_model,data)
 {
+    var vm_map={};
+    for(var idx=0;idx<view_model.entries().length;idx++)
+    {
+        var vm_entry=view_model.entries()[idx];
+        vm_map[vm_entry.name]=vm_entry;
+    }
     for(var idx=0;idx<data.length;idx++)
     {
-        if(view_model.entries()[idx].name===data[idx].name)
-            {
-                apply_metadata(view_model.entries()[idx],data[idx]);
-            }
+
+            apply_metadata(vm_map[data[idx].name],data[idx]);
     }
 }

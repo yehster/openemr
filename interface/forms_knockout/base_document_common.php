@@ -1,5 +1,6 @@
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/knockout/knockout-3.0.0.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_elements.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_events.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery-2.0.3.min.js"></script>
 <script type="text/javascript">
     var update_ajax='<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/ajax/update_json.php';
@@ -16,7 +17,7 @@
 <div data-bind="template: {name: 'base-document' ,data:entries }">
 </div>
 
-<input type="button" name="save" onclick='save()' value='Save'/>
+<input type="button" name="close" value='Close'/>
 <script>
     function save()
     {
@@ -34,7 +35,15 @@
                 uuid: uuid,
                 formname: formname,
                 json: JSON.stringify(entries)
-            }
-        });
+            },
+
+        }
+        );
     }
+    function close()
+    {
+        window.location.href= "<?php echo $GLOBALS['webroot'] ?>/interface/patient_file/encounter/encounter_top.php";
+    }
+    $("input[name='close']").click(close);
+    window.onbeforeunload=save;
 </script>

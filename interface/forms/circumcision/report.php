@@ -8,7 +8,7 @@ function circumcision_report( $pid, $encounter, $cols, $id)
     $form_id=str_replace("-","_",$form_data['uuid']);
     include_knockout_dependencies("circumcision");
     ?>
-    <div id="<?php echo  $form_id;?>" data-bind="template: {name: 'review-document' ,data:entries }"></div>
+    <div id="<?php echo  $form_id;?>" class='text' data-bind="template: {name: 'review-document' ,data:entries }"></div>
     <script>
         var vm_<?php echo  $form_id;?>=new circumcision_document();
         var loaded=<?php echo $form_data['json'];?>;

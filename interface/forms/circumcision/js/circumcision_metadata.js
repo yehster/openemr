@@ -3,7 +3,7 @@ function circumcision_document()
     this.entries=ko.observableArray();
 
     var r1= new document_phrase("Risks1",null,"Risks and benefits of circumcision explained fully at");
-    var encounter_date=new document_date("visit_date",r1);
+    this.encounter_date=new document_date("visit_date",r1);
     var r1b= new document_phrase("Risks1b",r1,"visit, and re-iterated risk of bleeding and infection prior to this procedure.");
     this.entries.push(r1);
     

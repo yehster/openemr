@@ -12,4 +12,9 @@ $form_data=load_knockout_form(FRM_INF_SICK,$id);
 require_once("infant_sick_common.php");
 
 ?>
+<script>
+        var loaded=<?php echo $form_data['json'];?>;
+        apply_to_view(view_model,loaded);
+        ko.applyBindings(view_model);
+</script>
 </body>

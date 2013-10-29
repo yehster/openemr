@@ -46,3 +46,21 @@ div.phrase:after{
     content: "\00a0";
     display: block;
 }
+
+.edit-container
+{
+    position: relative;
+}
+.edit-container > span
+{
+    cursor: pointer;
+}
+textarea.phrase-editor
+{
+    width: 40em;
+    position:absolute;
+    left: 0em;
+    top: 1.1em;
+    z-index: 2;
+    
+}

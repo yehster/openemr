@@ -15,7 +15,7 @@
 
 <script type="text/html" id="freetext">
     <div>
-        <textarea data-bind="text:value"></textarea>
+        <textarea data-bind="value:value,valueUpdate: 'keyup'"></textarea>
     </div>
 </script>
 
@@ -52,14 +52,14 @@
 </script>
 
 <script type="text/html" id="duration">
-    <input class='duration' data-bind="value: value" type='text' title='duration'/>
+    <input class='duration' data-bind="value: value,valueUpdate: 'keyup'" type='text' title='duration'/>
     <select data-bind="value: units,options: unit_choices"></select>    
 </script>
 
 <script type="text/html" id="quantity">
     <span data-bind="text:name,visible: showLabel"></span>
     <span data-bind="visible: showLabel">:</span>
-    <input class= 'quantity' data-bind="value: value" type='text' />
+    <input class= 'quantity' data-bind="value: value,valueUpdate: 'keyup'" type='text' />
     <select data-bind="value: units,options: unit_choices"></select>
 </script>
 
@@ -78,13 +78,13 @@
 
 <script type="text/html" id="text_history">
     <div class='text_history'>
-        <input type="text" data-bind="value: value, attr:{title: name}"/>
+        <input type="text" data-bind="value: value, attr:{title: name},valueUpdate: 'keyup'"/>
     </div>    
 </script>
 
 <script type="text/html" id="text_finding">
     <div class='text_finding'>
-        <input type="text" data-bind="value: value,  attr:{title: name}"/>
+        <input type="text" data-bind="value: value,  attr:{title: name},valueUpdate: 'keyup'"/>
     </div>
 </script>
 
@@ -101,12 +101,15 @@
 </script>
 
 <script type="text/html" id="phrase">
-    <span data-bind="text:value"></span>
+    <span class="edit-container">
+    <span data-bind="text:value, click: edit_phrase"></span>
+    <textarea class="phrase-editor" data-bind="value:value, valueUpdate: 'keyup',visible: editing,event:{blur: edit_phrase}"></textarea>
+    </span>
     <!-- ko foreach: children -->
         <span data-bind="template: {name: type, data: $data}"></span>
     <!-- /ko -->        
 </script>
 
 <script type="text/html" id="date">
-    <input class='date' data-bind="value:value" type="text"/>
+    <input class='date' data-bind="value:value,valueUpdate: 'keyup'" type="text"/>
 </script>
