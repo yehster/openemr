@@ -236,24 +236,39 @@ function document_date(name,parent)
 function apply_metadata(md,entry)
 {
 
+    var active=false;
     for (var prop in entry)
     {
         if(prop=='value')
         {
             md[prop](entry[prop]);
+            if(entry[prop]!="")
+                {
+                    active=true;
+                }
         }
     }
+    var vm_entry={};
     var vm_map={};
     for(var idx=0;idx<md.children().length;idx++)
     {
-        var vm_entry=md.children()[idx];
+        vm_entry=md.children()[idx];
         vm_map[vm_entry.name]=vm_entry;
     }         
     for(var idx=0;idx<entry.children.length;idx++)
     {
    
-        apply_metadata(vm_map[entry.children[idx].name],entry.children[idx]);
+        var sub_active=apply_metadata(vm_map[entry.children[idx].name],entry.children[idx]);
+        if(sub_active)
+        {
+            active=true;
+        }
     }
+    if((typeof vm_entry.expanded !=='undefined' ) && active)
+        {
+            vm_entry.expanded(true);
+        }    
+    return active;
 }
 
 function apply_to_view(view_model,data)
@@ -266,7 +281,11 @@ function apply_to_view(view_model,data)
     }
     for(var idx=0;idx<data.length;idx++)
     {
-
-            apply_metadata(vm_map[data[idx].name],data[idx]);
+            var vm=vm_map[data[idx].name];
+            var active=apply_metadata(vm,data[idx]);
+            if((typeof vm.expanded !=='undefined' ) && active)
+                {
+                    vm.expanded(true);
+                }
     }
 }

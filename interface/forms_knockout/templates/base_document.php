@@ -5,7 +5,10 @@
 </script>
 
 <script type="text/html" id="section">
-    <div class='section'><span class="label" data-bind="text:name"></span><input type="checkbox" data-bind="checked:expanded"></input></div>
+    <div class='section'>
+        <span class="label" data-bind="text:name"></span>
+        <input type="checkbox" data-bind="checked:expanded"></input>
+    </div>
     <span data-bind="visible: expanded">
         <!-- ko foreach: children -->
             <div class="child" data-bind="template: {name: type, data: $data}"></div>
