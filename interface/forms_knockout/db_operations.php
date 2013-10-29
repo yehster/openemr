@@ -8,6 +8,7 @@ define("KNOCKOUT_TABLE","KNOCKOUT_TABLE");
 define("KNOCKOUT_DIR","KNOCKOUT_DIR");
 
 define('COL_DOC_UUID',"document_uuid");
+define('COL_JSON',"json");
 
 
 define("FRM_INF_SICK","Infant Sick Visit");
@@ -58,13 +59,26 @@ function load_knockout_form($formname,$id)
     $form_info=$GLOBALS['knockout_forms'][$formname];
     $retval=array();
     $retval['id']=$id;
-    $sqlRetrieveData = " SELECT ".COL_DOC_UUID. " FROM ". $form_info[KNOCKOUT_TABLE]
+    $sqlRetrieveData = " SELECT ".COL_DOC_UUID.",".COL_JSON. " FROM ". $form_info[KNOCKOUT_TABLE]
                      . " WHERE id=?";
     $res=sqlQuery($sqlRetrieveData,array($id));
     if($res!==false)
     {
         $retval['uuid']=$res[COL_DOC_UUID];
+        $retval[COL_JSON]=$res[COL_JSON];
     }
     return $retval;
+}
+
+function update_knockout_form($formname,$uuid,$json)
+{
+    $form_info=$GLOBALS['knockout_forms'][$formname];
+    $sqlUpdateForm = "UPDATE ". $form_info[KNOCKOUT_TABLE] . " SET "
+                . COL_JSON . "=?"
+                . " WHERE ".COL_DOC_UUID . "=?";
+    
+    $queryParameters=array($json,$uuid);
+    error_log($sqlUpdateForm);
+    $res=sqlQuery($sqlUpdateForm,$queryParameters);
 }
 ?>

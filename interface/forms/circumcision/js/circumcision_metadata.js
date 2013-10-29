@@ -1,19 +1,3 @@
-/*
-Risks and benefits of circumcision explained fully at 10/15/2013 visit, and re-iterated risk of bleeding and infection prior to this procedure.
-
-Risks, benefits, and alternatives to circumcision were reviewed. Infant was restrained with his blanket and circumcision restraint device. Sugar nipple (Sweetease) provided to help with anesthesia. Dorsal penile nerve block was administered with 1% lidocaine without epinephrine 1.0 ml. Infant was then prepped and draped in a sterile manner.
-
-1.1cm Gomco clamp was used for the procedure.
-
-Estimated blood loss: <5ml.
-
-No complications. Infant tolerated circumcision well.
-
-Vaseline gauze applied.
-
-Family instructed to call 24 hours if any question or concern.
-
- */
 function circumcision_document()
 {
     this.entries=ko.observableArray();

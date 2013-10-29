@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS `form_infant_sick_visit` (
   `authorized`          tinyint(4)   NOT NULL DEFAULT 0,
   `activity`            tinyint(4)   NOT NULL DEFAULT 0,
   `document_uuid`       varchar(40),
+  `json`                text,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;

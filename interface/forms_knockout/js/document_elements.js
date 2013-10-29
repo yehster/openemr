@@ -1,6 +1,30 @@
-function save_object(newval)
+function save_section(obj)
 {
+        var retval={
+            name: obj.name,
+            type: obj.type,
+        }
+        retval.children=[];
+        for(var idx=0;idx<obj.children().length;idx++)
+        {
+            retval.children[idx]=obj.children()[idx].persistentForm();
+        }
+        return retval;
+}
 
+function save_value(obj)
+{
+        var retval={
+            name: obj.name,
+            type: obj.type,
+            value: obj.value()
+        }
+        retval.children=[];
+        for(var idx=0;idx<obj.children().length;idx++)
+        {
+            retval.children[idx]=obj.children()[idx].persistentForm();
+        }
+        return retval;
 }
 function document_metadata(name,parent)
 {
@@ -13,6 +37,10 @@ function document_metadata(name,parent)
         this.parent.children.push(this);
     }
     var self=this;
+    this.persistentForm=function()
+    {
+        return save_value(this);
+    }    
     return this;
 }
 
@@ -21,6 +49,11 @@ function document_section(name,parent)
     var retval=new document_metadata(name,parent);
     retval.type="section";
     retval.expanded=ko.observable(true);
+    retval.persistentForm=function()
+    {
+        return save_section(retval);
+    }    
+    
     return retval;
 }
 
@@ -29,7 +62,6 @@ function document_option_set(name,parent)
     var retval=new document_metadata(name,parent);
     retval.type="option_set";
     retval.value=ko.observable(false);
-    retval.value.subscribe(save_object,retval);
     retval.sub_components=ko.computed(function()
         {
             return retval.children().length>0 && !retval.value();
@@ -44,7 +76,6 @@ function document_option_select(name,parent,def,choices)
     var retval=new document_metadata(name,parent);
     retval.type="option_select";
     retval.value=ko.observable(false);
-    retval.value.subscribe(save_object,retval);
     retval.selection=ko.observable(def);
     retval.choices=ko.observableArray(choices);
     retval.sub_components=ko.computed(function()
@@ -94,6 +125,7 @@ function document_duration(name,parent,unit_options)
             unit_options=["days","weeks","months","hours","minutes","seconds"]
         }
     retval.unit_choices=ko.observableArray(unit_options);
+
     return retval;
     
 }
@@ -139,6 +171,10 @@ function document_grouping(name,parent)
 {
     var retval=new document_metadata(name,parent);
     retval.type="grouping";
+    retval.persistentForm=function()
+    {
+        return save_section(retval);
+    }       
     return retval;
 }
 
@@ -182,6 +218,7 @@ function document_phrase(name,parent,def)
     retval.type="phrase";
     retval.value=ko.observable(def);
     retval.default=def;
+
     return retval;
 }
 
@@ -190,5 +227,33 @@ function document_date(name,parent)
     var retval=new document_metadata(name,parent);
     retval.type="date";
     retval.value=ko.observable();
-    return retval;;
+
+    return retval;
+    
+}
+
+function apply_metadata(md,entry)
+{
+    for (var prop in entry)
+    {
+        if(prop=='value')
+        {
+            md[prop](entry[prop]);
+        }
+    }
+    for(var idx=0;idx<entry.children.length;idx++)
+    {
+        apply_metadata(md.children()[idx],entry.children[idx]);
+    }
+}
+
+function apply_to_view(view_model,data)
+{
+    for(var idx=0;idx<data.length;idx++)
+    {
+        if(view_model.entries()[idx].name===data[idx].name)
+            {
+                apply_metadata(view_model.entries()[idx],data[idx]);
+            }
+    }
 }
