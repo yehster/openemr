@@ -331,3 +331,20 @@ function apply_to_view(view_model,data)
                 }
     }
 }
+
+function document_text_choice(name,parent,options)
+{
+    var retval=new document_metadata(name,parent);
+    retval.type="text_choice";
+    retval.value=ko.observable();
+    retval.options=ko.observableArray(options);
+    retval.editing=ko.observable(false);
+    retval.editing_delay=ko.computed(
+            function(){ return retval.editing();}
+        ).extend({ throttle: 300 });    
+    retval.update_value=function(data)
+    {
+        retval.value(data);
+    };
+    return retval;
+}

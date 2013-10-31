@@ -32,7 +32,7 @@ function circumcision_document()
     
     this.entries.push(clamp);
     
-    this.ebl = new document_quantity("Estimated blood loss",null,"ml"); 
+    this.ebl = new document_text_choice("Estimated blood loss",null,["none","few drops"]); 
     this.entries.push(this.ebl);
     
     

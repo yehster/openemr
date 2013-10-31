@@ -131,3 +131,22 @@
 <script type="text/html" id="date">
     <input class='date' data-bind="value:value,valueUpdate: 'keyup'" type="text"/>
 </script>
+
+<script type="text/html" id="text_choice">
+    
+    <span data-bind="text:name"></span>
+    <span >:</span>
+    <span class='qty_editor'>
+        <input data-bind="value: value,valueUpdate: 'keyup', hasFocus: editing" type='text' />
+        <!-- ko if: options().length > 0 -->
+            <table class="qty_options" data-bind="visible: editing() || editing_delay()">
+                        <tbody data-bind="foreach:options()">
+                                    <tr data-bind="click: $parent.update_value">
+                                        <td data-bind="text:$data"></td>
+                                    </tr>
+                        </tbody>
+            </table>
+         <!-- /ko -->
+    </span>
+    </span>
+</script>
