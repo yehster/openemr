@@ -7,3 +7,6 @@ require_once("infant_sick_common.php");
 
 
 ?>
+<script>
+    ko.applyBindings(view_model);
+</script>

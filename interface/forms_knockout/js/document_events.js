@@ -9,3 +9,4 @@ function edit_phrase(data,event)
             data.editing(!data.editing());
         }
 }
+

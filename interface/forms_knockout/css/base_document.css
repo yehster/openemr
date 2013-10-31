@@ -64,3 +64,22 @@ textarea.phrase-editor
     z-index: 2;
     
 }
+.qty_editor
+{
+    position: relative;
+}
+.qty_options
+{
+    position: absolute;
+    left: 0em;
+    top: 1.4em;
+    z-index: 2;
+    cursor: pointer;
+    background: white;
+
+}
+
+.qty_options tr:hover
+{
+    background: yellow;
+}

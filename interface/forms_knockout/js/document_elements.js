@@ -149,6 +149,40 @@ function document_text_finding(name,parent)
     return retval;
 }
 
+function numeric_format()
+{
+    this.min= NaN;
+    this.max=NaN;
+    this.increment=NaN;
+    this.precision=NaN;
+    var self=this;
+    this.set=function(min,max,increment,precision)
+    {
+        self.min=min;
+        self.max=max;
+        self.increment=increment;
+        self.precision=precision;
+    }
+    this.options=function()
+    {
+        if(isNaN(self.min) || isNaN(self.max) || isNaN(self.increment) )
+        {
+            return false;
+        }
+        else
+        {
+            var retval=[];
+            var idx=0;
+            for(var val=self.min;val<=self.max;val=val+self.increment)
+            {
+                retval[idx]=val.toFixed(self.precision);
+                idx++
+            }
+            return retval;
+        }
+    }
+    return this;
+}
 
 function document_quantity(name,parent,units,unit_choices)
 {
@@ -157,11 +191,19 @@ function document_quantity(name,parent,units,unit_choices)
     retval.value=ko.observable();
     retval.units=ko.observable(units);
     retval.showLabel=ko.observable(true);
-    
+    retval.numeric_format=new numeric_format();
+    retval.editing=ko.observable(false);
+    retval.editing_delay=ko.computed(
+            function(){ return retval.editing();}
+        ).extend({ throttle: 300 });
     if(typeof unit_choices==='undefined')
         {
             unit_choices=[units];
         }
+    retval.update_quantity=function(qty)
+    {
+        retval.value(qty);
+    };
     retval.unit_choices=ko.observableArray(unit_choices);
     return retval;
     

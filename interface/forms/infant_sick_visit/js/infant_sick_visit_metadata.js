@@ -1,5 +1,5 @@
 
-function infant_sick_document()
+function infant_sick_visit_document()
 {
     this.entries=ko.observableArray();
 
@@ -175,6 +175,14 @@ function infant_sick_document()
     var hpi_ear_text=new document_text_history("Ear-history",hpi_ear);
     var hpi_ear_pain = set_and_duration("pain",hpi_ear);
     var hpi_ear_pain_side = new document_side("side",hpi_ear_pain);
+
+    var hpi_ear_pulling = set_and_duration("pulling on",hpi_ear);
+    var hpi_ear_pulling_side = new document_side("side",hpi_ear_pulling);    
+
+    var hpi_ear_discharge = new document_option_select("discharge",hpi_ear,"discharge",["discharge","drainage"]); 
+    var hpi_ear_discharge_duration = new document_duration("discharge-duration",hpi_ear_discharge);        
+    var hpi_ear_discharge_side = new document_side("side",hpi_ear_discharge);
+    
     
     // End Ear
 
@@ -285,6 +293,6 @@ function infant_sick_document()
         }
         
         this.entries()[4].expanded(true);
-    
+        this.entries()[4].children()[0].expanded(false);
     return this;
 }

@@ -60,9 +60,24 @@
 </script>
 
 <script type="text/html" id="quantity">
+    
     <span data-bind="text:name,visible: showLabel"></span>
     <span data-bind="visible: showLabel">:</span>
-    <input class= 'quantity' data-bind="value: value,valueUpdate: 'keyup'" type='text' />
+    <span class='qty_editor'>
+        <input class= 'quantity' data-bind="value: value,valueUpdate: 'keyup', hasFocus: editing" type='text' />
+        <!-- ko if: numeric_format.options() -->
+            <table class="qty_options" data-bind="visible: editing() || editing_delay()">
+                        <tbody data-bind="foreach:numeric_format.options()">
+                                    <tr data-bind="click: $parent.update_quantity">
+                                        <td data-bind="text:$data"></td>
+                                    </tr>
+                        </tbody>
+            </table>
+ 
+
+        <!-- /ko -->
+    </span>
+    </span>
     <select data-bind="value: units,options: unit_choices"></select>
 </script>
 
@@ -106,7 +121,7 @@
 <script type="text/html" id="phrase">
     <span class="edit-container">
     <span data-bind="text:value, click: edit_phrase"></span>
-    <textarea class="phrase-editor" data-bind="value:value, valueUpdate: 'keyup',visible: editing,event:{blur: edit_phrase}"></textarea>
+    <textarea class="phrase-editor" data-bind="value:value, valueUpdate: 'keyup',visible: editing,hasFocus: editing"></textarea>
     </span>
     <!-- ko foreach: children -->
         <span data-bind="template: {name: type, data: $data}"></span>

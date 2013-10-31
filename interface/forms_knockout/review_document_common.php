@@ -1,5 +1,5 @@
 <?php
-function include_knockout_dependencies($formname)
+function include_knockout_dependencies($formname,$form_data)
 {
     global $initialized_knockout_forms;
     if(!isset($initialized_knockout_forms))
@@ -23,6 +23,16 @@ function include_knockout_dependencies($formname)
         <?php
         $GLOBALS[$formname]=true;
     }
+    $form_id=str_replace("-","_",$form_data['uuid']);
+    ?>
+    <div id="<?php echo  $form_id;?>" class='text' data-bind="template: {name: 'review-document' ,data:entries }"></div>
+    <script>
+        var vm_<?php echo  $form_id;?>=new <?php echo $formname;?>_document();
+        var loaded=<?php echo $form_data['json'];?>;
+        apply_to_view(vm_<?php echo  $form_id;?>,loaded);        
+        ko.applyBindings(vm_<?php echo  $form_id;?>,document.getElementById('<?php echo  $form_id;?>'));
+    </script>        
+    <?php
 }
 
 ?>
