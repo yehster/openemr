@@ -7,7 +7,7 @@ function include_knockout_dependencies($formname,$form_data)
         $initialized_knockout_forms=true;
         ?>
         <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/knockout/knockout-3.0.0.js"></script>
-        <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_elements.js"></script>
+        <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_elements.js?<?php echo time(); ?>"></script>
         
         <?php
         $base_require=$GLOBALS['webserver_root']."/interface/forms_knockout/";
@@ -19,7 +19,7 @@ function include_knockout_dependencies($formname,$form_data)
     if(!isset($GLOBALS[$formname]))
     {
         ?>
-        <script type="text/javascript" src="<?php echo $GLOBALS['webroot']."/interface/forms/".$formname."/js/".$formname."_metadata.js";?>"></script>        
+        <script type="text/javascript" src="<?php echo $GLOBALS['webroot']."/interface/forms/".$formname."/js/".$formname."_metadata.js?".time();?>"></script>        
         <?php
         $GLOBALS[$formname]=true;
     }

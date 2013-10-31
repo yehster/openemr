@@ -46,7 +46,7 @@ function circumcision_document()
     var call = new document_phrase("call",null,"We instructed the family to call us 24 hours per day if they have any questions or concerns.");
     this.entries.push(call);
     
-    var tol = new document_phrase("tolerated",null,"Tolerated procedure well.");
+    var tol = new document_phrase("tolerated",null,"Patient tolerated procedure well.");
     this.entries.push(tol);
 
     return this;

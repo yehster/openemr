@@ -1,11 +1,11 @@
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/knockout/knockout-3.0.0.js"></script>
-<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_elements.js"></script>
-<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_events.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_elements.js?<?php echo time(); ?>"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/js/document_events.js?<?php echo time(); ?>"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery-2.0.3.min.js"></script>
 <script type="text/javascript">
     var update_ajax='<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/ajax/update_json.php';
 </script>
-<link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/css/base_document.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['webroot'] ?>/interface/forms_knockout/css/base_document.css?<?php echo time(); ?>"/>
 
 <?php
     $base_require=$webserver_root."/interface/forms_knockout/";
