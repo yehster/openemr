@@ -40,14 +40,12 @@ function circumcision_document()
     var no_comp = new document_phrase("no_comp",null,"No complications. Infant tolerated circumcision well.");
     this.entries.push(no_comp);
 
-    var gauze = new document_phrase("gauze",null,"Vaseline gauze applied.");
+    var gauze = new document_phrase("gauze",null,"Petrolatum and gauze applied to the wound.");
     this.entries.push(gauze);
     
     var call = new document_phrase("call",null,"We instructed the family to call us 24 hours per day if they have any questions or concerns.");
     this.entries.push(call);
     
-    var tol = new document_phrase("tolerated",null,"Patient tolerated procedure well.");
-    this.entries.push(tol);
 
     return this;
 }

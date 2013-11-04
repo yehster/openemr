@@ -324,6 +324,10 @@ function apply_to_view(view_model,data)
     for(var idx=0;idx<data.length;idx++)
     {
             var vm=vm_map[data[idx].name];
+            if(typeof vm=='undefined')
+                {
+                    window.alert(data[idx].name);
+                }
             var active=apply_metadata(vm,data[idx]);
             if((typeof vm.expanded !=='undefined' ) && active)
                 {

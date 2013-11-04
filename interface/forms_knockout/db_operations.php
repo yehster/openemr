@@ -19,6 +19,10 @@ define("FRM_CIRCUMCISION","Circumcision");
 define("TBL_CIRCUMCISION","form_circumcision");
 define("DIR_CIRCUMCISION","circumcision");
 
+define("FRM_MSE","Mental Status Exam");
+define("TBL_MSE","form_mse");
+define("DIR_MSE","mse");
+
 $knockout_forms=array();
 
 function define_knockout_metadata($name,$table,$dir)
@@ -33,6 +37,8 @@ function define_knockout_metadata($name,$table,$dir)
 define_knockout_metadata(FRM_INF_SICK,TBL_INF_SICK,DIR_INF_SICK);
 
 define_knockout_metadata(FRM_CIRCUMCISION,TBL_CIRCUMCISION,DIR_CIRCUMCISION);
+
+define_knockout_metadata(FRM_MSE,TBL_MSE,DIR_MSE);
 
 function new_knockout_form($formname,$encounter,$user,$group,$pid)
 {

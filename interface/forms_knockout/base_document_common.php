@@ -18,6 +18,7 @@
 </div>
 
 <input type="button" name="close" value='Close'/>
+<input type="button" name="cancel" value='Cancel'/>
 <script>
     function save()
     {
@@ -44,6 +45,12 @@
     {
         window.location.href= "<?php echo $GLOBALS['webroot'] ?>/interface/patient_file/encounter/encounter_top.php";
     }
+    function cancel()
+    {
+            window.onbeforeunload=function(){};
+            window.location.href= "<?php echo $GLOBALS['webroot'] ?>/interface/patient_file/encounter/encounter_top.php";
+    }
     $("input[name='close']").click(close);
+    $("input[name='cancel']").click(cancel);
     window.onbeforeunload=save;
 </script>

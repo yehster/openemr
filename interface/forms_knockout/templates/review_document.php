@@ -32,10 +32,12 @@
 </script>
 
 <script type="text/html" id="section">
+  <div>
   <span data-bind="text:name"></span>    
     <span data-bind="foreach: children">
         <span data-bind="attr: {class:type},template: {name: type, data:$data}"></span>
     </span>
+  </div>
 </script>
 
 <script type="text/html" id="freetext">
@@ -80,4 +82,10 @@
 <script type="text/html" id="option_select">
   <span data-bind="visible:value">
 </span>    
+</script>
+
+<script type="text/html" id="text_choice">
+    <span data-bind="text:name"></span>
+    <span >:</span>
+    <span data-bind="text:value"></span>
 </script>
