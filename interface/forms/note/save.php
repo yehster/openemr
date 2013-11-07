@@ -26,6 +26,7 @@ include_once("$srcdir/forms.inc");
 $table_name = "form_note";
 
 $print=false;
+$_POST['message']=add_escape_custom($_POST['message']);
 if ($encounter == "") $encounter = date("Ymd");
 if(isset($_POST["print"]))
 {
