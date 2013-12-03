@@ -820,7 +820,7 @@ function fixDate($date, $default="0000-00-00") {
 }
 
 function pdValueOrNull($key, $value) {
-  if (($key == 'DOB' || $key == 'regdate' || $key == 'contrastart' ||
+  if (($key == 'DOB' || $key == 'regdate' || $key == 'contrastart' || $key=='providerID' || $key=='ref_providerID' || $key=='financial_review' || $key=='deceased_date' ||
     substr($key, 0, 8) == 'userdate') &&
     (empty($value) || $value == '0000-00-00'))
   {
