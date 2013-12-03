@@ -1134,8 +1134,12 @@ function updateHistoryData($pid,$new)
         $arraySqlBind = array();
         $sql = "insert into history_data set `date` = NOW(), ";
         while(list($key, $value) = each($real)) {
-	        array_push($arraySqlBind,$value);
-                $sql .= "`$key` = ?, ";
+                if($key!='id')
+                {
+                    array_push($arraySqlBind,$value);
+                    $sql .= "`$key` = ?, ";
+                    
+                }
 	}
         $sql = substr($sql, 0, -2);
 
