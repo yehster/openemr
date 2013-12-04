@@ -39,6 +39,8 @@ $reason           = (isset($_POST['reason']))               ? $_POST['reason'] :
 $mode             = (isset($_POST['mode']))                 ? $_POST['mode'] : '';
 $referral_source  = (isset($_POST['form_referral_source'])) ? $_POST['form_referral_source'] : '';
 
+$onset_date = empty($onset_date) ? null : $onset_date;
+
 $facilityresult = sqlQuery("select name FROM facility WHERE id = ?", array($facility_id));
 $facility = $facilityresult['name'];
 
@@ -53,20 +55,22 @@ if ($mode == 'new')
 {
   $provider_id = $userauthorized ? $_SESSION['authUserID'] : 0;
   $encounter = generate_id();
-  addForm($encounter, "New Patient Encounter",
-    sqlInsert("INSERT INTO form_encounter SET " .
-      "date = '" . add_escape_custom($date) . "', " .
-      "onset_date = '" . add_escape_custom($onset_date) . "', " .
-      "reason = '" . add_escape_custom($reason) . "', " .
-      "facility = '" . add_escape_custom($facility) . "', " .
-      "pc_catid = '" . add_escape_custom($pc_catid) . "', " .
-      "facility_id = '" . add_escape_custom($facility_id) . "', " .
-      "billing_facility = '" . add_escape_custom($billing_facility) . "', " .
-      "sensitivity = '" . add_escape_custom($sensitivity) . "', " .
-      "referral_source = '" . add_escape_custom($referral_source) . "', " .
-      "pid = '" . add_escape_custom($pid) . "', " .
-      "encounter = '" . add_escape_custom($encounter) . "', " .
-      "provider_id = '" . add_escape_custom($provider_id) . "'"),
+  $values=array($date,$onset_date,$reason,$facility,$pc_catid,$facility_id,$billing_facility,$sensitivity,$referral_source,$pid,$encounter,$provider_id);
+  $form_id=sqlInsert("INSERT INTO form_encounter SET " .
+      "date = ?, " .
+      "onset_date = ?, " .
+      "reason = ?, " .
+      "facility = ?, " .
+      "pc_catid = ?, " .
+      "facility_id = ?, " .
+      "billing_facility = ?, " .
+      "sensitivity = ?, " .
+      "referral_source = ?, " .
+      "pid = ?, " .
+      "encounter = ?, " .
+      "provider_id = ?",$values);
+  addForm($encounter, "New Patient Encounter",$form_id
+    ,
     "newpatient", $pid, $userauthorized, $date);
 }
 else if ($mode == 'update')
@@ -77,19 +81,30 @@ else if ($mode == 'update')
    die(xlt("You are not authorized to see this encounter."));
   }
   $encounter = $result['encounter'];
+  
+  $parameters=array($onset_date,$reason,$facility,$pc_catid,$facility_id,$billing_facility,$sensitivity,$referral_source);
   // See view.php to allow or disallow updates of the encounter date.
-  $datepart = acl_check('encounters', 'date_a') ? "date = '" . add_escape_custom($date) . "', " : "";
-  sqlStatement("UPDATE form_encounter SET " .
-    $datepart .
-    "onset_date = '" . add_escape_custom($onset_date) . "', " .
-    "reason = '" . add_escape_custom($reason) . "', " .
-    "facility = '" . add_escape_custom($facility) . "', " .
-    "pc_catid = '" . add_escape_custom($pc_catid) . "', " .
-    "facility_id = '" . add_escape_custom($facility_id) . "', " .
-    "billing_facility = '" . add_escape_custom($billing_facility) . "', " .
-    "sensitivity = '" . add_escape_custom($sensitivity) . "', " .
-    "referral_source = '" . add_escape_custom($referral_source) . "' " .
-    "WHERE id = '" . add_escape_custom($id) . "'");
+  if(acl_check('encounters', 'date_a'))
+  {
+      $datepart=", date = ? ";
+      array_push($parameters,$date);
+  }
+  else {
+      $datepart="";
+  }
+  array_push($parameters,$id);
+  $updateQuery="UPDATE form_encounter SET " .
+    "onset_date = ?, " .
+    "reason = ?, " .
+    "facility = ?, " .
+    "pc_catid = ?, " .
+    "facility_id = ?, " .
+    "billing_facility = ?, " .
+    "sensitivity = ?, " .
+    "referral_source = ? " .
+    $datepart.
+    "WHERE id = ?";
+  sqlStatement($updateQuery,$parameters);
 }
 else {
   die("Unknown mode '" . text($mode) . "'");
