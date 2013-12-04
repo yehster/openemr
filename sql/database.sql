@@ -1967,8 +1967,8 @@ CREATE TABLE `history_data` (
   `name_2` varchar(255) default NULL,
   `value_2` varchar(255) default NULL,
   `additional_history` text,
-  `exams`      text         NOT NULL DEFAULT '',
-  `usertext11` TEXT NOT NULL,
+  `exams`      text,
+  `usertext11` TEXT,
   `usertext12` varchar(255) NOT NULL DEFAULT '',
   `usertext13` varchar(255) NOT NULL DEFAULT '',
   `usertext14` varchar(255) NOT NULL DEFAULT '',
@@ -1993,8 +1993,8 @@ CREATE TABLE `history_data` (
   `userdate13` date DEFAULT NULL,
   `userdate14` date DEFAULT NULL,
   `userdate15` date DEFAULT NULL,
-  `userarea11` text NOT NULL DEFAULT '',
-  `userarea12` text NOT NULL DEFAULT '',
+  `userarea11` text ,
+  `userarea12` text ,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
