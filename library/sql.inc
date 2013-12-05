@@ -690,6 +690,6 @@ function get_db() {
   return $GLOBALS['adodb']['db'];
 }
 
-
+require_once($webserver_root."/library/strict_sql/strict_sql_overrides.php");
 
 ?>
