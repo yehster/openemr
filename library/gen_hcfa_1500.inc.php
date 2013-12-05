@@ -564,7 +564,9 @@ function gen_hcfa_1500_page($pid, $encounter, &$log, &$claim) {
   // FreeB printed the rendering provider's name and the current date here,
   // but according to my instructions it must be a real signature and date,
   // or else "Signature on File" or "SOF".
-  put_hcfa(60, 1, 20, 'Signature on File');
+  $tmp = $claim->serviceDate();
+  $MDY=substr($tmp,4,2).substr($tmp,6,2).substr($tmp,0,4);
+  put_hcfa(60, 1, 20, $MDY);
   //
   // $tmp = $claim->providerFirstName();
   // if ($claim->providerMiddleName()) $tmp .= ' ' . substr($claim->providerMiddleName(),0,1);
