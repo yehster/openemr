@@ -620,7 +620,15 @@ function gen_hcfa_1500_page($pid, $encounter, &$log, &$claim) {
   // FreeB printed the rendering provider's name and the current date here,
   // but according to my instructions it must be a real signature and date,
   // or else "Signature on File" or "SOF".
-  put_hcfa(60, 1, 20, 'Signature on File');
+
+   if($GLOBALS['cms_1500_box_31_format']==0)
+   {
+      put_hcfa(60, 1, 20, 'Signature on File');   
+   }
+   else if($GLOBALS['cms_1500_box_31_format']==1)
+   {
+      put_hcfa(60, 1, 22, $claim->providerFirstName()." ".$claim->providerLastName());   
+   }
   //
   // $tmp = $claim->providerFirstName();
   // if ($claim->providerMiddleName()) $tmp .= ' ' . substr($claim->providerMiddleName(),0,1);
@@ -636,6 +644,21 @@ function gen_hcfa_1500_page($pid, $encounter, &$log, &$claim) {
   put_hcfa(60, 50, 27, $tmp . $claim->billingFacilityState() . ' ' .
     $claim->billingFacilityZip());
 
+  // 31. Signature of Physician or Supplier: Date
+   if($GLOBALS['cms_1500_box_31_date']>0)
+   {
+       if($GLOBALS['cms_1500_box_31_date']==1)
+       {
+            $date_of_service= $claim->serviceDate();
+            $MDY=substr($date_of_service,4,2)." ".substr($date_of_service,6,2)." ".substr($date_of_service,2,2);
+       }
+       else if($GLOBALS['cms_1500_box_31_date']==2)
+       {
+           $MDY=date("m/d/y");
+       }
+       put_hcfa(61,6,10,$MDY);
+   }
+  
   // 32a. Service Facility NPI
   put_hcfa(61, 24, 10, $claim->facilityNPI());
 

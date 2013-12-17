@@ -669,6 +669,30 @@ $GLOBALS_METADATA = array(
       '0',                              // default
       xl('This specifies which revision of the form the billing module should generate')
     ),
+     
+      'cms_1500_box_31_format' => array(
+      xl('CMS 1500: Box 31 Format'),
+      array(
+        '0' => xl('Signature on File'),
+        '1' => xl('Firstname Lastname'),
+        '2' => xl('None'),
+      ),
+      '0',                              // default
+      xl('This specifies whether to include date in Box 31.')
+    ),
+
+      
+     'cms_1500_box_31_date' => array(
+      xl('CMS 1500: Date in Box 31 (Signature)'),
+      array(
+        '0' => xl('None'),
+        '1' => xl('Date of Service'),
+        '2' => xl('Today'),
+      ),
+      '0',                              // default
+      xl('This specifies whether to include date in Box 31.')
+    ),
+
   ),
 
     //Documents Tab
