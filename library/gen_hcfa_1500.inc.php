@@ -337,13 +337,13 @@ function gen_hcfa_1500_page($pid, $encounter, &$log, &$claim) {
   $tmp = $claim->dateInitialTreatment();
   if(hcfa_1500_version_02_12() && !empty($tmp))
   {
-    put_hcfa(32, 30, 3, $claim->box15qualifier());    
+    put_hcfa(32, 31, 3, $claim->box15qualifier());    
   }
 
 
-  put_hcfa(32,36, 2, substr($tmp,4,2));
-  put_hcfa(32,39, 2, substr($tmp,6,2));
-  put_hcfa(32,42, 4, substr($tmp,0,4));
+  put_hcfa(32,37, 2, substr($tmp,4,2));
+  put_hcfa(32,40, 2, substr($tmp,6,2));
+  put_hcfa(32,43, 4, substr($tmp,0,4));
 
 
   // Box 16. Dates Patient Unable to Work in Current Occupation

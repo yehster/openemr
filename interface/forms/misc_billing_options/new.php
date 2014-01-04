@@ -15,12 +15,12 @@ $obj = $formid ? formFetch("form_misc_billing_options", $formid) : array();
 formHeader("Form: misc_billing_options");
 function generateDateQualifierSelect($name,$options,$obj)
 {
-    echo     "<select name='".$name."'>";
+    echo     "<select name='".attr($name)."'>";
     for($idx=0;$idx<count($options);$idx++)
     {
         echo "<option value='".$options[$idx][1]."'";
-        if($obj[$name]==$options[$idx][1]) echo " selected";
-        echo ">".xlt($options[$idx][0])."</option>";
+        if($obj[$name]==attr($options[$idx][1])) echo " selected";
+        echo ">".text($options[$idx][0])."</option>";
     }
     echo     "</select>";
 

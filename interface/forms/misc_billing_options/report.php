@@ -16,7 +16,7 @@ function misc_billing_options_report( $pid, $encounter, $cols, $id) {
             }
             if(($key==='box_14_date_qual')||$key==='box_15_date_qual')
             {
-                $value=xlt(qual_id_to_description($key,$value));
+                $value=text(qual_id_to_description($key,$value));
             }
             $key=ucwords(str_replace("_"," ",$key));
             print "<td><span class=bold>$key: </span><span class=text>$value</span></td>";
