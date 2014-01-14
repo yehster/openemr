@@ -21,6 +21,7 @@ require_once("$srcdir/options.inc.php");
 require_once("$srcdir/classes/Document.class.php");
 require_once("$srcdir/gprelations.inc.php");
 require_once("$srcdir/formatting.inc.php");
+require_once("$srcdir/allow_user_delete.php");
 
 if ($GLOBALS['concurrent_layout'] && $_GET['set_pid']) {
     require_once("$srcdir/pid.inc");
@@ -374,7 +375,7 @@ if ($result != "") {
     // display, or not, a button to delete the note
     // if the user is an admin or if they are the author of the note, they can delete it
     $thisauth = acl_check('admin', 'super');
-    if (($iter['user'] == $_SESSION['authUser']) || ($thisauth == 'write')) {
+    if (user_allowed_delete() && (($iter['user'] == $_SESSION['authUser']) || ($thisauth == 'write'))) {
 	  echo " <a href='#' class='deletenote css_button_small' id='del" . htmlspecialchars( $row_note_id, ENT_QUOTES) .
 	    "' title='" . htmlspecialchars( xl('Delete this note'), ENT_QUOTES) . "'><span>" .
 	    htmlspecialchars( xl('Delete'), ENT_NOQUOTES) . "</span>\n";
@@ -518,7 +519,7 @@ if ($result_sent != "") {
     // display, or not, a button to delete the note
     // if the user is an admin or if they are the author of the note, they can delete it
     $thisauth = acl_check('admin', 'super');
-    if (($iter['user'] == $_SESSION['authUser']) || ($thisauth == 'write')) {
+    if (user_allowed_delete() && (($iter['user'] == $_SESSION['authUser']) || ($thisauth == 'write'))) {
 	  echo " <a href='#' class='deletenote css_button_small' id='del" . htmlspecialchars( $row_note_id, ENT_QUOTES) .
 	    "' title='" . htmlspecialchars( xl('Delete this note'), ENT_QUOTES) . "'><span>" .
 	    htmlspecialchars( xl('Delete'), ENT_NOQUOTES) . "</span>\n";

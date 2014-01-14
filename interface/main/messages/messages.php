@@ -23,6 +23,7 @@ require_once("$srcdir/formdata.inc.php");
 require_once("$srcdir/classes/Document.class.php");
 require_once("$srcdir/gprelations.inc.php");
 require_once("$srcdir/formatting.inc.php");
+require_once("$srcdir/allow_user_delete.php");
 ?>
 <html>
 <head>
@@ -467,8 +468,9 @@ else {
     <table border=0 cellpadding=5 cellspacing=0 width=90%>
         <tr>
             <td class=\"text\"><a href=\"messages.php?showall=".attr($showall)."&sortby=".attr($sortby)."&sortorder=".attr($sortorder)."&begin=".attr($begin)."&task=addnew&$activity_string_html\" onclick=\"top.restoreSession()\">" .
-              htmlspecialchars( xl('Add New'), ENT_NOQUOTES) . "</a> &nbsp; <a href=\"javascript:confirmDeleteSelected()\" onclick=\"top.restoreSession()\">" .
-              htmlspecialchars( xl('Delete'), ENT_NOQUOTES) . "</a></td>
+              htmlspecialchars( xl('Add New'), ENT_NOQUOTES) . "</a> &nbsp; ";
+             if(user_allowed_delete()) {echo "<a href=\"javascript:confirmDeleteSelected()\" onclick=\"top.restoreSession()\">" . htmlspecialchars( xl('Delete'), ENT_NOQUOTES) . "</a>";}
+             echo "</td>
             <td align=right class=\"text\">$prevlink &nbsp; $end of $total &nbsp; $nextlink</td>
         </tr>
     </table></td></tr></table><br>"; ?>
