@@ -993,6 +993,46 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
 <?php
   } // end while
 ?>
+    <div id='history'>
+<?php
+            // History lookup
+            if ( (acl_check('patients', 'med')) ) { // && $GLOBALS['show_history_widget'] ) {
+                 $result = getHistoryData($pid);
+                 if (!is_array($result)) {
+                  newHistoryData($pid);
+                  $result = getHistoryData($pid);
+                 } ?>
+               <tr>
+                   <td width='650px'>
+               <?php
+            // History expand collapse widget
+                $widgetTitle = xl("History");
+                $widgetLabel = "history";
+                $widgetButtonLabel = xl("Edit");
+                $widgetButtonLink = "../history/history.php";
+                $widgetButtonClass = "";
+                $linkMethod = "html";
+                $bodyClass = "";
+                $widgetAuth = ($thisauth == "write");
+                $fixedWidth = true;
+                expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
+                  $widgetButtonLink, $widgetButtonClass, $linkMethod, $bodyClass,
+                  $widgetAuth, $fixedWidth);
+                ?>
+                        <div id="HIS" >
+                          <ul class="tabNav">
+                           <?php display_layout_tabs('HIS', $result, $result2); ?>
+                          </ul>
+                          <div class="tabContainer">
+                           <?php display_layout_tabs_data('HIS', $result, $result2); ?>
+                          </div>
+                         </div>
+                      </div> <!--required for expand_collapse_widget -->
+                   </td>
+                  </tr>
+                <?php
+                } 
+                ?> 
 
    </table>
 
@@ -1000,7 +1040,7 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
     <!-- end left column div -->
 
     <!-- start right column div -->
-	<div>
+ <div>
     <table>
     <tr>
     <td>
@@ -1291,22 +1331,21 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
         }
     }
 // END of past appointments            
-            
-			?>
+
+    ?>
 		</div>
 
 		<div id='stats_div'>
             <br/>
-            <div style='margin-left:10px' class='text'><img src='../../pic/ajax-loader.gif'/></div><br/>
+            <div style='margin-left:10px' class='text'><img src='../../pic/ajax-loader.gif'/><div><br/>
         </div>
     </td>
     </tr>
     </table>
 
 	</div> <!-- end right column div -->
-
+        
   </td>
-
  </tr>
 </table>
 
