@@ -23,6 +23,7 @@ $fake_register_globals=false;
  require_once("$srcdir/formatting.inc.php");
  require_once("$srcdir/edi.inc");
  require_once("$srcdir/clinical_rules.php");
+ require_once("$srcdir/allow_user_delete.php");
 
   if ($GLOBALS['concurrent_layout'] && isset($_GET['set_pid'])) {
   include_once("$srcdir/pid.inc");
@@ -466,7 +467,7 @@ $(window).load(function() {
    htmlspecialchars(getPatientName($pid),ENT_NOQUOTES) .
    "</span></td>";
 
-  if (acl_check('admin', 'super')) {
+  if (acl_check('admin', 'super') && user_allowed_delete()) {
    echo "<td style='padding-left:1em;'><a class='css_button iframe' href='../deleter.php?patient=" . 
     htmlspecialchars($pid,ENT_QUOTES) . "'>" .
     "<span>".htmlspecialchars(xl('Delete'),ENT_NOQUOTES).
@@ -1337,7 +1338,7 @@ expand_collapse_widget($widgetTitle, $widgetLabel, $widgetButtonLabel,
 
 		<div id='stats_div'>
             <br/>
-            <div style='margin-left:10px' class='text'><img src='../../pic/ajax-loader.gif'/><div><br/>
+            <div style='margin-left:10px' class='text'><img src='../../pic/ajax-loader.gif'/></div><br/>
         </div>
     </td>
     </tr>

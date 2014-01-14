@@ -10,6 +10,7 @@
  require_once("$srcdir/log.inc");
  require_once("$srcdir/acl.inc");
  require_once("$srcdir/sl_eob.inc.php");
+ require_once("$srcdir/allow_user_delete.php");
 
  $patient     = $_REQUEST['patient'];
  $encounterid = $_REQUEST['encounterid'];
@@ -148,7 +149,7 @@ function popup_close() {
  if ($_POST['form_submit']) {
 
   if ($patient) {
-   if (!acl_check('admin', 'super')) die("Not authorized!");
+   if (!( acl_check('admin', 'super')  && user_allowed_delete() )) die("Not authorized!");
    row_modify("billing"       , "activity = 0", "pid = '$patient'");
    row_modify("pnotes"        , "deleted = 1" , "pid = '$patient'");
    // row_modify("prescriptions" , "active = 0"  , "patient_id = '$patient'");
