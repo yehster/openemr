@@ -254,6 +254,12 @@ function set_and_duration(name,parent)
     return retval;
 }
 
+function create_yes_no(name,parent)
+{
+    var retval = new document_select(name,parent,"",["","yes","no"]);
+    return retval;
+}
+
 function document_phrase(name,parent,def)
 {
     var retval=new document_metadata(name,parent);

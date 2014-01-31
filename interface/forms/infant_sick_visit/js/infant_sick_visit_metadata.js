@@ -186,18 +186,131 @@ function infant_sick_visit_document()
     
     // End Ear
 
+    // Begin Resp
     var hpi_resp= new document_section("Respiratory",hpi);
-
-    var hpi_gi= new document_section("Gastrointestinal",hpi);    
+    var hpi_resp_text = new document_text_history("Respiratory-history",hpi_resp);
+    var hpi_cough_set=new document_option_set("cough",hpi_resp);
+    var hpi_cough_choice1=new document_choice("wet",hpi_cough_set);
+    var hpi_cough_choice2=new document_choice("dry",hpi_cough_set);    
+    var hpi_resp_cough_duration = new document_duration("resp-cough duration",hpi_cough_set);
+    var hpi_resp_wheeze= set_and_duration("wheezing",hpi_resp);
+    var hpi_resp_phlegm= set_and_duration("phlegm in chest",hpi_resp);
     
-    var hpi_heme= new document_section("Hematological",hpi);    
+    var hpi_resp_difficulty = new document_option_set("difficulty breathing",hpi_resp);
+    var hpi_resp_difficulty_duration = new document_duration("resp-difficulty duration",hpi_resp_difficulty);
+    var hpi_resp_difficulty_choice1=new document_choice("due to nasal congestion",hpi_resp_difficulty);  
+    var hpi_resp_difficulty_choice2=new document_choice("inside chest",hpi_resp_difficulty);  
+    var hpi_resp_difficulty_choice3=new document_choice("working hard to breathe",hpi_resp_difficulty);  
     
-    var hpi_gu= new document_section("Genitourinary",hpi);    
+    var hpi_resp_color= new document_option_set("Turning purple/blue",hpi_resp);
+    var hpi_resp_color_choice1 = new document_choice("face",hpi_resp_color);
+    var hpi_resp_color_choice2 = new document_choice("lips",hpi_resp_color);
+    var hpi_resp_color_choice3 = new document_choice("around mouth",hpi_resp_color);
+    var hpi_resp_color_choice4 = new document_choice("inside mouth",hpi_resp_color);
+    var hpi_resp_color_choice5 = new document_choice("whole head",hpi_resp_color);
+    var hpi_resp_color_text = new document_text_history("resp-color-text",hpi_resp_color);
+    
+    //End Resp
 
+    // Begin GI
+    var hpi_gi= new document_section("Gastrointestinal",hpi);   
+    var hpi_gi_text = new document_text_history("gi-history",hpi_gi);
+    var hpi_gi_spit_up = set_and_duration("spit-up",hpi_gi);
+    var hpi_gi_spit_up_w_cough = new document_choice("with coughing",hpi_gi_spit_up);
+    var hpi_gi_spit_up_wo_cough = new document_choice("without coughing",hpi_gi_spit_up);
+    var hpi_gi_spit_up_w_choking = new document_choice("with choking",hpi_gi_spit_up);
+    var hpi_gi_spit_up_wo_choking = new document_choice("without choking",hpi_gi_spit_up);
+    var hpi_gi_spitup_green = create_yes_no("green",hpi_gi_spit_up);
+    var hpi_gi_spitup_yellow = create_yes_no("yellow",hpi_gi_spit_up);
+    var hpi_gi_spitup_text = new document_text_history("gi-spitup",hpi_gi_spit_up);
+    
+    
+    
+    var hpi_diarrhea = set_and_duration("diarrhea",hpi_gi);
+    var hpi_diarrhea_normal = new document_choice("means normal yellow seedy liquid breastfed stools",hpi_diarrhea);
+    var hpi_diarrhea_blood = create_yes_no("blood",hpi_diarrhea);
+    var hpi_diarrhea_blood_qty= new document_quantity("amount",hpi_diarrhea,"",["","number of times","frequency of blood"]);
+    
+    var hpi_diarrhea_green = create_yes_no("green",hpi_diarrhea);
+    var hpi_diarrhea_text= new document_text_history("diarrhea-history",hpi_diarrhea);
+    
+    var hpi_gi_constipation = new document_option_select("constipation",hpi_gi,"constipation",["constipation","hard stools"]);
+    var hpi_gi_constipation_duration = new document_duration("constipation-duration",hpi_gi_constipation);
+    var hpi_gi_constipation_blood = create_yes_no("blood",hpi_gi_constipation);
+    var hpi_gi_constipation_blood_qty= new document_quantity("amount",hpi_gi_constipation,"",["","number of times","frequency of blood"]);
+    var hpi_gi_constipation_pain=new document_choice("pain with stooling",hpi_gi_constipation);
+    var hpi_gi_constipation_infrequent=new document_choice("infrequent stools",hpi_gi_constipation);
+    var hpi_gi_constipation_frequency= new document_quantity("number of stools",hpi_gi_constipation,"",["","pre day","per week"]);
+    var hpi_gi_constipation_history=new document_text_history("constipation-history",hpi_gi_constipation);
+    
+    var hpi_gi_vomitting = new document_option_set("vomitting",hpi_gi);
+    var hpi_gi_vomitting_choice1= new document_choice("non-bilious",hpi_gi_vomitting);
+    var hpi_gi_vomitting_choice2= new document_choice("non-bloody",hpi_gi_vomitting);    
+    var hpi_gi_vomitting_choice3= new document_choice("green",hpi_gi_vomitting);    
+    var hpi_gi_vomitting_choice4= new document_choice("yellow",hpi_gi_vomitting);    
+    var hpi_gi_vomitting_choice5= new document_choice("mucous",hpi_gi_vomitting);    
+    var hpi_gi_vomitting_choice6= new document_choice("partially digested food/milk",hpi_gi_vomitting);    
+    var hpi_gi_vomitting_choice7= new document_choice("projectile",hpi_gi_vomitting);
+    
+    var hpi_gi_vomitting_history = new document_text_history("vomitting-history",hpi_gi_vomitting);
+    var hpi_gi_vomitting_duration = new document_duration("vomitting-duration",hpi_gi_vomitting);    
+
+    // End GI;
+    
+    // Begin Heme
+    var hpi_heme= new document_section("Hematological",hpi);
+    var hpi_heme_photo = set_and_duration("received phototheray in hospital",hpi_heme);
+    var hpi_heme_color = new document_option_set("concern about yellow color of",hpi_heme);
+    var hpi_heme_color_eyes = new document_choice("eyes",hpi_heme_color);
+    var hpi_heme_color_skin = new document_choice("skin",hpi_heme_color);
+    var hpi_heme_history = new document_text_history("heme-history",hpi_heme);
+    var hpi_heme_duration= new document_duration("heme-duration",hpi_heme);
+    // End Heme
+    
+    // Begin gu
+    var hpi_gu= new document_section("Genitourinary",hpi);
+    var hpi_gu_discharge = new document_option_set("discharge from vagina",hpi_gu);
+    var hpi_gu_discharge_mucous = new document_choice("mucous",hpi_gu_discharge);
+    var hpi_gu_discharge_blood = new document_choice("blood",hpi_gu_discharge);
+    
+    var hpi_gu_foreskin= new document_option_set("foreskin concern",hpi_gu);
+    var hpi_gu_foreskin_history= new document_text_history("foreskin concern-history",hpi_gu_foreskin);    
+    var hpi_gu_foreskin_duration = new document_duration("foreskin concern-duration",hpi_gu_foreskin);
+    
+    var hpi_gu_dysuria= new document_option_set("dysuria",hpi_gu);
+    var hpi_gu_dysuria_history= new document_text_history("dysuria-history",hpi_gu_dysuria);    
+    var hpi_gu_dysuria_duration = new document_duration("dysuria-duration",hpi_gu_dysuria);  
+    
+
+    var hpi_gu_blood= new document_option_set("blood in diaper",hpi_gu);
+    var hpi_gu_blood_red = new document_choice("bright red",hpi_gu_blood);
+    var hpi_gu_blood_brick = new document_choice("brick color",hpi_gu_blood);
+    // end gu
+    
+    // begin derm
     var hpi_skin= new document_section("Skin",hpi);    
-
+    var hpi_skin_history = new document_text_history("skin-history",hpi_skin);
+    var hpi_skin_duration= new document_duration("skin-duration",hpi_skin);
+    
+    var hpi_skin_rash= set_and_duration("rash",hpi_skin);
+    var hpi_skin_rash_location1 = new document_choice("diaper area",hpi_skin_rash);
+    var hpi_skin_rash_location2 = new document_choice("upper extermities",hpi_skin_rash);
+    var hpi_skin_rash_location3 = new document_choice("lower exteremities",hpi_skin_rash);
+    var hpi_skin_rash_location4 = new document_choice("face",hpi_skin_rash);
+    var hpi_skin_rash_location5 = new document_choice("cheeks",hpi_skin_rash);
+    var hpi_skin_rash_location6 = new document_choice("forehead",hpi_skin_rash);
+    var hpi_skin_rash_location7 = new document_choice("scalp",hpi_skin_rash);
+    var hpi_skin_rash_location8 = new document_choice("abdomen",hpi_skin_rash);
+    var hpi_skin_rash_location9 = new document_choice("chest",hpi_skin_rash);
+    var hpi_skin_rash_location10 = new document_choice("back",hpi_skin_rash);
+    var hpi_skin_rash_location11 = new document_choice("buttocks",hpi_skin_rash);
+    var hpi_skin_rash_location_side = new document_side("rash-side",hpi_skin_rash);
+    var hpi_skin_rash_choice1 = new document_choice("pruritic/itchy",hpi_skin_rash);    
+    var hpi_skin_rash_choice2 = new document_choice("bump on breast",hpi_skin_rash);    
+    
+    // end derm
     var hpi_ortho= new document_section("Orthopedic",hpi);  
-    var hpi_ortho_text = new document_text_history("Orthopedic-history",hpi)
+    var hpi_ortho_text = new document_text_history("Orthopedic-history",hpi_ortho);
 
     var hpi_neuro= new document_section("Neurologic",hpi);
     var hpi_neuro_flat=new document_option_set("Flat spot on head",hpi_neuro);
