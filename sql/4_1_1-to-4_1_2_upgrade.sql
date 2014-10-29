@@ -206,7 +206,6 @@ UPDATE procedure_order AS po, procedure_order_code AS pc, procedure_type AS pt
   SET po.lab_id = pt.lab_id WHERE
   po.lab_id = 0 AND
   pc.procedure_order_id = po.procedure_order_id AND
-  pt.procedure_type_id = pc.procedure_type_id AND
   pt.lab_id != 0;
 #EndIf
 
