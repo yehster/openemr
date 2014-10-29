@@ -661,6 +661,37 @@ if (!$alertmsg && ($_POST['bn_save'] || $_POST['bn_save_close'])) {
 }
 
 $billresult = getBillingByEncounter($pid, $encounter, "*");
+if (!$billresult)
+{
+  //no bill lines in the database found, attempt to copy the entries from a previous patient encounter
+  
+  //find the encounter id of the most recent visit that has active fee sheet items
+  $bill_res = sqlStatement("select encounter from billing where pid=$pid and activity=1 and encounter < $encounter and code_type != 'COPAY' order by encounter desc limit 1");
+  
+  if (sqlNumRows($bill_res) > 0)
+  {
+    $last_encounter_id = sqlFetchArray($bill_res);
+    $last_encounter_id = $last_encounter_id['encounter'];
+    
+    //now we can grab all the active billing lines from the last encounter
+    $bill_res = sqlStatement("select * from billing where pid=$pid and activity=1 and encounter=$last_encounter_id and code_type != 'COPAY' order by id");
+    
+    //$lb is short for "last bill", made short due to variable name length and number of times used in the coming line
+    //(having such short, obscure variable names is usually a bad idea)
+    while ($lb = sqlFetchArray($bill_res))
+    {
+      addBilling($encounter,$lb['code_type'],$lb['code'],$lb['code_text'],$pid,"1",$lb['provider_id'],$lb['modifier'],$lb['units'],$lb['fee'],'',$lb['justify']);
+    }
+    /* addBilling function header, for quick reference
+    addBilling($encounter_id, $code_type, $code, $code_text, $pid,
+    $authorized="0", $provider, $modifier="", $units="", $fee="0.00",
+    $ndc_info='', $justify='', $billed=0)
+    */
+    
+    //refresh the billing info for the rest of the script
+    $billresult = getBillingByEncounter($pid, $encounter, "*");
+  }  
+}
 ?>
 <html>
 <head>
@@ -1308,3 +1339,17 @@ if ($alertmsg) {
 </body>
 </html>
 <?php require_once("review/initialize_review.php"); ?>
+<script type='text/javascript' charset='utf-8'>
+jQuery(document).ready(function(){
+  //if nothing is selected for the dropdown options, select the first value
+  //value=3 is samuel salas
+  if (jQuery('select[name="ProviderID"]').val() == "")
+    jQuery('select[name="ProviderID"]').val(3)
+  if (jQuery('select[name="SupervisorID"]').val() == "")
+    jQuery('select[name="SupervisorID"]').val(3);
+  jQuery('select[name*="provid"]').each(function(item,element){
+    if (jQuery(element).val() == "")
+      jQuery(element).val(3)
+  });
+});
+</script>
