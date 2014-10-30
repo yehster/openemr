@@ -633,6 +633,22 @@ foreach ($providers as $provider) {
 	    if($eventtype['pc_cattype']==1)
 	    $pccattype = 'true';
             $patientid = $event['pid'];
+	    
+	    /* Paul phone number addition start*/
+	    if (!empty($patientid))
+	    {
+	      $phone_sql_result = sqlQuery("select phone_home as Home, phone_biz as Work, phone_cell as Cell from patient_data where id=$patientid");
+	    }
+	    $phone_numbers = array();
+	    foreach ($phone_sql_result as $phone_type => $phone_number)
+	    {
+	      if ($phone_number != '')
+	      {
+		$phone_numbers[$phone_type] = $phone_number;
+	      }
+	    }
+	    /* Paul phone number addition end*/
+	                
             $commapos = strpos($event['patient_name'], ",");
             $lname = substr($event['patient_name'], 0, $commapos);
 	    $fname = substr($event['patient_name'], $commapos + 2);
@@ -682,6 +698,13 @@ foreach ($providers as $provider) {
                 if ($patientid) {
                     // include patient name and link to their details
                     $link_title = htmlspecialchars($fname,ENT_QUOTES)." ".htmlspecialchars($lname,ENT_QUOTES). " \n";
+
+		    /* Paul phone number addition start*/
+		    foreach($phone_numbers as $phone_type=>$phone_number)
+		    {
+		       $link_title .= xl($phone_type) . ": $phone_number\n";
+		    }
+                    
                     $link_title .= xl('Age') . ": ".$patient_age."\n" . xl('DOB') . ": ".$patient_dob.htmlspecialchars($comment, ENT_QUOTES)."\n";
                     $link_title .= "(" . xl('Click to view') . ")";
                     $content .= "<a href='javascript:goPid($patientid)' title='$link_title'>";
