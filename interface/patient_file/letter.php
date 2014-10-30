@@ -81,7 +81,7 @@ if ($_POST['formaction']=="generate") {
     $frow = sqlQuery("SELECT * FROM users WHERE id = '$form_from'");
     $trow = sqlQuery("SELECT * FROM users WHERE id = '$form_to'");
 
-    $datestr = date('j F Y', strtotime($form_date));
+    $datestr = date('F j, Y', strtotime($form_date));
     $from_title = $frow['title'] ? $frow['title'] . ' ' : '';
     $to_title   = $trow['title'] ? $trow['title'] . ' ' : '';
 
@@ -441,7 +441,7 @@ function insertAtCursor(myField, myValue) {
 
   <td>
    <input type='text' size='10' name='form_date' id='form_date'
-    value='<?php echo date('Y-m-d'); ?>'
+    value='<?php echo date('Y, m, d'); ?>'
     title='<?php xl('yyyy-mm-dd date of this letter','e'); ?>'
     onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' />
    <img src='../pic/show_calendar.gif' align='absbottom' width='24' height='22'
