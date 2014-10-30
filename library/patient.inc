@@ -1723,5 +1723,24 @@ function is_patient_deceased($pid,$date='') {
     return $results['days_deceased'];
   }
 }
+//Given a patient id, return the name of the most recent provider
+function get_most_recent_provider_name($pid)
+{
+  $result = sqlQuery("
+SELECT u.lname, u.fname, u.mname, u.info
+FROM form_encounter
+INNER JOIN patient_data ON form_encounter.pid = patient_data.id
+INNER JOIN users u ON form_encounter.provider_id = u.id
+WHERE patient_data.id = $pid
+ORDER BY form_encounter.date DESC 
+LIMIT 1"
+);
+  
+  $name = $result['fname'];
+  if ($result['fname'] != "") $name .= " ".$result['mname'];
+  $name .= " ".$result['lname'];
+  if ($result['info']) $name .= ", ".$result['info'];
+  return empty($result)?"":$name;
+}
 
 ?>

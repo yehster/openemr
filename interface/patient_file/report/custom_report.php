@@ -491,6 +491,7 @@ if ($printable) {
      } 
 ?>
 <h2><?php echo $facility['name'] ?></h2>
+<div><strong><?php echo get_most_recent_provider_name($pid); ?></strong></div>
 <?php echo $facility['street'] ?><br>
 <?php echo $facility['city'] ?>, <?php echo $facility['state'] ?> <?php echo $facility['postal_code'] ?><br clear='all'>
 <?php echo $facility['phone'] ?><br>
@@ -988,7 +989,7 @@ foreach ($ar as $key => $val) {
 
                 if ($res[1] == 'newpatient') {
                     // display billing info
-                    $bres = sqlStatement("SELECT b.date, b.code, b.code_text " .
+                    $bres = sqlStatement("SELECT b.date, b.code, b.modifier, b.code_text, b.justify " .
                       "FROM billing AS b, code_types AS ct WHERE " .
                       "b.pid = ? AND " .
                       "b.encounter = ? AND " .
@@ -999,7 +1000,7 @@ foreach ($ar as $key => $val) {
                       array($pid, $form_encounter));
                     while ($brow=sqlFetchArray($bres)) {
                         echo "<span class='bold'>&nbsp;".xl('Procedure').": </span><span class='text'>" .
-                            $brow['code'] . " " . $brow['code_text'] . "</span><br>\n";
+                            $brow['code'] . "." . $brow['modifier'] . " " . $brow['code_text'] . "," . " " .xl('Related Diagnosis'). ":" . " " . $brow['justify'] ."</span><br>\n";
                     }
                 }
 
