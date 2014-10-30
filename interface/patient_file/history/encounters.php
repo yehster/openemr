@@ -311,6 +311,8 @@ $getStringForPage="&pagesize=".$pagesize."&pagestart=".$pagestart;
 <?php } else { ?>
 <a href='encounters.php?billing=1&issue=<?php echo $issue.$getStringForPage; ?>' onclick='top.restoreSession()' style='font-size:8pt'>(<?php echo htmlspecialchars( xl('To Billing View'), ENT_NOQUOTES); ?>)</a>
 <?php } ?>
+<a href='<?php echo $web_root; ?>/interface/patient_file/history/itemizedbilling.php' target='_blank' style='font-size:8pt'>(Itemized Billing View)</a>
+
 
 <span style="float:right">
     <?php echo htmlspecialchars( xl('Results per page'), ENT_NOQUOTES); ?>:
@@ -355,7 +357,7 @@ $getStringForPage="&pagesize=".$pagesize."&pagestart=".$pagestart;
 <?php if (!$issue) { ?>
   <th><?php echo htmlspecialchars( xl('Issue'), ENT_NOQUOTES);       ?></th>
 <?php } ?>
-  <th><?php echo htmlspecialchars( xl('Reason/Form'), ENT_NOQUOTES); ?></th>
+  <th style='width:70%;'><?php echo htmlspecialchars( xl('Reason/Form'), ENT_NOQUOTES); ?></th>
   <th><?php echo htmlspecialchars( xl('Provider'), ENT_NOQUOTES);    ?></th>
 <?php } ?>
 
@@ -582,12 +584,28 @@ while ($result4 = sqlFetchArray($res4)) {
                   echo "</div>";
                 }
                 else {
+                  /*
                   echo "<div " .
                     "onmouseover='efmouseover(this,$pid," . $result4['encounter'] .
                     ",\"$formdir\"," . $enc['form_id'] . ")' " .
                     "onmouseout='ttMouseOut()'>";
                   echo htmlspecialchars(xl_form_title($enc['form_name']), ENT_NOQUOTES);
                   echo "</div>";
+                   */
+                  /* Paul - don't use the ajax functionality, just place the SOAP text directly in the issue box */
+                  $sql = sqlStatement("select form_soap.* from
+                  forms inner join form_soap on forms.form_id = form_soap.id
+                  where forms.form_name = 'SOAP'
+                  and deleted = 0
+                  and forms.encounter = " . $result4['encounter']);
+                  
+                  if ($row = sqlFetchArray($sql))
+                  {
+                    printf("<b>Subjective:</b> %s<br />\n", $row['subjective']);
+                    printf("<b>Objective:</b> %s<br />\n", $row['objective']);
+                    printf("<b>Assessment:</b> %s<br />\n", $row['assessment']);
+                    printf("<b>Plan:</b> %s<br />\n", $row['plan']);
+                  }                    
                 }
 
             } // end encounter Forms loop
@@ -664,6 +682,11 @@ while ($result4 = sqlFetchArray($res4)) {
                     $title = htmlspecialchars(($iter2['code_text']), ENT_QUOTES);
                     $codekey = $iter2['code'];
                     $codekeydisp = $iter2['code_type']." - ".$iter2['code'];
+                    // If it exists append the modifier to the codekeydisp
+                    if ($iter2['modifier'])
+                    {
+                        $codekeydisp.=':' . $iter2['modifier'];
+                    }
                     if ($iter2['code_type'] == 'COPAY') {
                       $codekey = 'CO-PAY';
                       $codekeydisp = xl('CO-PAY');
