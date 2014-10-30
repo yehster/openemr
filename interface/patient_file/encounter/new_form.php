@@ -198,6 +198,10 @@ if (!empty($reg)) {
       }
   }
   $StringEcho.= '</table></div></li>';
+  $StringEcho .= "<li><a onclick=\"openNewForm('$web_root/interface/patient_file/encounter/load_form.php?formname=fee_sheet')\" href=\"JavaScript:void(0);\">Fee Sheet</a></li>";
+  if ( $encounterLocked === false ) {
+    $StringEcho .= "<li><a onclick=\"openNewForm('$web_root/interface/patient_file/encounter/load_form.php?formname=soap')\" href=\"JavaScript:void(0);\">SOAP</a></li>";
+  }  
 }
 if($StringEcho){
   $StringEcho2= '<div style="clear:both"></div>';
