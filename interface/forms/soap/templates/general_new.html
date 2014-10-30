@@ -1,7 +1,24 @@
 <html>
 <head>
 {php}html_header_show();{/php}
+<script type='text/javascript' src='{$FORM_ACTION}/library/js/jquery-1.9.1.min.js' ></script>
 {literal}
+<script type='text/javascript' charset='utf-8'>
+function loadlastSOAP()
+{
+  var pid = jQuery('input[name="pid"]').val();
+{/literal}
+  jQuery.getJSON("{$FORM_ACTION}/interface/forms/soap/loadlastSOAP.php"
+{literal}
+  , {pid:pid},function(data){
+    if (data["Error"] !== undefined) return;
+    jQuery('textarea[name="assessment"]').val(data['assessment']);
+    jQuery('textarea[name="objective"]').val(data['objective']);
+    jQuery('textarea[name="plan"]').val(data['plan']);
+    jQuery('textarea[name="subjective"]').val(data['subjective']);
+  });
+}
+</script>
 
  <style type="text/css" title="mystyles" media="all">
 <!--
@@ -41,34 +58,43 @@ a {
 <p><span class="title">{php} xl('SOAP','e'); {/php}</span></p>
 <form name="soap" method="post" action="{$FORM_ACTION}/interface/forms/soap/save.php"
  onsubmit="return top.restoreSession()">
-<table>
+<table style="width:100%;">
 	<tr>
-		<td align="left">{php} xl('Subjective','e'); {/php}</td>
-		<td width="90%">
-			<textarea name="subjective" cols="60" rows="6">{$data->get_subjective()}</textarea>
-		</td>
+	  <td colspan="2">
+	      <input type="button" name="useprev" value="Use Previous" onclick='loadlastSOAP()' />
+	      <input type="submit" name="Submit" value={php} xl('Save Form','e','"','"'); {/php} />
+	      <a href="{$DONT_SAVE_LINK}" class="link" onclick="top.restoreSession()">[{php} xl("Don't Save","e"); {/php}]</a>
+	  </td>
 	</tr>
+	<tr>
+	  <td align="left">{php} xl('Subjective','e'); {/php}</td>
+	  <td width="90%">
+		  <textarea name="subjective" style="width:95%;" rows="6">{$data->get_subjective()}</textarea>
+	  </td>
 	<tr>
 		<td align="left">{php} xl('Objective','e'); {/php}</td>
 		<td width="90%">
-			<textarea name="objective" cols="60" rows="6">{$data->get_objective()}</textarea>
+			<textarea name="objective" style="width:95%;" rows="6">{$data->get_objective()}</textarea>
 		</td>
 	</tr>
 	<tr>
 		<td align="left">{php} xl('Assessment','e'); {/php}</td>
 		<td width="90%">
-			<textarea name="assessment" cols="60" rows="6">{$data->get_assessment()}</textarea>
+			<textarea name="assessment" style="width:95%;" rows="6">{$data->get_assessment()}</textarea>
 		</td>
 	</tr>
 	<tr>
 		<td align="left">{php} xl('Plan','e'); {/php}</td>
 		<td width="90%">
-			<textarea name="plan" cols="60" rows="6">{$data->get_plan()}</textarea>
+			<textarea name="plan" style="width:95%;" rows="6">{$data->get_plan()}</textarea>
 		</td>
 	</tr>
 	<tr>
-		<td><input type="submit" name="Submit" value={php} xl('Save Form','e','"','"'); {/php}</td>
-    <td><a href="{$DONT_SAVE_LINK}" class="link" onclick="top.restoreSession()">[{php} xl("Don't Save","e"); {/php}]</a></td>
+    <td colspan="2">
+	<input type="button" name="useprev" value="Use Previous" onclick='loadlastSOAP()' />
+	<input type="submit" name="Submit" value={php} xl('Save Form','e','"','"'); {/php} />
+	<a href="{$DONT_SAVE_LINK}" class="link" onclick="top.restoreSession()">[{php} xl("Don't Save","e"); {/php}]</a>
+    </td>
 	</tr>
 </table>
 <input type="hidden" name="id" value="{$data->get_id()}" />
