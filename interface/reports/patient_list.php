@@ -58,8 +58,9 @@ else {
 /* specifically include & exclude from printing */
 @media print {
     #report_parameters {
-        visibility: hidden;
-        display: none;
+        visibility: visible;
+        display: inline;
+        margin-bottom: 20px;
     }
     #report_parameters_daterange {
         visibility: visible;
@@ -117,7 +118,7 @@ else {
       <td>
 	      <?php
          generate_form_field(array('data_type' => 10, 'field_id' => 'provider',
-           'empty_title' => '-- All --'), $form_provider);
+           'empty_title' => '-- All --'), $form_provider ? $form_provider : '');
 	      ?>
       </td>
 			<td class='label'>
@@ -203,20 +204,20 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
  <thead>
   <th> <?php xl('Last Visit','e'); ?> </th>
   <th> <?php xl('Patient','e'); ?> </th>
+  <th> <?php xl('DOB','e'); ?> </th>  
   <th> <?php xl('ID','e'); ?> </th>
   <th> <?php xl('Street','e'); ?> </th>
   <th> <?php xl('City','e'); ?> </th>
   <th> <?php xl('State','e'); ?> </th>
   <th> <?php xl('Zip','e'); ?> </th>
   <th> <?php xl('Home Phone','e'); ?> </th>
-  <th> <?php xl('Work Phone','e'); ?> </th>
  </thead>
  <tbody>
 <?php
   } // end not export
   $totalpts = 0;
   $query = "SELECT " .
-   "p.fname, p.mname, p.lname, p.street, p.city, p.state, " .
+   "p.fname, p.mname, p.lname, p.DOB, p.street, p.city, p.state, " .
    "p.postal_code, p.phone_home, p.phone_biz, p.pid, p.pubpid, " .
    "count(e.date) AS ecount, max(e.date) AS edate, " .
    "i1.date AS idate1, i2.date AS idate2, " .
@@ -292,6 +293,9 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
     <?php echo htmlspecialchars( $row['lname'] . ', ' . $row['fname'] . ' ' . $row['mname'] ) ?>
   </td>
   <td>
+   <?php echo $row['DOB'] ?>
+  </td>  
+  <td>
    <?php echo $row['pubpid'] ?>
   </td>
   <td>
@@ -308,9 +312,6 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
   </td>
   <td>
    <?php echo $row['phone_home'] ?>
-  </td>
-  <td>
-   <?php echo $row['phone_biz'] ?>
   </td>
  </tr>
 <?php
