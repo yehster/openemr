@@ -372,7 +372,21 @@ while ($lrow = sqlFetchArray($lres)) {
 
 <form action='new_comprehensive_save.php' name='demographics_form' method='post' onsubmit='return validate(this)'>
 
-<span class='title'><?php xl('Search or Add Patient','e'); ?></span>
+<span class='title'><?php xl('Search or Add Patient','e'); ?>
+
+
+<?php if (!$SHORT_FORM) echo "  <center>\n"; ?>                           
+
+<?php if ($WITH_SEARCH) { ?>
+<input type="button" id="search" value=<?php xl('Search','e','\'','\''); ?>
+ style='background-color:<?php echo $searchcolor; ?>' />
+&nbsp;&nbsp;
+<?php } ?>
+<input type="button" name='create' id="create" value=<?php xl('Create New Patient','e','\'','\''); ?> />
+
+
+</center>
+</span>
 
 <table width='100%' cellpadding='0' cellspacing='8'>
  <tr>
