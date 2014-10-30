@@ -88,7 +88,7 @@ function postError($msg) {
   //
   $query = "( " .
    "SELECT " .
-   "e.pc_eventDate, e.pc_startTime, " .
+   "e.pc_eventDate, e.pc_startTime, e.pc_apptstatus, " .
    "fe.encounter, fe.date AS encdate, " .
    "f.authorized, " .
    "p.fname, p.lname, p.pid, p.pubpid, " .
@@ -109,10 +109,10 @@ function postError($msg) {
    $query .= "AND e.pc_facility = '$form_facility' ";
   }
   // $query .= "AND ( e.pc_catid = 5 OR e.pc_catid = 9 OR e.pc_catid = 10 ) " .
-  $query .= "AND e.pc_pid != '' AND e.pc_apptstatus != '?' " .
+  $query .= "AND e.pc_pid != '' " . //AND e.pc_apptstatus != '?' " .
    ") UNION ( " .
    "SELECT " .
-   "e.pc_eventDate, e.pc_startTime, " .
+   "e.pc_eventDate, e.pc_startTime, e.pc_apptstatus,  " .
    "fe.encounter, fe.date AS encdate, " .
    "f.authorized, " .
    "p.fname, p.lname, p.pid, p.pubpid, " .
@@ -121,7 +121,7 @@ function postError($msg) {
    "LEFT OUTER JOIN openemr_postcalendar_events AS e " .
    "ON fe.date = e.pc_eventDate AND fe.pid = e.pc_pid AND " .
    // "( e.pc_catid = 5 OR e.pc_catid = 9 OR e.pc_catid = 10 ) " .
-   "e.pc_pid != '' AND e.pc_apptstatus != '?' " .
+   "e.pc_pid != '' " . //AND e.pc_apptstatus != '?' " .
    "LEFT OUTER JOIN forms AS f ON f.pid = fe.pid AND f.encounter = fe.encounter AND f.formdir = 'newpatient' " .
    "LEFT OUTER JOIN patient_data AS p ON p.pid = fe.pid " .
    // "LEFT OUTER JOIN users AS u ON BINARY u.username = BINARY f.user WHERE ";
@@ -294,6 +294,7 @@ function postError($msg) {
   <th align='right'> <?php  xl('Copays','e'); ?>&nbsp; </th>
   <th> <?php  xl('Billed','e'); ?> </th>
   <th> &nbsp;<?php  xl('Error','e'); ?> </th>
+  <th> &nbsp;<?php  xl('Status','e'); ?> </th>  
  </thead>
  <tbody>
 <?php
@@ -304,7 +305,8 @@ function postError($msg) {
    $patient_id = $row['pid'];
    $encounter  = $row['encounter'];
    $docname    = $row['docname'] ? $row['docname'] : xl('Unknown');
-
+   $pc_apptstatus = $row['pc_apptstatus'];
+   
    if ($docname != $docrow['docname']) {
     endDoctor($docrow);
    }
@@ -456,6 +458,9 @@ function postError($msg) {
   <td style='color:#cc0000'>
    <?php echo $errmsg; ?>&nbsp;
   </td>
+  <td style='color:#cc0000'>
+   <?php echo $pc_apptstatus; ?>&nbsp;
+  </td>  
  </tr>
 <?php
    } // end of details line
