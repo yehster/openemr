@@ -136,13 +136,15 @@ function create_statement($stmt) {
 
  // Text only labels
  
- $label_addressee = xl('ADDRESSEE');
- $label_remitto = xl('REMIT TO');
+ $label_addressee = xl('');
+ $label_remitto = xl('REMIT TO:');
  $label_chartnum = xl('Chart Number');
  $label_insinfo = xl('Insurance information on file');
  $label_totaldue = xl('Total amount due');
- $label_payby = xl('If paying by');
- $label_cards = xl('VISA/MC/AMEX/Dis');  
+ $label_payby = xl('We can accept payment by cash, check,');
+ $label_pat = xl('Patient');
+ $label_phys = xl('Dr. Sam Salas D.C.');
+ $label_cards = xl('VISA/MC/AMEX/Dis.');  
  $label_cardnum = xl('Card');
  $label_expiry = xl('Exp');
  $label_sign = xl('Signature');
@@ -151,6 +153,8 @@ function create_statement($stmt) {
  $label_visit = xl('Visit Date');
  $label_desc = xl('Description');
  $label_amt = xl('Amount');
+ $label_paymt = xl('Payment Amount');
+ $label_due = xl('Balance due');
 
  // This is the text for the top part of the page, up to but not
  // including the detail lines.  Some examples of variable fields are:
@@ -160,24 +164,27 @@ function create_statement($stmt) {
  // Note that "\n" is a line feed (new line) character.
  // reformatted to handle i8n by tony
 
-$out  = sprintf("%-30s %-23s %-s\n",$clinic_name,$stmt['patient'],$stmt['today']);
+//$out  = sprintf("%-30s %-s %-s\n",$clinic_name,$stmt['patient'],$stmt['today']);
+$out  = sprintf("%-30s %s: %s\n", $label_phys,$label_pat,$stmt['patient']);
 $out .= sprintf("%-30s %s: %-s\n",$clinic_addr,$label_chartnum,$stmt['pid']);
 $out .= sprintf("%-30s %-s\n",$clinic_csz,$label_insinfo);
-$out .= sprintf("%-30s %s: %-s\n",null,$label_totaldue,null);
-$out .= "\n\n";
+//$out .= sprintf("%-30s %s: %-s\n",null,$label_totaldue,null);
+$out .= "\n";
 $out .= sprintf("%-30s %-s\n",$label_addressee,$label_remitto);
 $out .= sprintf("%-32s %s\n",$stmt['to'][0],$remit_name);
 $out .= sprintf("%-32s %s\n",$stmt['to'][1],$remit_addr);
 $out .= sprintf("%-32s %s\n",$stmt['to'][2],$remit_csz);
 
 if($stmt['to'][3]!='')//to avoid double blank lines the if condition is put.
- 	$out .= sprintf("   %-32s\n",$stmt['to'][3]);
+$out .= sprintf("   %-32s\n",$stmt['to'][3]);
 $out .= sprintf("_________________________________________________________________\n");
+//$out .= "\n";
+$out .= sprintf("%-s %-s\n",$label_payby,$label_cards);
 $out .= "\n";
-$out .= sprintf("%-32s\n",$label_payby.' '.$label_cards);
-$out .= "\n";
-$out .= sprintf("%s_____________________  %s______ %s___________________\n",
+$out .= sprintf("%-11s:%-19s %s___________________\n\n",$label_due,$stmt['amount'],$label_paymt);
+$out .= sprintf("%s_____________________  %s______ %s___________________\n\n",
                 $label_cardnum,$label_expiry,$label_sign);
+//$out .= sprintf("%-11s:%s %s________________\n",$label_due,$stmt['amount'],$label_paymt);
 $out .= sprintf("%-20s %s\n",null,$label_retpay);
 $out .= sprintf("-----------------------------------------------------------------\n");
 $out .= "\n";
@@ -188,16 +195,52 @@ $out .= "\n";
  
  // This must be set to the number of lines generated above.
  //
- $count = 21;
+ $count = 22;
 
  // This generates the detail lines.  Again, note that the values must
  // be specified in the order used.
  //
  foreach ($stmt['lines'] as $line) {
   $description = $line['desc'];
-  $tmp = substr($description, 0, 14);
-  if ($tmp == 'Procedure 9920' || $tmp == 'Procedure 9921')
-   $description = xl('Office Visit');
+  
+  if (strlen($description) == 18){
+    $tmp = substr($description, 0, 18);
+  } else {
+  
+//  if (substr($tmp, 15, 1) /= ':' ) { 
+	  $tmp = substr($description, 0, 15) . xl('   ');
+  }
+  $tmplast = substr($tmp, -8);
+  //if ($tmp == 'Procedure 9920' || $tmp == 'Procedure 9921') {
+	if (preg_match('#^Procedure 9920#', $tmp) === 1 || preg_match('#^Procedure 9921#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Evaluation/Management ' ) ;
+	} else if (preg_match('#^Procedure 9927#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Consultation ') ;
+	} else if (preg_match('#^Procedure 72#', $tmp) === 1 || preg_match('#^Procedure 73#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Radiographic Procedure ') ;
+	} else if (preg_match('#^Procedure 9781#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Acupuncture Procedure ') ;
+	} else if (preg_match('#^Procedure 9780#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Nutrition Assessment ') ;
+	} else if (preg_match('#^Procedure 97535#', $tmp) === 1 ) {
+	 	$description = $tmplast . xl(' Activities of Daily Living ') ;
+	} else if (preg_match('#^Procedure 97530#', $tmp) === 1 ) {
+		$description = $tmplast . xl(' Therapy ') ;
+	} else if (preg_match('#^Procedure 970#', $tmp) === 1 ) {
+		 	$description = $tmplast . xl(' Modalities ') ;
+	} else if (preg_match('#^Procedure 971#', $tmp) === 1 ) {
+		 	$description = $tmplast . xl(' Therapy ') ;
+	} else if (preg_match('#^Procedure 9894#', $tmp) === 1 ) {
+	 	$description = $tmplast . xl(' Chiropractic Procedure ') ;
+	} else if (preg_match('#^Procedure 99070#', $tmp) === 1 ) {
+	 	$description = $tmplast . xl(' Biofreeze ') ;
+	} else if (preg_match('#^Procedure 99002#', $tmp) === 1 ) {
+	 	$description = $tmplast . xl(' Shipping and handling ') ;
+	} else if (preg_match('#^Procedure L3030#', $tmp) === 1 ) {
+	 	$description = $tmplast . xl(' Custom Orthotics ') ;
+	}
+
+
 
   $dos = $line['dos'];
   ksort($line['detail']);
@@ -240,24 +283,26 @@ $out .= "\n";
  // Fixed text labels
  $label_ptname = xl('Name');
  $label_today = xl('Date');
- $label_due = xl('Due');
- $label_thanks = xl('Thank you for choosing');
- $label_call = xl('Please call if any of the above information is incorrect');
- $label_prompt = xl('We appreciate prompt payment of balances due');
- $label_dept = xl('Billing Department');
+ $label_thanks = xl('Thank you for choosing us for your health care needs.');
+ $label_call = xl('Please contact our office at');
+ $label_call2 = xl('to make payment arrangements.');
+ $label_prompt = xl('We appreciate prompt payment of balances due.');
+ $label_dept = xl('');
  
  // This is the bottom portion of the page.
  
- $out .= sprintf("%-s: %-25s %-s: %-14s %-s: %8s\n",$label_ptname,$stmt['patient'],
+ $out .= sprintf("%-4s: %-14s %34s: %8s\n",
                  $label_today,$stmt['today'],$label_due,$stmt['amount']);
+ $out .= sprintf("%-s: %-35s\n\n",$label_ptname,$stmt['patient']);
  $out .= sprintf("__________________________________________________________________\n");
  $out .= "\n";
- $out .= sprintf("%-s\n",$label_call);
+$out .= sprintf("%-s\n\n",$label_thanks);
+ $out .= sprintf("%-s %s %s\n",$label_call,$billing_phone,$label_call2);
+ //.$out .= sprintf("  %-s",$billing_phone,"%-s.");
  $out .= sprintf("%-s\n",$label_prompt);
  $out .= "\n";
  $out .= sprintf("%-s\n",$billing_contact);
  $out .= sprintf("  %-s\n",$label_dept);
- $out .= sprintf("  %-s\n",$billing_phone);
  $out .= "\014"; // this is a form feed
  
  return $out;
