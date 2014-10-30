@@ -39,6 +39,7 @@ $fake_register_globals=false;
  require_once("$srcdir/edi.inc");
  require_once("$srcdir/invoice_summary.inc.php");
  require_once("$srcdir/clinical_rules.php");
+ require_once("$srcdir/billing.inc");
 
   if ($GLOBALS['concurrent_layout'] && isset($_GET['set_pid'])) {
   include_once("$srcdir/pid.inc");
@@ -430,6 +431,7 @@ function setMyPatient() {
  var EncounterDateArray = new Array;
  var CalendarCategoryArray = new Array;
  var EncounterIdArray = new Array;
+ var EncounterBilledArray=new Array;
  var Count = 0;
 <?php
   //Encounter details are stored to javacript as array.
@@ -441,12 +443,13 @@ function setMyPatient() {
  EncounterIdArray[Count] = '<?php echo htmlspecialchars($rowresult4['encounter'], ENT_QUOTES); ?>';
  EncounterDateArray[Count] = '<?php echo htmlspecialchars(oeFormatShortDate(date("Y-m-d", strtotime($rowresult4['date']))), ENT_QUOTES); ?>';
  CalendarCategoryArray[Count] = '<?php echo htmlspecialchars(xl_appt_category($rowresult4['pc_catname']), ENT_QUOTES); ?>';
+ EncounterBilledArray[Count]=<?php echo isEncounterBilled($pid,$rowresult4['encounter'])?"true":"false"; ?>;
  Count++;
 <?php
     }
   }
 ?>
- parent.left_nav.setPatientEncounter(EncounterIdArray,EncounterDateArray,CalendarCategoryArray);
+ parent.left_nav.setPatientEncounter(EncounterIdArray,EncounterDateArray,CalendarCategoryArray,EncounterBilledArray);        
 <?php } // end setting new pid ?>
  parent.left_nav.setRadio(window.name, 'dem');
  parent.left_nav.syncRadios();

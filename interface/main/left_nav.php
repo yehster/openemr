@@ -801,7 +801,7 @@ function clearactive() {
   reloadIssues(pid);
   $(parent.Title.document.getElementById('clear_active')).show();//To display Clear Active Patient button on selecting a patient
  }
- function setPatientEncounter(EncounterIdArray,EncounterDateArray,CalendarCategoryArray) {
+  function setPatientEncounter(EncounterIdArray,EncounterDateArray,CalendarCategoryArray,EncounterBilledArray) {
  //This function lists all encounters of the patient.
  //This function writes the drop down in the top frame.
  //It is called when a new patient is create/selected from the search menu.
@@ -811,8 +811,7 @@ function clearactive() {
   str+='<option value="Past Encounter List"><?php echo htmlspecialchars( xl('Past Encounter List'), ENT_QUOTES) ?></option>';
   for(CountEncounter=0;CountEncounter<EncounterDateArray.length;CountEncounter++)
    {
-    str+='<option value="'+EncounterIdArray[CountEncounter]+'~'+EncounterDateArray[CountEncounter]+'">'+EncounterDateArray[CountEncounter]+'-'+CalendarCategoryArray[CountEncounter]+'</option>';
-   }
+    str+='<option class="'+(EncounterBilledArray[CountEncounter]?"billed":"")+'" value="'+EncounterIdArray[CountEncounter]+'~'+EncounterDateArray[CountEncounter]+'">'+EncounterDateArray[CountEncounter]+'-'+CalendarCategoryArray[CountEncounter]+'</option>';   }
   str+='</Select>';
   $(parent.Title.document.getElementById('past_encounter_block')).show();
   top.window.parent.Title.document.getElementById('past_encounter').innerHTML=str;
