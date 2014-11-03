@@ -1052,7 +1052,8 @@ $(document).ready(function(){
 
 <?php
 // Find widget is at the top for the athletic team layout.
-if ($GLOBALS['athletic_team']) {
+// Force search box to top for Salas. -KHY
+if (true || $GLOBALS['athletic_team']) {
   genFindBlock();
   echo "<hr />\n";
 }
@@ -1695,9 +1696,11 @@ if (!empty($reg)) {
 <?php
 if (!$GLOBALS['athletic_team']) {
   genPopupsList();
-  echo "<hr />\n";
+// Force search box to top for Salas. -KHY
+/*  echo "<hr />\n";
   genFindBlock();
   echo "<hr />\n";
+ */
 }
 ?>
 
