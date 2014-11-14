@@ -31,7 +31,8 @@ function refresh_codes()
 function update_display_table(data)
 {
     var rc = true; // this will be our return value
-
+    
+    data=data.replace(/^\s+|\s+$/g, '');
     // This creates a jquery object representing new DOM elements built from
     // HTML returned by the AJAX call to new.php.
     var new_info=$(data);
