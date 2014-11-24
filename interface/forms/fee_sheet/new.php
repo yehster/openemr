@@ -430,12 +430,14 @@ $visit_date = substr($visit_row['date'], 0, 10);
 $current_checksum = visitChecksum($pid, $encounter);
 // It's important to look for a checksum mismatch even if we're just refreshing
 // the display, otherwise the error goes undetected on a refresh-then-save.
+
+/*  KHY Skip checksum verification
 if (isset($_POST['form_checksum'])) {
   if ($_POST['form_checksum'] != $current_checksum) {
     $alertmsg = xl('Someone else has just changed this visit. Please cancel this page and try again.');
   }
 }
-
+*/
 // If Save or Save-and-Close was clicked, save the new and modified billing
 // lines; then if no error, redirect to $returnurl.
 //
