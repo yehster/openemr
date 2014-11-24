@@ -74,7 +74,7 @@ $ires = sqlStatement("SELECT id, type, title, begdate FROM lists WHERE " .
 jQuery(document).ready(function(){
   jQuery('select[name^="issues"] option').click(function(){
     var id = jQuery(this).val();
-    jQuery.getJSON("issue_from_id.php",{id:id},function(data){
+    jQuery.getJSON("<?php echo $webroot ?>/interface/forms/newpatient/issue_from_id.php",{id:id},function(data){
       //we only want to append a space if there is already text in the textbox
       if (data["Error"] === undefined)
         jQuery('textarea[name="reason"]').text(jQuery('textarea[name="reason"]').text()+(jQuery('textarea[name="reason"]').text()==""?"":" ")+data['title']);
