@@ -7,28 +7,34 @@
  */
 ?>
 <script type="text/html" id="visits-parameters">
-    <div>
-        <div>Clinics&nbsp;<span data-bind="visible:(!clinics_details())">Summary Only</span></div>
-        <input type="checkbox" data-bind="checked:clinics_details"/>
-        <?php echo xlt("Display Details") ?>
-        <div data-bind="foreach: clinics, visible:clinics_details">
-            <div>
-                <input type="checkbox" data-bind="checked: selected"/>
-                <span data-bind="text: name"></span>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div>Providers&nbsp;<span data-bind="visible:(!providers_details())">Summary Only</span></div>
-        <input type="checkbox" data-bind="checked:providers_details"/>
-        <?php echo xlt("Display Details") ?>
-        <div data-bind="foreach: providers, visible:providers_details">
-            <div>
-                <input type="checkbox" data-bind="checked: selected"/>
-                <span data-bind="text: lname"></span>
-            </div>
-        </div>
-    </div>
-
+    <select data-bind="options: period_options,optionsText: 'description', value: period_size"></select>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <div>Clinics&nbsp;<span data-bind="visible:(!clinics_details())">Summary Only</span></div>
+                    <input type="checkbox" data-bind="checked:clinics_details"/>
+                    <?php echo xlt("Display Details") ?>
+                    <div data-bind="foreach: clinics, visible:clinics_details">
+                        <div>
+                            <input type="checkbox" data-bind="checked: selected"/>
+                            <span data-bind="text: name"></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>Providers&nbsp;<span data-bind="visible:(!providers_details())">Summary Only</span></div>
+                    <input type="checkbox" data-bind="checked:providers_details"/>
+                    <?php echo xlt("Display Details") ?>
+                    <div data-bind="foreach: providers, visible:providers_details">
+                        <div>
+                            <input type="checkbox" data-bind="checked: selected"/>
+                            <span data-bind="text: lname"></span>,<span data-bind="text: fname"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <button data-bind="click: search_visits">Search</button>
 </script>

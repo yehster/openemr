@@ -33,7 +33,7 @@ function get_clinic_list()
 function get_provider_list()
 {
     $retval=array();
-    array_push($retval,array("id"=>"ALL","lname"=>xl("--All Providers--")));
+    array_push($retval,array("id"=>"ALL","lname"=>xl("--All Providers--"),"fname"=>""));
     $query_providers="select id,fname,lname from users where authorized!=0 and active!=0 order by lname,fname asc";
     $res=  sqlStatement($query_providers);
     while($row=sqlFetchArray($res))
@@ -61,7 +61,7 @@ function get_service_categories_list()
 $clinic_list=  get_clinic_list();
 $provider_list=get_provider_list();
 $service_categories_list=get_service_categories_list();
-$from_date=date('Y-m-d',date_sub(new DateTime(),DateInterval::createFromDateString("1 Year"))->getTimeStamp());
+$from_date=date('Y-m-d',date_sub(new DateTime(),DateInterval::createFromDateString("3 Months"))->getTimeStamp());
 $to_date=date('Y-m-d');
 
 ?>
@@ -87,6 +87,11 @@ $to_date=date('Y-m-d');
     var providers=<?php echo json_encode($provider_list);?>;
     var service_categories=<?php echo json_encode($service_categories_list);?>;
     var query_ajax=<?php echo json_encode($web_root."/interface/reports/visits/ajax/visits_data.php");?>;
+    var period_options=[
+        {id: 'm',description:<?php echo json_encode(xla("Months"));?>}
+        ,{id: 'q',description:<?php echo json_encode(xla("Quarters"));?>}
+        ,{id: 'y',description:<?php echo json_encode(xla("Years"));?>}
+    ];
 </script>
 <body>
     
@@ -103,7 +108,7 @@ $to_date=date('Y-m-d');
       <img src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
        id='img_to_date' border='0' alt='[?]' style='cursor:pointer'
        title='<?php echo xla('Click here to choose a date'); ?>'>
-      <div data-bind="template:{name: 'visits-parameters', data: parameters}"></div>
+      <span data-bind="template:{name: 'visits-parameters', data: parameters}"></span>
 </div>
     <div data-bind="template:{name: 'visits-results', data: results}"></div>
 <script>

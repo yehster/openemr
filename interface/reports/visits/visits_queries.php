@@ -77,7 +77,7 @@ function set_periods($type)
 {
     if($type==='m')
     {
-      $convert= "CONCAT(YEAR(".COL_ENC_DATE."),'-',MONTH(".COL_ENC_DATE."))";  
+      $convert= "DATE_FORMAT(".COL_ENC_DATE.",'%Y-%m')";  
     }
     if($type==='y')
     {
@@ -200,16 +200,18 @@ function update_services($dimensions,$categorize)
     }
 }
 
-function query_visits($enc_from,$enc_to,$categorize,$facility_filters=null,$provider_filters=null)
+function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filters=null,$provider_filters=null)
 {
-    
- 
-    $dimensions=array(
-        COL_PROVIDER_ID=>"int",
-        COL_FACILITY=>"VARCHAR(255)",
-        COL_PERIOD=>"VARCHAR(15)"
-    );
-    
+    if(!is_null($provider_filters))
+    {
+        $dimensions[COL_PROVIDER_ID]="int";
+    }
+    if(!is_null($facility_filters))
+    {
+        $dimensions[COL_FACILITY]="VARCHAR(255)";
+        
+    }
+    $dimensions[COL_PERIOD]="VARCHAR(15)";
     $dimension_columns=array_keys($dimensions);
     
     
@@ -218,7 +220,7 @@ function query_visits($enc_from,$enc_to,$categorize,$facility_filters=null,$prov
     
     
     // define periods
-    set_periods('m');
+    set_periods($period_size);
     
     setup_periods_data($dimensions);
     // compute active days in each period

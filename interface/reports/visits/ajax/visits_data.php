@@ -32,4 +32,21 @@ else
     
 }
 
-echo json_encode(query_visits($parameters->{'from'},$parameters->{'to'},false));
+if($parameters->{'clinics_details'})
+{
+    $facility_filters=array();
+}
+else
+{
+    $facility_filters=null;
+}
+
+if($parameters->{'providers_details'})
+{
+    $providers_filters=array();
+}
+else
+{
+    $providers_filters=null;
+}
+echo json_encode(query_visits($parameters->{'from'},$parameters->{'to'},$parameters->{'period_size'},false,$facility_filters,$providers_filters));
