@@ -8,7 +8,7 @@
 ?>
 <script type="text/html" id="visits-parameters">
     <select data-bind="options: period_options,optionsText: 'description', value: period_size"></select>
-    <table>
+    <table class="parameters">
         <tbody>
             <tr>
                 <td>
@@ -32,6 +32,11 @@
                             <span data-bind="text: lname"></span>,<span data-bind="text: fname"></span>
                         </div>
                     </div>
+                </td>
+                <td>
+                    <div>Services</div>
+                    <input type="checkbox" data-bind="checked:categorize_services"/>
+                    <?php echo xlt("Categorize Services"); ?>
                 </td>
             </tr>
         </tbody>

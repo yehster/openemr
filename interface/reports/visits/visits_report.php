@@ -70,15 +70,12 @@ $to_date=date('Y-m-d');
 <!DOCTYPE html>
 <html>
 
-<style type="text/css">
- body       { font-family:sans-serif; font-size:10pt; font-weight:normal }
- .dehead    { color:#000000; font-family:sans-serif; font-size:10pt; font-weight:bold }
- .detail    { color:#000000; font-family:sans-serif; font-size:10pt; font-weight:normal }
-</style>
+
 
 <script type="text/javascript" src="<?php echo $web_root."/library/js/knockout/knockout-3.3.0.js"?>"></script>
 
 <style type="text/css">@import url(<?php echo $web_root;?>/library/dynarch_calendar.css);</style>
+<style type="text/css">@import url(<?php echo $web_root;?>/interface/reports/visits/visits_report.css);</style>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/dynarch_calendar.js"></script>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/dynarch_calendar_en.js"></script>
 <script type="text/javascript" src="<?php echo $web_root;?>/library/dynarch_calendar_setup.js"></script>

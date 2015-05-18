@@ -7,7 +7,7 @@
  */
 
 
-function create_encounters_temp($startDate,$endDate,$dimensions)
+function create_encounters_temp($startDate,$endDate,$dimensions,$facility_filters,$provider_filters)
 {
     
     $columns=array_merge($dimensions,
@@ -35,11 +35,59 @@ function create_encounters_temp($startDate,$endDate,$dimensions)
     $insert_columns[]=COL_PID;
     
     $select_columns=implode(",",$insert_columns);
+    $query_parameters=array($startDate,$endDate);
     $populate_encounters = "INSERT INTO ".TMP_ENCOUNTERS." SELECT ".$select_columns
             ." FROM ".TBL_ENCOUNTERS
             ." WHERE date >=? and date <=?";
     
-    sqlStatement($populate_encounters,array($startDate,$endDate));    
+    // Add facility filters
+    if(!is_null($facility_filters))
+    {
+        if(count($facility_filters)>0)
+        {
+            $populate_encounters .= " AND ". COL_FACILITY . " IN " . "(";
+            $first=true;
+            foreach($facility_filters as $facility)
+            {
+                array_push($query_parameters,$facility);
+                if(!$first)
+                {
+                    $populate_encounters.=",";
+                }
+                $populate_encounters.="?";
+                $first=false;
+            }
+            
+            $populate_encounters .= ")";
+                    
+        }
+    }
+    
+    // Add provider_filters
+    if(!is_null($provider_filters))
+    {
+        if(count($provider_filters)>0)
+        {
+            $populate_encounters .= " AND ". COL_PROVIDER_ID . " IN " . "(";
+            $first=true;
+            foreach($provider_filters as $provider)
+            {
+                array_push($query_parameters,$provider);
+                error_log(">>>>>>>".$provider);
+                if(!$first)
+                {
+                    $populate_encounters.=",";
+                }
+                $populate_encounters.="?";
+                $first=false;
+            }
+            
+            $populate_encounters .= ")";
+                    
+        }
+    }    
+    
+    sqlStatement($populate_encounters,$query_parameters);    
 }
 
 function dimension_names($dimensions)
@@ -150,72 +198,6 @@ function set_active_days()
 
 function update_services($dimensions,$categorize)
 {
-    /*
-     * 
-
-1000000000000
-	
-
-CONTRACEPTIVE SERVICES
-
-2110000000000
-	
-
-SRH - ABORTION               
-
-2120000000000
-	
-
-SRH - HIV AND AIDS                                  
-
-2130000000000
-	
-
-SRH - STI/RTI
-
-2140000000000
-	
-
-SRH - GYNECOLOGY
-
-2150000000000
-	
-
-SRH - OBSTETRIC                                                 
-
-2160000000000
-	
-
-SRH - UROLOGY                                                 
-
-2170000000000
-	
-
-SRH - SUBFERTILITY
-
-2180000000000
-	
-
-SRH- SPECIALISED SRH SERVICES
-
-2190000000000
-	
-
-SRH - PEDIATRICS
-
-2200000000000
-	
-
-SRH - OTHER
-
-4000000000000
-	
-
-NON-CLINICAL - ADMINISTRATION
-
-3100000000000 NON-SRH - MEDICAL
-
-     */
     // Create billing temp table
     $columns=array_merge($dimensions,array(
         COL_CODE=>"VARCHAR(20)",
@@ -337,6 +319,40 @@ function update_averages()
     
     sqlStatement($update_query);
 }
+
+function build_category_list($filters=null)
+{
+    $parameters=array();
+    $select_categories_query = " SELECT ". COL_CATEGORY_NAME . " FROM " . TBL_IPPF2_CATEGORIES;
+    
+    if($filters!==null)
+    {
+        $in="(";
+        $first=true;
+        foreach($filters as $filter)
+        {
+            array_push($parameters,$filter);
+            if(!$first)
+            {
+                $in .= ",";
+            }
+            $in.="?";
+            $first=false;
+        }
+        $in.=")";
+        $select_categories_query .= " WHERE " . COL_CATEGORY_NAME . " IN " . $like;
+    }
+    $select_categories_query .= " ORDER BY " . COL_CATEGORY_HEADER . " ASC";
+            
+    $res=sqlStatement($select_categories_query,$parameters);
+    $retval=array();
+    while($row= sqlFetchArray($res))
+    {
+        $retval[] = $row[COL_CATEGORY_NAME];
+    }
+    return $retval;
+}
+
 function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filters=null,$provider_filters=null)
 {
     if(!is_null($provider_filters))
@@ -353,7 +369,7 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     
     
     // create encounters temp table
-    create_encounters_temp($enc_from,$enc_to,$dimensions);
+    create_encounters_temp($enc_from,$enc_to,$dimensions,$facility_filters,$provider_filters);
     
     
     // define periods
@@ -377,7 +393,8 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     
     if($categorize)
     {
-        $category_data=aggregate_categories($dimension_columns);        
+        $category_data=aggregate_categories($dimension_columns);
+        $category_list = build_category_list();
     }
     
     update_averages();
@@ -395,12 +412,17 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
             {
                 $data_traversal=&$data_traversal[$row[$column]];
             }
-            if(!is_null($data_traversal))
+            foreach($category_list as $category)
             {
-                foreach($data_traversal as $key=>$value)
+                $category_count=0;
+                if(!is_null($data_traversal))
                 {
-                    $row[$key]=$value;
+                    if(isset($data_traversal[$category]))
+                    {
+                        $category_count=$data_traversal[$category];                        
+                    }
                 }
+                $row[$category]=$category_count;
             }
 
         }

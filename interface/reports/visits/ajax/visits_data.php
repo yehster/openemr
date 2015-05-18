@@ -35,6 +35,17 @@ else
 if($parameters->{'clinics_details'})
 {
     $facility_filters=array();
+    if($parameters->{'clinic_filter'})
+    {
+        $facility_filters=$parameters->{'clinic_filter'};
+        if(count($facility_filters)>=1)
+        {
+            if($facility_filters[0]=='All')
+            {
+               $facility_filters=array(); 
+            }
+        }
+    }
 }
 else
 {
@@ -44,9 +55,25 @@ else
 if($parameters->{'providers_details'})
 {
     $providers_filters=array();
+    if($parameters->{'provider_filter'})
+    {
+        $providers_filters=$parameters->{'provider_filter'};
+        if(count($providers_filters)>=1)
+        {
+            if($providers_filters[0]==='ALL')
+            {
+                $providers_filters=array();
+            }
+        }
+    }
 }
 else
 {
     $providers_filters=null;
 }
-echo json_encode(query_visits($parameters->{'from'},$parameters->{'to'},$parameters->{'period_size'},true,$facility_filters,$providers_filters));
+echo json_encode(query_visits($parameters->{'from'}
+                              ,$parameters->{'to'}
+                              ,$parameters->{'period_size'}
+                              ,$parameters->{"categorize_services"}
+                              ,$facility_filters
+                              ,$providers_filters));
