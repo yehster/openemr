@@ -10,7 +10,8 @@ var visits_view_model=
     parameters: {},
     results: {
         headers: ko.observableArray(),
-        data_rows: ko.observableArray()
+        data_rows: ko.observableArray(),
+        report_type: ko.observable("Summary")
     }
 };
 
@@ -81,6 +82,7 @@ function build_data_table_summary_only(data)
             }
         }
     }
+    visits_view_model.results.report_type("Summary");
     return results_table;
 }
 
@@ -88,6 +90,71 @@ function build_data_table_summary_only(data)
 function build_data_table_providers(data)
 {
     
+    visits_view_model.results.report_type("Providers");
+    var results_table=setup_results_array(visits_view_model.results.providers_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2);    
+    var num_values=visits_view_model.results.values_list.length;
+    for(var data_idx=0;data_idx<data.length;data_idx++)
+    {
+        var cur_data=data[data_idx];
+        var provider_idx=visits_view_model.results.providers_list.indexOf(cur_data.provider_id);
+        var period_idx=visits_view_model.results.periods.indexOf(cur_data.period);
+        
+        for(var value in cur_data)
+        {        
+            var value_idx=visits_view_model.results.values_list.indexOf(value)
+            if((value_idx!==-1) && (provider_idx!==-1))
+            {
+                if(value_idx===0)
+                {
+                    results_table[provider_idx*num_values +value_idx][0]=cur_data.provider_id;
+                }
+                else
+                {
+                    results_table[provider_idx*num_values +value_idx][0]="";
+                }
+                results_table[provider_idx*num_values +value_idx][1]=value;
+                results_table[provider_idx*num_values +value_idx][period_idx+2]=(cur_data[value]===null) ? 0 : cur_data[value];
+            }
+        }
+    }
+    
+    visits_view_model.results.headers.unshift("Provider");
+    return results_table;
+}
+
+function build_data_table_clinic_only(data)
+{
+    
+    visits_view_model.results.report_type("Providers");
+    var results_table=setup_results_array(visits_view_model.results.clinics_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2);    
+    var num_values=visits_view_model.results.values_list.length;
+    for(var data_idx=0;data_idx<data.length;data_idx++)
+    {
+        var cur_data=data[data_idx];
+        var facility_idx=visits_view_model.results.clinics_list.indexOf(cur_data.facility);
+        var period_idx=visits_view_model.results.periods.indexOf(cur_data.period);
+        
+        for(var value in cur_data)
+        {        
+            var value_idx=visits_view_model.results.values_list.indexOf(value)
+            if((value_idx!==-1) && (facility_idx!==-1))
+            {
+                if(value_idx===0)
+                {
+                    results_table[facility_idx*num_values +value_idx][0]=cur_data.facility;
+                }
+                else
+                {
+                    results_table[facility_idx*num_values +value_idx][0]="";
+                }
+                results_table[facility_idx*num_values +value_idx][1]=value;
+                results_table[facility_idx*num_values +value_idx][period_idx+2]=(cur_data[value]===null) ? 0 : cur_data[value];
+            }
+        }
+    }
+    
+    visits_view_model.results.headers.unshift("Clinic");
+    return results_table;
 }
 
 function build_data_table_clinics(data)
@@ -149,6 +216,7 @@ function build_data_table(data)
         {
             visits_view_model.results.providers_list.push(provider);
         }
+        visits_view_model.results.providers_list.sort();
     }
     
     visits_view_model.results.headers.removeAll();
@@ -169,7 +237,7 @@ function build_data_table(data)
         {
             if(clinics_details)
             {
-                results_table=build_data_table_clinics(data);
+                results_table=build_data_table_clinic_only(data);
             }
         }
     }
@@ -187,6 +255,21 @@ function build_data_table(data)
 
 }
 
+function build_provider_integer_map()
+{
+    provider_integer_map={};
+    for(var idx=0;idx<providers.length;idx++)
+    {
+        var cur_provider=providers[idx];
+        provider_integer_map[cur_provider.id]=cur_provider.lname + "," +cur_provider.fname;
+    }
+    provider_integer_map['0']="~~Unknown~~"
+}
+function provider_integer_to_name(id)
+{
+    return provider_integer_map[id];
+}
+
 function process_results(data,status, jqXHR)
 {
     visits_view_model.results.periods_map={};
@@ -199,6 +282,13 @@ function process_results(data,status, jqXHR)
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
         var cur_data=data[data_idx];
+        // Convert Provider IDs to names
+        if(cur_data.hasOwnProperty("provider_id"))
+        {
+            cur_data.provider_id=provider_integer_to_name(cur_data.provider_id);
+        }
+        
+        
         visits_view_model.results.periods_map[cur_data.period]=cur_data.period;
         for(var value in cur_data)
         {
@@ -333,4 +423,5 @@ function search_visits()
     
 }
 setup_parameters();
+build_provider_integer_map();
 ko.applyBindings(visits_view_model);
