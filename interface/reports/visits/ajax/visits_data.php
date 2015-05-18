@@ -49,4 +49,4 @@ else
 {
     $providers_filters=null;
 }
-echo json_encode(query_visits($parameters->{'from'},$parameters->{'to'},$parameters->{'period_size'},false,$facility_filters,$providers_filters));
+echo json_encode(query_visits($parameters->{'from'},$parameters->{'to'},$parameters->{'period_size'},true,$facility_filters,$providers_filters));

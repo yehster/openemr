@@ -12,10 +12,10 @@
         <tbody>
             <tr>
                 <td>
-                    <div>Clinics&nbsp;<span data-bind="visible:(!clinics_details())">Summary Only</span></div>
+                    <div>Clinics&nbsp;<!-- <span data-bind="visible:(!clinics_details())">Summary Only</span>--></div> 
                     <input type="checkbox" data-bind="checked:clinics_details"/>
                     <?php echo xlt("Display Details") ?>
-                    <div data-bind="foreach: clinics, visible:clinics_details">
+                    <div data-bind="foreach: clinics, visible:clinics_details()">
                         <div>
                             <input type="checkbox" data-bind="checked: selected"/>
                             <span data-bind="text: name"></span>
@@ -23,10 +23,10 @@
                     </div>
                 </td>
                 <td>
-                    <div>Providers&nbsp;<span data-bind="visible:(!providers_details())">Summary Only</span></div>
+                    <div>Providers&nbsp;<!-- <span data-bind="visible:(!providers_details())">Summary Only</span> --></div>
                     <input type="checkbox" data-bind="checked:providers_details"/>
                     <?php echo xlt("Display Details") ?>
-                    <div data-bind="foreach: providers, visible:providers_details">
+                    <div data-bind="foreach: providers, visible:providers_details()">
                         <div>
                             <input type="checkbox" data-bind="checked: selected"/>
                             <span data-bind="text: lname"></span>,<span data-bind="text: fname"></span>

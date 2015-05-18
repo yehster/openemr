@@ -58,10 +58,12 @@ function get_service_categories_list()
     
 }
 
+
 $clinic_list=  get_clinic_list();
 $provider_list=get_provider_list();
+
 $service_categories_list=get_service_categories_list();
-$from_date=date('Y-m-d',date_sub(new DateTime(),DateInterval::createFromDateString("3 Months"))->getTimeStamp());
+$from_date=date('Y-m-d',date_sub(new DateTime(),DateInterval::createFromDateString("4 Months 14 days"))->getTimeStamp());
 $to_date=date('Y-m-d');
 
 ?>
@@ -85,6 +87,7 @@ $to_date=date('Y-m-d');
 <script type="text/javascript">
     var clinics=<?php echo json_encode($clinic_list);?>;
     var providers=<?php echo json_encode($provider_list);?>;
+
     var service_categories=<?php echo json_encode($service_categories_list);?>;
     var query_ajax=<?php echo json_encode($web_root."/interface/reports/visits/ajax/visits_data.php");?>;
     var period_options=[
