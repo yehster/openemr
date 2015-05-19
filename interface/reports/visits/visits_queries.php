@@ -156,7 +156,7 @@ function update_results_from_encounters($source_column,$result_column,$dimension
     $sql_update_result =
             " UPDATE ".TMP_PERIODS_DATA
             ." INNER JOIN ("
-            ." SELECT count(DISTINCT ".$source_column.") ".$result_column.", "
+            ." SELECT count(".$source_column.") ".$result_column.", "
             . $dimensions_list
             ." FROM ".TMP_ENCOUNTERS
             ." GROUP BY ".$dimensions_list
@@ -201,7 +201,10 @@ function update_services($dimensions,$categorize)
     // Create billing temp table
     $columns=array_merge($dimensions,array(
         COL_CODE=>"VARCHAR(20)",
-        COL_CODE_TYPE=>"VARCHAR(15)"
+        COL_CODE_TYPE=>"VARCHAR(15)",
+        COL_ENC_ID=>"int",
+        COL_PID=>"int",
+        COL_ENC_DATE=>"date"
     ));
     if($categorize)
     {
@@ -215,7 +218,10 @@ function update_services($dimensions,$categorize)
                        array_keys($dimensions),
                        array(
                        COL_CODE,
-                       COL_CODE_TYPE));
+                       COL_CODE_TYPE,
+                       COL_ENC_ID,
+                       COL_PID,
+                       COL_ENC_DATE));
     
     create_temporary_table(TMP_BILLING_DATA,$columns);
 
@@ -234,6 +240,9 @@ function update_services($dimensions,$categorize)
     }
     $select_columns_encounters[]=TBL_BILLING.".".COL_CODE;
     $select_columns_encounters[]=TBL_BILLING.".".COL_CODE_TYPE;
+    $select_columns_encounters[]=TMP_ENCOUNTERS.".".COL_ENC_ID;
+    $select_columns_encounters[]=TMP_ENCOUNTERS.".".COL_PID;
+    $select_columns_encounters[]=TMP_ENCOUNTERS.".".COL_ENC_DATE;
     
     $populate_billing_data=
             " INSERT INTO ".TMP_BILLING_DATA
@@ -384,17 +393,17 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     set_periods($period_size);
     
     setup_periods_data($dimensions);
-    // compute active days in each period
-    update_results_from_encounters(COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
-    
-    // find unique patients
-    update_results_from_encounters(COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
-
-    // find visits
-    update_results_from_encounters(COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
     
     // join with billing to find services
     update_services($dimensions,$categorize);
+    // compute active days in each period
+    update_results_from_encounters("distinct ".COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
+    
+    // find unique patients
+    update_results_from_encounters("distinct ".COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
+
+    // find visits
+    update_results_from_encounters("distinct ".COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
     
     // aggregate service data.
     update_results_from_billing("*",COL_NUMBER_SERVICES,$dimension_columns);
