@@ -370,20 +370,40 @@ function build_category_list($filters=null)
     return $retval;
 }
 
+function process_results($dimension_columns)
+{
+    // compute active days in each period
+    update_results_from_encounters("distinct ".COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
+    
+    // find unique patients
+    update_results_from_encounters("distinct ".COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
+
+    // find visits
+    update_results_from_encounters("distinct ".COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
+    
+    // aggregate service data.
+    update_results_from_billing("*",COL_NUMBER_SERVICES,$dimension_columns);
+
+}
+
 function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filters=null,$provider_filters=null)
 {
+    $providers_details=false;
+    $facilities_details=false;
+    
     if(!is_null($provider_filters))
     {
+        $providers_details=true;
         $dimensions[COL_PROVIDER_ID]="int NOT NULL default 0";
     }
     if(!is_null($facility_filters))
     {
+        $facilities_details=true;
         $dimensions[COL_FACILITY]="VARCHAR(255)";
         
     }
     $dimensions[COL_PERIOD]="VARCHAR(15)";
-    $dimension_columns=array_keys($dimensions);
-    
+    $dimension_columns=array_keys($dimensions);    
     
     // create encounters temp table
     create_encounters_temp($enc_from,$enc_to,$dimensions,$facility_filters,$provider_filters);
@@ -396,17 +416,8 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     
     // join with billing to find services
     update_services($dimensions,$categorize);
-    // compute active days in each period
-    update_results_from_encounters("distinct ".COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
-    
-    // find unique patients
-    update_results_from_encounters("distinct ".COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
 
-    // find visits
-    update_results_from_encounters("distinct ".COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
-    
-    // aggregate service data.
-    update_results_from_billing("*",COL_NUMBER_SERVICES,$dimension_columns);
+    process_results($dimension_columns);
     
     if($categorize)
     {
@@ -453,6 +464,62 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
         {
             $retval[]=$row;            
         }
+    }
+    
+    if($providers_details && $facilities_details)
+    {
+        $sqlDropPeriods_data = "DROP TABLE ".TMP_PERIODS_DATA;
+        sqlStatement($sqlDropPeriods_data);
+        
+        unset($dimensions[COL_PROVIDER_ID]);
+        setup_periods_data($dimensions);
+        $dimension_columns=array_keys($dimensions);
+        process_results($dimension_columns);
+        update_averages();
+        
+        if($categorize)
+        {
+            $category_data=aggregate_categories($dimension_columns);
+            $category_list = build_category_list();
+        }
+    $select_results="SELECT * FROM ".TMP_PERIODS_DATA;
+//    $select_results="SELECT * FROM ".TMP_BILLING_DATA;
+    $res=sqlStatement($select_results);        
+    while($row=sqlFetchArray($res))
+    {
+        $row[COL_PROVIDER_ID]=-1;
+        if($categorize)
+        {
+            $return_row=array();
+            $data_traversal=&$category_data;
+            foreach($dimension_columns as $column)
+            {
+                $data_traversal=&$data_traversal[$row[$column]];
+                $return_row[$column]=$row[$column];
+            }
+            foreach($category_list as $category)
+            {
+                $category_count=0;
+                if(!is_null($data_traversal))
+                {
+                    if(isset($data_traversal[$category]))
+                    {
+                        $category_count=$data_traversal[$category];                        
+                    }
+                }
+                $return_row[$category]=$category_count;
+            }
+            foreach($row as $key=>$value)
+            {
+                $return_row[$key]=$value;
+            }
+            $retval[]=$return_row;
+        }
+        else
+        {
+            $retval[]=$row;            
+        }
+    }        
     }
     return $retval;
 }
