@@ -63,7 +63,7 @@ $clinic_list=  get_clinic_list();
 $provider_list=get_provider_list();
 
 $service_categories_list=get_service_categories_list();
-$from_date=date('Y-m-d',date_sub(new DateTime(),DateInterval::createFromDateString("4 Months 14 days"))->getTimeStamp());
+$from_date=date("Y") . "-01-01";
 $to_date=date('Y-m-d');
 
 ?>

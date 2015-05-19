@@ -17,3 +17,8 @@ and open the template in the editor.
      width: 33%;
      vertical-align: top;
  }
+ 
+table td
+{
+    border: 1px solid black;
+}

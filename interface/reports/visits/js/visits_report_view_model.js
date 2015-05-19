@@ -157,41 +157,77 @@ function build_data_table_clinic_only(data)
     return results_table;
 }
 
-function build_data_table_clinics(data)
+function build_data_table_clinics_and_providers(data)
 {
-    var results_table=new Array(visits_view_model.results.clinics_list.length);
-    for(var clinic_idx=0;clinic_idx<visits_view_model.results.clinics_list.length;clinic_idx++)
+    var clinic_list=[];
+    for(var clinic in visits_view_model.results.clinics_map)
     {
-        results_table[clinic_idx]=null;
+        clinic_list.push(clinic);
     }
+    clinic_list.sort;
+    var number_clinic_providers=0;
+    var clinic_position_map={};
+    for(var clinic_idx=0;clinic_idx<clinic_list.length;clinic_idx++)
+    {
+        var clinic=clinic_list[clinic_idx];
+        var cur_clinic=visits_view_model.results.clinics_map[clinic]
+        cur_clinic.provider_list=[];
+        for(var provider in cur_clinic.providers)
+        {
+            if(provider!== "undefined")
+            {
+                cur_clinic.provider_list.push(provider);              
+            }
+        }
+        cur_clinic.provider_list.sort();
+        clinic_position_map[clinic]=number_clinic_providers;
+        number_clinic_providers+=cur_clinic.provider_list.length*visits_view_model.results.values_list.length;
+    }
+    var results_table=setup_results_array(number_clinic_providers,visits_view_model.results.periods.length+3);    
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
         var cur_data=data[data_idx];
+        var facility_position=clinic_position_map[cur_data.facility];
+        var cur_clinic=visits_view_model.results.clinics_map[cur_data.facility];
+        var provider_position=cur_clinic.provider_list.indexOf(cur_data.provider_id)*visits_view_model.results.values_list.length;
+        var base_position=facility_position+provider_position;
         var period_idx=visits_view_model.results.periods.indexOf(cur_data.period);
-        var clinic_idx=visits_view_model.results.clinics_list.indexOf(cur_data.facility);
-        if((results_table[clinic_idx]===null))
+        if(provider_position<0)
         {
-            results_table[clinic_idx]=setup_results_array(visits_view_model.results.values_list.length,visits_view_model.results.periods.length+1);
-        }
-        if(cur_data.hasOwnProperty("provider_id"))
-        {
-            var clinic_map = visits_view_model.results.clinics_map[cur_data.facility];
-            
-        }
-        else
-        {
-            for(var value in cur_data)
-            {        
-                var value_idx=visits_view_model.results.values_list.indexOf(value)
-                if(value_idx!==-1)
+            alert(JSON.stringify(cur_data));
+        }        
+        for(var value in cur_data)
+        {        
+
+            var value_idx=visits_view_model.results.values_list.indexOf(value)
+
+            if((value_idx!==-1) && base_position>=0)
+            {
+                if(value_idx===0)
                 {
-                    results_table[clinic_idx][value_idx][0]=value;
-                    results_table[clinic_idx][value_idx][period_idx+1]=(cur_data[value]===null) ? 0 : cur_data[value];
+                    if(provider_position===0)
+                    {
+                        results_table[base_position +value_idx][0]=cur_data.facility;                   
+                    }
+                    else
+                    {
+                        results_table[base_position +value_idx][0]="";
+                    }
+                    results_table[base_position +value_idx][1]=cur_data.provider_id;
                 }
+                else
+                {
+                    results_table[base_position +value_idx][0]="";
+                }
+                results_table[base_position +value_idx][2]=value;
+                results_table[base_position +value_idx][period_idx+3]=(cur_data[value]===null) ? 0 : cur_data[value];
             }
-            
-        }
-    }    
+        }        
+    }
+
+
+    visits_view_model.results.headers.unshift("Provider");
+    visits_view_model.results.headers.unshift("Clinic");
     return results_table;
 }
 function build_data_table(data)
@@ -214,7 +250,10 @@ function build_data_table(data)
         visits_view_model.results.providers_list=[];
         for(var provider in visits_view_model.results.providers_map)
         {
-            visits_view_model.results.providers_list.push(provider);
+            if(provider!=="undefined")
+            {
+                visits_view_model.results.providers_list.push(provider);            
+            }
         }
         visits_view_model.results.providers_list.sort();
     }
@@ -237,7 +276,14 @@ function build_data_table(data)
         {
             if(clinics_details)
             {
-                results_table=build_data_table_clinic_only(data);
+                if(!data[0].hasOwnProperty("provider_id"))
+                {
+                    results_table=build_data_table_clinic_only(data);
+                }
+                else
+                {
+                    results_table=build_data_table_clinics_and_providers(data);
+                }
             }
         }
     }
@@ -263,7 +309,7 @@ function build_provider_integer_map()
         var cur_provider=providers[idx];
         provider_integer_map[cur_provider.id]=cur_provider.lname + "," +cur_provider.fname;
     }
-    provider_integer_map['0']="~~Unknown~~"
+    provider_integer_map[0]="~~Unknown~~"
 }
 function provider_integer_to_name(id)
 {

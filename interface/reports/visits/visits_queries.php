@@ -73,7 +73,6 @@ function create_encounters_temp($startDate,$endDate,$dimensions,$facility_filter
             foreach($provider_filters as $provider)
             {
                 array_push($query_parameters,$provider);
-                error_log(">>>>>>>".$provider);
                 if(!$first)
                 {
                     $populate_encounters.=",";
@@ -120,6 +119,7 @@ function setup_periods_data($dimensions)
             . " SELECT " . implode(array_keys($dimensions),",")
             . " FROM " . TMP_ENCOUNTERS
             . " GROUP BY ".implode(array_keys($dimensions),",");
+    
     
     sqlStatement($populate_periods_data);
 }
@@ -222,7 +222,15 @@ function update_services($dimensions,$categorize)
     $select_columns_encounters = array();
     foreach(array_keys($dimensions) as $dimension)
     {
-        $select_columns_encounters[]=TMP_ENCOUNTERS.".".$dimension;
+        if($dimension===COL_PROVIDER_ID)
+        {
+            $select_columns_encounters[]= " IF(".TBL_BILLING.".".COL_PROVIDER_ID . " = 0,"
+               . TMP_ENCOUNTERS . ".". COL_PROVIDER_ID. ",". TBL_BILLING.".".COL_PROVIDER_ID . ")";
+        }
+        else
+        {
+            $select_columns_encounters[]=TMP_ENCOUNTERS.".".$dimension;            
+        }
     }
     $select_columns_encounters[]=TBL_BILLING.".".COL_CODE;
     $select_columns_encounters[]=TBL_BILLING.".".COL_CODE_TYPE;
@@ -313,9 +321,9 @@ function aggregate_categories($dimension_columns)
 function update_averages()
 {
     $update_query=  " UPDATE ". TMP_PERIODS_DATA
-                    ." SET " . COL_DAILY_CLIENTS . " = " . COL_NUMBER_CLIENTS . "/" . COL_ACTIVE_DAYS
-                    . ", " . COL_DAILY_SERVICES . " = " . COL_NUMBER_SERVICES . "/" . COL_ACTIVE_DAYS
-                    . ", " . COL_DAILY_SERVICES_CLIENT . " = " .COL_NUMBER_SERVICES . "/" . COL_NUMBER_CLIENTS;
+                    ." SET " . COL_DAILY_CLIENTS . " = " . "TRUNCATE(".COL_NUMBER_CLIENTS . "/" . COL_ACTIVE_DAYS . ",1)"
+                    . ", " . COL_DAILY_SERVICES . " = " . "TRUNCATE(". COL_NUMBER_SERVICES . "/" . COL_ACTIVE_DAYS. ",1)"
+                    . ", " . COL_DAILY_SERVICES_CLIENT . " = " . "TRUNCATE(".COL_NUMBER_SERVICES . "/" . COL_NUMBER_CLIENTS. ",1)";
     
     sqlStatement($update_query);
 }
@@ -357,7 +365,7 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
 {
     if(!is_null($provider_filters))
     {
-        $dimensions[COL_PROVIDER_ID]="int";
+        $dimensions[COL_PROVIDER_ID]="int NOT NULL default 0";
     }
     if(!is_null($facility_filters))
     {
@@ -398,7 +406,7 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     }
     
     update_averages();
-
+    
     $select_results="SELECT * FROM ".TMP_PERIODS_DATA;
 //    $select_results="SELECT * FROM ".TMP_BILLING_DATA;
     $res=sqlStatement($select_results);
@@ -407,10 +415,12 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     {
         if($categorize)
         {
+            $return_row=array();
             $data_traversal=&$category_data;
             foreach($dimension_columns as $column)
             {
                 $data_traversal=&$data_traversal[$row[$column]];
+                $return_row[$column]=$row[$column];
             }
             foreach($category_list as $category)
             {
@@ -422,11 +432,18 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
                         $category_count=$data_traversal[$category];                        
                     }
                 }
-                $row[$category]=$category_count;
+                $return_row[$category]=$category_count;
             }
-
+            foreach($row as $key=>$value)
+            {
+                $return_row[$key]=$value;
+            }
+            $retval[]=$return_row;
         }
-        $retval[]=$row;
+        else
+        {
+            $retval[]=$row;            
+        }
     }
     return $retval;
 }
