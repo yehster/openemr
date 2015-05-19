@@ -36,10 +36,14 @@
                 <td>
                     <div>Services</div>
                     <input type="checkbox" data-bind="checked:categorize_services"/>
-                    <?php echo xlt("Categorize Services"); ?>
+                    <?php echo xlt("Category Details"); ?>
                 </td>
             </tr>
         </tbody>
     </table>
-    <button data-bind="click: search_visits">Search</button>
+    <button data-bind="click: search_visits"><?php echo xlt("Search"); ?></button>
+    <div>
+        <button data-bind="click: export_csv"><?php echo xlt("Export to CSV"); ?></button>
+        <button data-bind="click: print_window"><?php echo xlt("Print"); ?></button>
+    </div>
 </script>

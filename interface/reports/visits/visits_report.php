@@ -92,23 +92,28 @@ $to_date=date('Y-m-d');
         ,{id: 'q',description:<?php echo json_encode(xla("Quarters"));?>}
         ,{id: 'y',description:<?php echo json_encode(xla("Years"));?>}
     ];
+    var report_title = <?php echo json_encode(xl('Service and Client Volume')); ?>;
+    var title_by_provider = <?php echo json_encode(xl('Service and Client Volume by Provider')); ?>;
+    var title_by_clinic = <?php echo json_encode(xl('Service and Client Volume by Clinic')); ?>;
+    var title_by_clinic_and_provider = <?php echo json_encode(xl('Service and Client Volume by Clinic and Provider')); ?>;
 </script>
 <body>
-    
+    <title data-bind="text: title"></title>
+    <b><center data-bind="text: title"></center></b>
 <div id="queryParameters">
       <?php echo xlt('From'); ?>
       <input type='text' name='form_from_date' id='form_from_date' size='10' value='<?php echo $from_date ?>'
        onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' title='Start date yyyy-mm-dd'>
-      <img src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
+      <img class='datePicker' src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
        id='img_from_date' border='0' alt='[?]' style='cursor:pointer'
        title='<?php echo xla('Click here to choose a date'); ?>'>
       <?php echo xlt('To'); ?>
       <input type='text' name='form_to_date' id='form_to_date' size='10' value='<?php echo $to_date ?>'
        onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' title='End date yyyy-mm-dd'>
-      <img src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
+      <img class='datePicker' src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
        id='img_to_date' border='0' alt='[?]' style='cursor:pointer'
        title='<?php echo xla('Click here to choose a date'); ?>'>
-      <span data-bind="template:{name: 'visits-parameters', data: parameters}"></span>
+      <span id='filters' data-bind="template:{name: 'visits-parameters', data: parameters}"></span>
 </div>
     <div data-bind="template:{name: 'visits-results', data: results}"></div>
 <script>
@@ -121,6 +126,7 @@ $to_date=date('Y-m-d');
     require_once("templates/visits_results.php");
 ?>
 
+<script type="text/javascript" src="js/export_and_print.js"></script>
 <script type="text/javascript" src="js/visits_report_view_model.js"></script>
 
 </body>

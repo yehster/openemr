@@ -7,11 +7,13 @@
 
 var visits_view_model=
 {
+    title: ko.observable(report_title),
     parameters: {},
     results: {
         headers: ko.observableArray(),
         data_rows: ko.observableArray(),
-        report_type: ko.observable("Summary")
+        report_type: ko.observable("Summary"),
+        loading: ko.observable(false)
     }
 };
 
@@ -42,7 +44,7 @@ function setup_parameters()
         parameters.providers.push(providers[providers_idx]);
     }
     
-    parameters.categorize_services=ko.observable(true);
+    parameters.categorize_services=ko.observable(false);
     
 }
 function isEmpty(obj) {
@@ -267,12 +269,14 @@ function build_data_table(data)
     if(!clinics_details && !providers_details)
     {
         results_table=build_data_table_summary_only(data);
+        visits_view_model.title(report_title);
     }
     else
     {
         if(providers_details)
         {
             results_table=build_data_table_providers(data);
+            visits_view_model.title(title_by_provider);
         }
         else
         {
@@ -281,10 +285,12 @@ function build_data_table(data)
                 if(!data[0].hasOwnProperty("provider_id"))
                 {
                     results_table=build_data_table_clinic_only(data);
+                    visits_view_model.title(title_by_clinic);
                 }
                 else
                 {
                     results_table=build_data_table_clinics_and_providers(data);
+                    visits_view_model.title(title_by_clinic_and_provider);
                 }
             }
         }
@@ -296,6 +302,7 @@ function build_data_table(data)
     {
         visits_view_model.results.headers.push(visits_view_model.results.periods[period_idx]);
     }
+    
     visits_view_model.results.data_rows(results_table);
 //    alert(JSON.stringify(results_table));
 //    alert(JSON.stringify(visits_view_model.results.clinics_list));
@@ -312,7 +319,7 @@ function build_provider_integer_map()
         provider_integer_map[cur_provider.id]=cur_provider.lname + "," +cur_provider.fname;
     }
 //    provider_integer_map['0']="~~Unknown~~";
-    provider_integer_map[-1]="~~~Total~~~";
+    provider_integer_map[-1]="~~~Clinic Total~~~";
     provider_integer_map[0]="~~Unknown~~";
 }
 function provider_integer_to_name(id)
@@ -419,7 +426,7 @@ function process_results(data,status, jqXHR)
     visits_view_model.results.periods.sort();
     
     build_data_table(data);
-    
+    visits_view_model.results.loading(false);
 }
 
 function search_visits()
@@ -471,6 +478,7 @@ function search_visits()
             }
         }
     }
+    visits_view_model.results.loading(true);
     $.ajax(query_ajax,
     {
         data: {parameters: JSON.stringify(search_parameters) }
@@ -480,6 +488,8 @@ function search_visits()
     });
     
 }
+
+
 setup_parameters();
 build_provider_integer_map();
 ko.applyBindings(visits_view_model);

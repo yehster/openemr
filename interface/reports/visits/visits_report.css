@@ -18,7 +18,17 @@ and open the template in the editor.
      vertical-align: top;
  }
  
-table td
+table.results td
 {
     border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+}
+@media print 
+{
+    img.datePicker, #filters
+    {
+        display:none;
+    }
+   
 }
