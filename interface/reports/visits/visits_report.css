@@ -18,6 +18,10 @@ and open the template in the editor.
      vertical-align: top;
  }
  
+ .label{
+     font-weight: bold;
+ }
+ 
 table.results td
 {
     border: 1px solid black;

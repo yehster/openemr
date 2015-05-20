@@ -99,15 +99,15 @@ $to_date=date('Y-m-d');
 </script>
 <body>
     <title data-bind="text: title"></title>
-    <b><center data-bind="text: title"></center></b>
+    <h2><center data-bind="text: title"></center></h2>
 <div id="queryParameters">
-      <?php echo xlt('From'); ?>
+       <span class='label'><?php echo xlt('From'); ?></span>
       <input type='text' name='form_from_date' id='form_from_date' size='10' value='<?php echo $from_date ?>'
        onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' title='Start date yyyy-mm-dd'>
       <img class='datePicker' src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
        id='img_from_date' border='0' alt='[?]' style='cursor:pointer'
        title='<?php echo xla('Click here to choose a date'); ?>'>
-      <?php echo xlt('To'); ?>
+      <span class='label'><?php echo xlt('To'); ?></span>
       <input type='text' name='form_to_date' id='form_to_date' size='10' value='<?php echo $to_date ?>'
        onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' title='End date yyyy-mm-dd'>
       <img class='datePicker' src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'

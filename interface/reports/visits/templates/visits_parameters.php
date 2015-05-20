@@ -7,12 +7,13 @@
  */
 ?>
 <script type="text/html" id="visits-parameters">
+    <span class='label'><?php echo xlt("Periods:"); ?></span>
     <select data-bind="options: period_options,optionsText: 'description', value: period_size"></select>
     <table class="parameters">
         <tbody>
             <tr>
                 <td>
-                    <div>Clinics&nbsp;<!-- <span data-bind="visible:(!clinics_details())">Summary Only</span>--></div> 
+                    <div class='label'>Clinics&nbsp;<!-- <span data-bind="visible:(!clinics_details())">Summary Only</span>--></div> 
                     <input type="checkbox" data-bind="checked:clinics_details"/>
                     <?php echo xlt("Display Details") ?>
                     <div data-bind="foreach: clinics, visible:clinics_details()">
@@ -23,7 +24,7 @@
                     </div>
                 </td>
                 <td>
-                    <div>Providers&nbsp;<!-- <span data-bind="visible:(!providers_details())">Summary Only</span> --></div>
+                    <div class='label'>Providers&nbsp;<!-- <span data-bind="visible:(!providers_details())">Summary Only</span> --></div>
                     <input type="checkbox" data-bind="checked:providers_details"/>
                     <?php echo xlt("Display Details") ?>
                     <div data-bind="foreach: providers, visible:providers_details()">
@@ -34,7 +35,7 @@
                     </div>
                 </td>
                 <td>
-                    <div>Services</div>
+                    <div class='label'>Services</div>
                     <input type="checkbox" data-bind="checked:categorize_services"/>
                     <?php echo xlt("Category Details"); ?>
                 </td>
