@@ -21,7 +21,7 @@ function get_clinic_list()
 {
     
     $retval=array();
-    array_push($retval,"All");
+    array_push($retval,xl("All"));
     $query_clinic="select name from facility where service_location!=0 order by name asc";
     $res=  sqlStatement($query_clinic);
     while($row=sqlFetchArray($res))
@@ -47,12 +47,12 @@ function get_provider_list()
 function get_service_categories_list()
 {
     $retval=array();
-    array_push($retval,array("option_id"=>"ALL","title"=>xl("--All Service Categories--")));
-    $query_service_categories="select option_id,title from list_options where list_id='superbill' order by seq asc";
+    array_push($retval,array("--All Service Categories--"));
+    $query_service_categories="select category_name FROM ippf2_categories order by category_header";
     $res=  sqlStatement($query_service_categories);
     while($row=sqlFetchArray($res))
     {
-        array_push($retval,$row);
+        array_push($retval,$row['category_name']);
     }
     return $retval;
     

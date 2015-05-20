@@ -40,7 +40,7 @@ if($parameters->{'clinics_details'})
         $facility_filters=$parameters->{'clinic_filter'};
         if(count($facility_filters)>=1)
         {
-            if($facility_filters[0]=='All')
+            if($facility_filters[0]==xl('All'))
             {
                $facility_filters=array(); 
             }

@@ -62,6 +62,29 @@ function manage_providers_select_one(newValue)
         visits_view_model.parameters.providers()[0].selected(false);
     }
 }
+
+function manage_categories_select_all(newValue)
+{
+    if(newValue)
+    {
+        for(var idx=1;idx<visits_view_model.parameters.categories().length;idx++)
+        {
+            visits_view_model.parameters.categories()[idx].selected(false);
+        }
+    }
+    else
+    {
+        
+    }
+}
+
+function manage_categories_select_one(newValue)
+{
+    if(newValue)
+    {
+        visits_view_model.parameters.categories()[0].selected(false);
+    }
+}
 function setup_parameters()
 {
     var parameters=visits_view_model.parameters;
@@ -111,6 +134,25 @@ function setup_parameters()
     }
     
     parameters.categorize_services=ko.observable(false);
+    parameters.categories=ko.observableArray();
+    for(var categories_idx=0;categories_idx<service_categories.length;categories_idx++)
+    {
+        var category_select;
+        if(categories_idx===0)
+        {
+            category_select=ko.observable(true);
+            category_select.subscribe(manage_categories_select_all);
+        }
+        else
+        {
+            category_select=ko.observable(false);
+            category_select.subscribe(manage_categories_select_one);
+        }
+        var category_info={name: service_categories[categories_idx]
+            ,selected: category_select
+        };
+        parameters.categories.push(category_info);
+    }
     
 }
 function isEmpty(obj) {

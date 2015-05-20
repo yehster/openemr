@@ -466,6 +466,8 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
         }
     }
     
+    
+    // Re-run analysis for clinic totals if clinic AND provider details are required
     if($providers_details && $facilities_details)
     {
         $sqlDropPeriods_data = "DROP TABLE ".TMP_PERIODS_DATA;

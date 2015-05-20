@@ -38,6 +38,12 @@
                     <div class='label'>Services</div>
                     <input type="checkbox" data-bind="checked:categorize_services"/>
                     <?php echo xlt("Category Details"); ?>
+                    <div data-bind="foreach: categories, visible:categorize_services()">
+                        <div>
+                            <input type="checkbox" data-bind="checked: selected"/>
+                            <span data-bind="text: name"></span>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>
