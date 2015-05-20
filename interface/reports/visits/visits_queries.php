@@ -416,13 +416,6 @@ function filter_categories($categories_filter)
             $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in . " OR ".COL_CATEGORY . " IS NULL " ;
             sqlStatement($deleteCategories,$parameters);
         }
-        $selectCategories=" SELECT distinct ".COL_CATEGORY. " FROM ". TMP_BILLING_DATA;
-        $res=sqlStatement($selectCategories);
-        error_log($selectCategories);
-        while($row=sqlFetchArray($res))
-        {
-            error_log($row[COL_CATEGORY]);
-        }
     }
     
 }
