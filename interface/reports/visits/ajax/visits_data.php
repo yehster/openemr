@@ -71,9 +71,28 @@ else
 {
     $providers_filters=null;
 }
+
+$category_filter=null;
+if($parameters->{"categorize_services"})
+{
+    $categories_filter=array();
+    if($parameters->{'category_filter'})
+    {
+        $category_filter=$parameters->{'category_filter'};
+        if(count($category_filter)>=1)
+        {
+            if($category_filter[0]===xl("--All Service Categories--"))
+            {
+                $category_filter=null;
+            }
+        }
+        
+    }
+}
 echo json_encode(query_visits($parameters->{'from'}
                               ,$parameters->{'to'}
                               ,$parameters->{'period_size'}
                               ,$parameters->{"categorize_services"}
                               ,$facility_filters
-                              ,$providers_filters));
+                              ,$providers_filters
+                              ,$category_filter));

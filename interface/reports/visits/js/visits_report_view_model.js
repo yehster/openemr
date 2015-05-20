@@ -586,7 +586,25 @@ function search_visits()
             }
         }
     }
+    
+    if(search_parameters.categorize_services)
+    {
+        search_parameters.category_filter=[];
+        for(var category_idx=0;category_idx<visits_view_model.parameters.categories().length;category_idx++)
+        {
+            var cur_category=visits_view_model.parameters.categories()[category_idx];
+            if(cur_category.selected())
+            {
+                search_parameters.category_filter.push(cur_category.name);
+                if(category_idx===0)
+                {
+                    category_idx+=visits_view_model.parameters.categories().length;
+                }
+            }
+        }
+    }
     visits_view_model.results.loading(true);
+    
     $.ajax(query_ajax,
     {
         data: {parameters: JSON.stringify(search_parameters) }
@@ -594,7 +612,6 @@ function search_visits()
         ,method: "POST"
         ,success: process_results
     });
-    
 }
 
 

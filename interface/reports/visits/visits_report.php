@@ -47,7 +47,7 @@ function get_provider_list()
 function get_service_categories_list()
 {
     $retval=array();
-    array_push($retval,array("--All Service Categories--"));
+    array_push($retval,xl("--All Service Categories--"));
     $query_service_categories="select category_name FROM ippf2_categories order by category_header";
     $res=  sqlStatement($query_service_categories);
     while($row=sqlFetchArray($res))

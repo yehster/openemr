@@ -344,23 +344,26 @@ function build_category_list($filters=null)
     
     if($filters!==null)
     {
-        $in="(";
-        $first=true;
-        foreach($filters as $filter)
+        if(count($filters)>0)
         {
-            array_push($parameters,$filter);
-            if(!$first)
+            $in="(";
+            $first=true;
+            foreach($filters as $filter)
             {
-                $in .= ",";
+                array_push($parameters,$filter);
+                if(!$first)
+                {
+                    $in .= ",";
+                }
+                $in.="?";
+                $first=false;
             }
-            $in.="?";
-            $first=false;
+            $in.=")";
+            $select_categories_query .= " WHERE " . COL_CATEGORY_NAME . " IN " . $in;
         }
-        $in.=")";
-        $select_categories_query .= " WHERE " . COL_CATEGORY_NAME . " IN " . $like;
     }
     $select_categories_query .= " ORDER BY " . COL_CATEGORY_HEADER . " ASC";
-            
+    error_log($select_categories_query);        
     $res=sqlStatement($select_categories_query,$parameters);
     $retval=array();
     while($row= sqlFetchArray($res))
@@ -370,23 +373,54 @@ function build_category_list($filters=null)
     return $retval;
 }
 
-function process_results($dimension_columns)
+function process_results($dimension_columns,$categorize=false)
 {
+    $process_function="update_results_from_encounters";
+    if($categorize)
+    {
+        $process_function="update_results_from_billing";
+    }
     // compute active days in each period
-    update_results_from_encounters("distinct ".COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
+    $process_function("distinct ".COL_ENC_DATE,COL_ACTIVE_DAYS,$dimension_columns);
     
     // find unique patients
-    update_results_from_encounters("distinct ".COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
+    $process_function("distinct ".COL_PID,COL_NUMBER_CLIENTS,$dimension_columns);
 
     // find visits
-    update_results_from_encounters("distinct ".COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
+    $process_function("distinct ".COL_ENC_ID,COL_NUMBER_VISITS,$dimension_columns);
     
     // aggregate service data.
     update_results_from_billing("*",COL_NUMBER_SERVICES,$dimension_columns);
 
 }
-
-function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filters=null,$provider_filters=null)
+function filter_categories($categories_filter)
+{
+    if($categories_filter!==null)
+    {
+        $parameters=array();
+        $deleteCategories= " DELETE FROM ". TMP_BILLING_DATA;
+        if(count($categories_filter)>0)
+        {
+            $in="(";
+            $first=true;
+            foreach($categories_filter as $filter)
+            {
+                array_push($parameters,$filter);
+                if(!$first)
+                {
+                    $in .= ",";
+                }
+                $in.="?";
+                $first=false;
+            }
+            $in.=")";
+            $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in;
+            sqlStatement($deleteCategories,$parameters);
+        }
+    }
+    
+}
+function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filters=null,$provider_filters=null,$category_filter=null)
 {
     $providers_details=false;
     $facilities_details=false;
@@ -417,13 +451,15 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
     // join with billing to find services
     update_services($dimensions,$categorize);
 
-    process_results($dimension_columns);
     
     if($categorize)
     {
         $category_data=aggregate_categories($dimension_columns);
-        $category_list = build_category_list();
+        $category_list = build_category_list($category_filter);
+        filter_categories($category_filter);
     }
+
+    process_results($dimension_columns,$categorize);
     
     update_averages();
     
@@ -476,13 +512,13 @@ function query_visits($enc_from,$enc_to,$period_size,$categorize,$facility_filte
         unset($dimensions[COL_PROVIDER_ID]);
         setup_periods_data($dimensions);
         $dimension_columns=array_keys($dimensions);
-        process_results($dimension_columns);
+        process_results($dimension_columns,$categorize);
         update_averages();
         
         if($categorize)
         {
             $category_data=aggregate_categories($dimension_columns);
-            $category_list = build_category_list();
+            $category_list = build_category_list($category_filter);
         }
     $select_results="SELECT * FROM ".TMP_PERIODS_DATA;
 //    $select_results="SELECT * FROM ".TMP_BILLING_DATA;
