@@ -363,7 +363,6 @@ function build_category_list($filters=null)
         }
     }
     $select_categories_query .= " ORDER BY " . COL_CATEGORY_HEADER . " ASC";
-    error_log($select_categories_query);        
     $res=sqlStatement($select_categories_query,$parameters);
     $retval=array();
     while($row= sqlFetchArray($res))
@@ -414,8 +413,15 @@ function filter_categories($categories_filter)
                 $first=false;
             }
             $in.=")";
-            $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in . " OR ".COL_CATEGORY . " IS NULL ";
+            $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in . " OR ".COL_CATEGORY . " IS NULL " ;
             sqlStatement($deleteCategories,$parameters);
+        }
+        $selectCategories=" SELECT distinct ".COL_CATEGORY. " FROM ". TMP_BILLING_DATA;
+        $res=sqlStatement($selectCategories);
+        error_log($selectCategories);
+        while($row=sqlFetchArray($res))
+        {
+            error_log($row[COL_CATEGORY]);
         }
     }
     
