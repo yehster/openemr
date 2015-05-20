@@ -414,7 +414,7 @@ function filter_categories($categories_filter)
                 $first=false;
             }
             $in.=")";
-            $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in;
+            $deleteCategories .= " WHERE " . COL_CATEGORY . " NOT IN " . $in . " OR ".COL_CATEGORY . " IS NULL ";
             sqlStatement($deleteCategories,$parameters);
         }
     }
