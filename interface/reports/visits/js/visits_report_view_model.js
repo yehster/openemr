@@ -17,6 +17,51 @@ var visits_view_model=
     }
 };
 
+function manage_clinic_select_all(newValue)
+{
+    if(newValue)
+    {
+        for(var idx=1;idx<visits_view_model.parameters.clinics().length;idx++)
+        {
+            visits_view_model.parameters.clinics()[idx].selected(false);
+        }
+    }
+    else
+    {
+        
+    }
+}
+
+function manage_clinic_select_one(newValue)
+{
+    if(newValue)
+    {
+        visits_view_model.parameters.clinics()[0].selected(false);
+    }
+}
+
+function manage_providers_select_all(newValue)
+{
+    if(newValue)
+    {
+        for(var idx=1;idx<visits_view_model.parameters.providers().length;idx++)
+        {
+            visits_view_model.parameters.providers()[idx].selected(false);
+        }
+    }
+    else
+    {
+        
+    }
+}
+
+function manage_providers_select_one(newValue)
+{
+    if(newValue)
+    {
+        visits_view_model.parameters.providers()[0].selected(false);
+    }
+}
 function setup_parameters()
 {
     var parameters=visits_view_model.parameters;
@@ -27,9 +72,21 @@ function setup_parameters()
     for(var clinic_idx=0;clinic_idx<clinics.length;clinic_idx++)
     {
         
+        var new_select= ko.observable(false);
+        if(clinics[clinic_idx]=='All')
+        {
+            new_select.subscribe(manage_clinic_select_all);
+            new_select(true);
+        }
+        else
+        {
+            new_select.subscribe(manage_clinic_select_one);
+            
+        }
         parameters.clinics.push(
                     {   name: clinics[clinic_idx]
-                       ,selected: ko.observable(false)
+                       ,selected: new_select
+                       
                     }
                 );
     }
@@ -41,6 +98,15 @@ function setup_parameters()
     {
         
         providers[providers_idx].selected=ko.observable(false);
+        if(providers_idx===0)
+        {
+            providers[providers_idx].selected.subscribe(manage_providers_select_all);
+            providers[providers_idx].selected(true);
+        }
+        else
+        {
+            providers[providers_idx].selected.subscribe(manage_providers_select_one);
+        }
         parameters.providers.push(providers[providers_idx]);
     }
     
