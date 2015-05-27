@@ -122,7 +122,11 @@ function getDocListByEncID($encounter,$raw_encounter_date,$pid){
 //
 function showDocument(&$drow) {
   global $ISSUE_TYPES, $auth_med;
-
+  if(!acl_check_array($drow))
+  {
+      return;
+  }
+  
   $docdate = $drow['docdate'];
 
   echo "<tr class='text docrow' id='".htmlspecialchars( $drow['id'], ENT_QUOTES)."' title='". htmlspecialchars( xl('View document'), ENT_QUOTES) . "'>\n";
@@ -386,6 +390,7 @@ if (!$billing_view) {
   // then also limit the query to documents that are linked to the issue.
   $queryarr = array($pid);
   $query = "SELECT d.id, d.type, d.url, d.docdate, d.list_id, c.name " .
+    ", c.acl_section_value, c.acl_value " .          
     "FROM documents AS d, categories_to_documents AS cd, categories AS c WHERE " .
     "d.foreign_id = ? AND cd.document_id = d.id AND c.id = cd.category_id ";
   if ($issue) {

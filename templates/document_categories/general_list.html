@@ -37,8 +37,14 @@ var deleteLabel="{xl t="Delete"}";
 		<input type="hidden" name="parent_is" value="{$parent_is}">
 		<input type="hidden" name="process" value="{$PROCESS}" />
 		</form>
+                <div id="categoryACL"></div>
 		</td>
 		{/if}
 	</tr>
 
 </table>
+
+<script type="text/javascript">
+    var category_id={$parent_is};
+</script>
+<script src="interface/document_category_acl/document_category_acl.js" type="text/javascript"></script>

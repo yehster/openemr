@@ -82,6 +82,11 @@ class Tree {
 	    
 	    // ADDED below by BM on 06-2009 to translate categories, if applicable
 	    if ($this->_table == "categories") {
+              if(!acl_check_array($row))
+              {
+                  $result->MoveNext();
+                  continue;
+              }
 	      $this->_id_name[$row['id']] = array("id" => $row['id'], "name" => xl_document_category($row['name']), "parent" => $row['parent']);
 	    }
 	    else {

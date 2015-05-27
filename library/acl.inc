@@ -817,4 +817,26 @@
         else
             return false;
     }
+    
+    /**
+     * 
+     * @param type $data an array to check 'acl_section_value' and 'acl_value'
+     * 
+     * return true if these value aren't set, and return the result of running acl_check
+     * with those values if they are set
+     */
+    function acl_check_array(&$data)
+    {
+        if(!isset($data['acl_section_value']) || !isset($data['acl_value']))
+        {
+            return true;
+        }
+        
+        if(empty($data['acl_section_value']) || empty($data['acl_value']))
+        {
+            return true;
+        }
+        
+        return acl_check($data['acl_section_value'],$data['acl_value']);
+    }
 ?>

@@ -627,5 +627,18 @@ class Document extends ORDataObject{
     setGpRelation(1, $this->get_id(), 6, $noteid);
   }
 
+  /**
+   * Check to see if the current user has permissions to access the category to which this document belongs
+   */
+  function acl_check()
+  {
+      $select_acl_info= " SELECT acl_section_value, acl_value FROM categories, categories_to_documents "
+              . " WHERE categories_to_documents.category_id=categories.id AND categories_to_documents.document_id=?";
+      
+      $res=sqlQuery($select_acl_info,array($this->id));
+      
+      return acl_check_array($res);
+      
+  }
 } // end of Document
 ?>

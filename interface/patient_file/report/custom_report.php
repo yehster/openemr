@@ -778,6 +778,10 @@ foreach ($ar as $key => $val) {
                 $document_id = $valvalue;
                 if (!is_numeric($document_id)) continue;
                 $d = new Document($document_id);
+                if(!$d->acl_check())
+                {
+                    continue;
+                }
                 $fname = basename($d->get_url());
                 $couch_docid = $d->get_couch_docid();
                 $couch_revid = $d->get_couch_revid();

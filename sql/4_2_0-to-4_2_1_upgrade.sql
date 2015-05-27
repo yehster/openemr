@@ -93,3 +93,9 @@ UPDATE `globals` SET `gl_name` = 'erx_account_password' WHERE `gl_name` = 'erx_p
 ALTER TABLE `lang_custom` CHANGE `constant_name` `constant_name` mediumtext NOT NULL default '';
 #EndIf
 
+
+#IfMissingColumn categories acl_section_value
+ALTER TABLE `categories` 
+ADD COLUMN `acl_section_value` VARCHAR(150) NULL DEFAULT NULL AFTER `rght`,
+ADD COLUMN `acl_value` VARCHAR(150) NULL DEFAULT NULL AFTER `acl_section_value`;
+#EndIf

@@ -385,7 +385,18 @@ class C_Document extends Controller {
 	
 	
 	function retrieve_action($patient_id="",$document_id,$as_file=true,$original_file=true) {
-	    
+            $select_document_acl_info= " SELECT acl_section_value,acl_value FROM categories, categories_to_documents "
+                    . " WHERE categories_to_documents.category_id=categories.id AND categories_to_documents.document_id=?";
+
+            $document_acl_results=sqlQuery($select_document_acl_info,array($document_id));
+            if($document_acl_results)
+            {
+                if(!acl_check_array($document_acl_results)) 
+                {
+                    echo xlt("Access Denied to document");
+                    return;
+                }
+            }	    
 	    $encrypted = $_POST['encrypted'];
 		$passphrase = $_POST['passphrase'];
 		$doEncryption = false;

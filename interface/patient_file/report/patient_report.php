@@ -450,13 +450,20 @@ while($row = sqlFetchArray($res)) {
 <?php
 // show available documents
 $db = $GLOBALS['adodb']['db'];
-$sql = "SELECT d.id, d.url, c.name FROM documents AS d " .
+$sql = "SELECT d.id, d.url, c.name " .
+        " , c.acl_section_value , c.acl_value " .
+        "FROM documents AS d " .
         "LEFT JOIN categories_to_documents AS ctd ON d.id=ctd.document_id " .
         "LEFT JOIN categories AS c ON c.id = ctd.category_id WHERE " .
         "d.foreign_id = " . $db->qstr($pid);
 $result = $db->Execute($sql);
 if ($db->ErrorMsg()) echo $db->ErrorMsg();
 while ($result && !$result->EOF) {
+    if(!acl_check_array($result->fields))
+    {
+/*        $result->MoveNext();
+        continue; */
+    }
     echo "<li class='bold'>";
     echo '<input type="checkbox" name="documents[]" value="' .
         $result->fields['id'] . '">';
