@@ -96,6 +96,10 @@ ALTER TABLE `lang_custom` CHANGE `constant_name` `constant_name` mediumtext NOT 
 
 #IfMissingColumn categories acl_section_value
 ALTER TABLE `categories` 
-ADD COLUMN `acl_section_value` VARCHAR(150) NULL DEFAULT NULL AFTER `rght`,
-ADD COLUMN `acl_value` VARCHAR(150) NULL DEFAULT NULL AFTER `acl_section_value`;
+ADD COLUMN `acl_section_value` VARCHAR(150) DEFAULT NULL;
+#EndIf
+
+#IfMissingColumn categories acl_value
+ALTER TABLE `categories` 
+ADD COLUMN `acl_value` VARCHAR(150) DEFAULT NULL; 
 #EndIf

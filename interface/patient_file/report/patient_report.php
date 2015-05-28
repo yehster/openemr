@@ -461,8 +461,8 @@ if ($db->ErrorMsg()) echo $db->ErrorMsg();
 while ($result && !$result->EOF) {
     if(!acl_check_array($result->fields))
     {
-/*        $result->MoveNext();
-        continue; */
+        $result->MoveNext();
+        continue;
     }
     echo "<li class='bold'>";
     echo '<input type="checkbox" name="documents[]" value="' .
