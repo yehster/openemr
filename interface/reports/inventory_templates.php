@@ -145,6 +145,6 @@ while ($row = sqlFetchArray($res)) {
 <script language="JavaScript">
 facchanged();
 </script>
-
+<?php require_once($webserver_root."/interface/reports/csvExport/inventory_templates_csv_export.php"); ?>
 </body>
 </html>
