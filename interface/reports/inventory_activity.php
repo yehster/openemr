@@ -95,7 +95,7 @@ function getEndInventory($product_id = 0, $warehouse_id = '~') {
 }
 
 function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
-  $rowprod, $rowwh, $transdate, $qtys, $irnumber='')
+  $rowprod, $rowwh, $transdate, $qtys, $irnumber='',$lot_number)
 {
   global $warehouse, $product, $secqtys, $priqtys, $grandqtys;
   global $whleft, $prodleft; // left 2 columns, blank where repeated
@@ -128,6 +128,7 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
             echo '"'  . display_desc($warehouse) . '"';
             echo ',"' . display_desc($product)   . '"';
           }
+          echo ',"' . $lot_number . '"';
           echo ',"' . ($secei - $secqtys[0] - $secqtys[1] - $secqtys[2] - $secqtys[3] - $secqtys[4]) . '"'; // start inventory
           echo ',"' . $secqtys[0] . '"'; // sales
           // echo ',"' . $secqtys[1] . '"'; // distributions
@@ -157,6 +158,9 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
    <?php if ($_POST['form_details']) echo xl('Total for') . ' '; echo display_desc($product); ?>
   </td>
 <?php } ?>
+  <td class="detail">
+   <?php echo $lot_number; ?>
+  </td>  
   <td class="detail" align="right">
    <?php echo $secei - $secqtys[0] - $secqtys[1] - $secqtys[2] - $secqtys[3] - $secqtys[4]; ?>
   </td>
@@ -214,6 +218,9 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
   <td class="dehead" colspan="3">
    <?php echo xl('Total for') . ' '; echo display_desc($product_first ? $product : $warehouse); ?>
   </td>
+  <td class="dehead">
+   &nbsp; <!-- column for Lot Number does not make sense for totals, so leaving blank -->
+  </td>  
   <td class="dehead" align="right">
    <?php echo $priei - $priqtys[0] - $priqtys[1] - $priqtys[2] - $priqtys[3] - $priqtys[4]; ?>
   </td>
@@ -263,6 +270,7 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
       }
       echo ',"' . oeFormatShortDate(display_desc($transdate)) . '"';
       echo ',"' . display_desc($invnumber) . '"';
+      echo ',"' . $lot_number . '"';
       echo ',"' . $qtys[0]             . '"'; // sales
       // echo ',"' . $qtys[1]             . '"'; // distributions
       echo ',"' . $qtys[2]             . '"'; // purchases
@@ -300,6 +308,9 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
   }
   echo "   $invnumber\n  </td>\n";
 ?>
+  <td class="detail">
+   <?php echo $lot_number; ?>
+  </td>  
   <td class="detail">
    &nbsp;
   </td>
@@ -354,10 +365,12 @@ if ($_POST['form_csvexport']) {
   } else {
     echo '"' . xl('Warehouse') . '",';
     echo '"' . xl('Product'  ) . '",';
-  }
+  }    
+
   if ($_POST['form_details']) {
     echo '"' . xl('Date'        ) . '",';
     echo '"' . xl('Invoice'     ) . '",';
+    echo '"' . xl('Lot Number'  ) . '",';
     echo '"' . xl('Issues/Sales') . '",';
     // echo '"' . xl('Distributions') . '",';
     echo '"' . xl('Receipts'    ) . '",';
@@ -365,6 +378,7 @@ if ($_POST['form_csvexport']) {
     echo '"' . xl('Adjustments' ) . '"' . "\n";
   }
   else {
+    echo '"' . xl('Lot Number'  ) . '",';
     echo '"' . xl('Opening Balance') . '",';
     echo '"' . xl('Issues/Sales'   ) . '",';
     // echo '"' . xl('Distributions'  ) . '",';
@@ -507,9 +521,15 @@ echo "   </select>&nbsp;\n";
   <td class="dehead">
    <?php xl('Invoice','e'); ?>
   </td>
+  <td class="dehead">
+   <?php echo xlt('Lot Number'); ?>
+  </td>
 <?php } else { ?>
   <td class="dehead" colspan="3">
    <?php echo $product_first ? xl('Warehouse') : xl('Product'); ?>
+  </td>
+  <td class="dehead">
+   <?php echo xlt('Lot Number'); ?>
   </td>
 <?php } ?>
   <td class="dehead" align="right" width="8%">
@@ -565,7 +585,7 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
   $query = "SELECT s.sale_id, s.sale_date, s.quantity, s.fee, s.pid, s.encounter, " .
     "s.xfer_inventory_id, s.distributor_id, s.trans_type, d.name, lo.title, " .
     "di.drug_id, di.warehouse_id, di.inventory_id, di.destroy_date, di.on_hand, " .
-    "fe.invoice_refno " .
+    "fe.invoice_refno, di.lot_number " .
     "FROM drug_inventory AS di " .
     "JOIN drugs AS d ON d.drug_id = di.drug_id " .
     "LEFT JOIN drug_sales AS s ON " .
@@ -608,7 +628,7 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
         thisLineItem($row['drug_id'], $row['warehouse_id'], 0,
           0, $row['name'], $row['title'], $row['destroy_date'],
           array(0, 0, 0, 0, 0 - $row['on_hand']),
-          xl('Destroyed'));
+          xl('Destroyed'),$row['lot_number']);
       }
     }
 
@@ -635,7 +655,7 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
 
     thisLineItem($row['drug_id'], $row['warehouse_id'], $row['pid'] + 0,
       $row['encounter'] + 0, $row['name'], $row['title'], $row['sale_date'],
-      $qtys, $row['invoice_refno']);
+      $qtys, $row['invoice_refno'],$row['lot_number']);
   }
 
   // Generate totals for last product and warehouse.
