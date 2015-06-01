@@ -128,7 +128,6 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
             echo '"'  . display_desc($warehouse) . '"';
             echo ',"' . display_desc($product)   . '"';
           }
-          echo ',"' . $lot_number . '"';
           echo ',"' . ($secei - $secqtys[0] - $secqtys[1] - $secqtys[2] - $secqtys[3] - $secqtys[4]) . '"'; // start inventory
           echo ',"' . $secqtys[0] . '"'; // sales
           // echo ',"' . $secqtys[1] . '"'; // distributions
@@ -158,9 +157,9 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
    <?php if ($_POST['form_details']) echo xl('Total for') . ' '; echo display_desc($product); ?>
   </td>
 <?php } ?>
-  <td class="detail">
-   <?php echo $lot_number; ?>
-  </td>  
+  <?php if ($_POST['form_details']) { ?>
+    <td class="detail">&nbsp;</td>  
+   <?php } ?>
   <td class="detail" align="right">
    <?php echo $secei - $secqtys[0] - $secqtys[1] - $secqtys[2] - $secqtys[3] - $secqtys[4]; ?>
   </td>
@@ -218,9 +217,11 @@ function thisLineItem($product_id, $warehouse_id, $patient_id, $encounter_id,
   <td class="dehead" colspan="3">
    <?php echo xl('Total for') . ' '; echo display_desc($product_first ? $product : $warehouse); ?>
   </td>
-  <td class="dehead">
-   &nbsp; <!-- column for Lot Number does not make sense for totals, so leaving blank -->
-  </td>  
+  <?php if ($_POST['form_details']) { ?>
+    <td class="dehead">
+     &nbsp; <!-- column for Lot Number does not make sense for totals, so leaving blank -->
+    </td>  
+  <?php } ?>
   <td class="dehead" align="right">
    <?php echo $priei - $priqtys[0] - $priqtys[1] - $priqtys[2] - $priqtys[3] - $priqtys[4]; ?>
   </td>
@@ -378,7 +379,6 @@ if ($_POST['form_csvexport']) {
     echo '"' . xl('Adjustments' ) . '"' . "\n";
   }
   else {
-    echo '"' . xl('Lot Number'  ) . '",';
     echo '"' . xl('Opening Balance') . '",';
     echo '"' . xl('Issues/Sales'   ) . '",';
     // echo '"' . xl('Distributions'  ) . '",';
@@ -528,9 +528,6 @@ echo "   </select>&nbsp;\n";
   <td class="dehead" colspan="3">
    <?php echo $product_first ? xl('Warehouse') : xl('Product'); ?>
   </td>
-  <td class="dehead">
-   <?php echo xlt('Lot Number'); ?>
-  </td>
 <?php } ?>
   <td class="dehead" align="right" width="8%">
    <?php xl('Opening Balance','e'); ?>
@@ -669,6 +666,11 @@ if ($_POST['form_refresh'] || $_POST['form_csvexport']) {
   <td class="dehead" colspan="4">
    <?php xl('Grand Total','e'); ?>
   </td>
+  <?php if ($_POST['form_details']) { ?>
+    <td class="dehead">
+     &nbsp; <!-- column for Lot Number does not make sense for totals, so leaving blank -->
+    </td>  
+  <?php } ?>  
   <td class="dehead" align="right">
    <?php echo $grei - $grandqtys[0] - $grandqtys[1] - $grandqtys[2] - $grandqtys[3] - $grandqtys[4]; ?>
   </td>
