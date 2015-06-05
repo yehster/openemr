@@ -1448,7 +1448,8 @@ if (!empty($reg)) {
           <?php if ($GLOBALS['gbl_menu_stats_c3'   ]) genPopLink(xl('C3'),'ippf_c3.php'); ?>
           <?php if ($GLOBALS['gbl_menu_ive_clients']) genPopLink(xl('IVE Client List'),'ive_client_list.php'); ?>
           <?php if (!empty($GLOBALS['code_types']['REPORT'])) genPopLink(xl('Visits by Item'),'famp_services_products_visits.php'); ?>
-<?php if (!empty($GLOBALS['code_types']['IPPF'])) { ?>
+          <?php genPopLink(xl('Service and Client Volume'),'visits/visits_report.php'); ?>
+        <?php if (!empty($GLOBALS['code_types']['IPPF'])) { ?>
             <li><a class="collapsed_lv2"><span><?php xl('Legacy Statistics','e') ?></span></a>
             <ul>
               <?php if ($GLOBALS['gbl_menu_stats_ippf' ]) genPopLink(xl('IPPF Stats'),'ippf_statistics.php?t=i'); ?>
