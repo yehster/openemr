@@ -17,6 +17,16 @@ var visits_view_model=
     }
 };
 
+function provider_display_name(data)
+{
+    var retval=data.lname;
+    if((data.lname.length>0) && (data.fname.length>0))
+    {
+        retval+=",";
+    }
+    retval+=data.fname;
+    return retval;
+}
 function manage_clinic_select_all(newValue)
 {
     if(newValue)
@@ -89,7 +99,20 @@ function setup_parameters()
 {
     var parameters=visits_view_model.parameters;
     parameters.clinics=ko.observableArray();
+    parameters.clinics_mode=ko.observable("summary");
     parameters.clinics_details=ko.observable(false);
+
+    parameters.clinics_mode.subscribe(function(value)
+    {
+        if(value==="summary")
+        {
+            parameters.clinics_details(false);
+        }
+        else if(value==="details")
+        {
+            parameters.clinics_details(true);
+        }
+    });
 
     parameters.period_size=ko.observable(period_options[0]);
     for(var clinic_idx=0;clinic_idx<clinics.length;clinic_idx++)
@@ -115,7 +138,19 @@ function setup_parameters()
     }
     
     parameters.providers=ko.observableArray();
+    parameters.providers_mode=ko.observable("summary");
     parameters.providers_details=ko.observable(false);
+    parameters.providers_mode.subscribe(function(value)
+    {
+        if(value==="summary")
+        {
+            parameters.providers_details(false);
+        }
+        else if(value==="details")
+        {
+            parameters.providers_details(true);
+        }
+    });    
     
     for(var providers_idx=0;providers_idx<providers.length;providers_idx++)
     {
@@ -134,6 +169,19 @@ function setup_parameters()
     }
     
     parameters.categorize_services=ko.observable(false);
+    parameters.services_mode=ko.observable("summary");
+    parameters.services_mode.subscribe(function(value)
+    {
+        if(value==="summary")
+        {
+            parameters.categorize_services(false);
+        }
+        else if(value==="details")
+        {
+            parameters.categorize_services(true);
+        }
+    });    
+    
     parameters.categories=ko.observableArray();
     for(var categories_idx=0;categories_idx<service_categories.length;categories_idx++)
     {
@@ -164,19 +212,44 @@ function isEmpty(obj) {
     return true;
 }
 
+function data_heading_to_content_type(data)
+{
+    if((data.indexOf("_")==-1) &&  (data[0] === data[0].toUpperCase()))
+    {
+        return "service";
+    }
+    else
+    {
+        return data;
+    }
+}
 
-function setup_results_array(rows,columns)
+function cell_data(data,type)
+{
+    var self=this;
+    this.data=(data===null)? 0 : data;
+    this.type=type;
+    this.content="";
+    this.trend="none";
+    return self;
+}
+
+function setup_results_array(rows,columns,label_columns)
 {
     var retval=new Array(rows);
     for(var row_idx=0;row_idx<rows;row_idx++)
     {
         retval[row_idx]=new Array(columns);
+        for(var col_idx=0;col_idx<columns;col_idx++)
+        {
+            retval[row_idx][col_idx]=new cell_data(col_idx >= label_columns ? 0 : "","placeholder");
+        }
     }
     return retval;
 }
 function build_data_table_summary_only(data)
 {
-    var results_table=setup_results_array(visits_view_model.results.values_list.length,visits_view_model.results.periods.length+1);
+    var results_table=setup_results_array(visits_view_model.results.values_list.length,visits_view_model.results.periods.length+1,1);
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
         var cur_data=data[data_idx];
@@ -187,8 +260,9 @@ function build_data_table_summary_only(data)
             var value_idx=visits_view_model.results.values_list.indexOf(value)
             if(value_idx!==-1)
             {
-                results_table[value_idx][0]=value_tag_to_descriptions(value);
-                results_table[value_idx][period_idx+1]=(cur_data[value]===null) ? 0 : cur_data[value];
+                results_table[value_idx][0]=new cell_data(value_tag_to_descriptions(value),"tag");
+                results_table[value_idx][0].content=data_heading_to_content_type(value);
+                results_table[value_idx][period_idx+1]=new cell_data(cur_data[value],"value");
             }
         }
     }
@@ -201,7 +275,7 @@ function build_data_table_providers(data)
 {
     
     visits_view_model.results.report_type("Providers");
-    var results_table=setup_results_array(visits_view_model.results.providers_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2);    
+    var results_table=setup_results_array(visits_view_model.results.providers_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2,2);    
     var num_values=visits_view_model.results.values_list.length;
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
@@ -216,14 +290,15 @@ function build_data_table_providers(data)
             {
                 if(value_idx===0)
                 {
-                    results_table[provider_idx*num_values +value_idx][0]=cur_data.provider_id;
+                    results_table[provider_idx*num_values +value_idx][0]=new cell_data(cur_data.provider_id,"provider");
                 }
                 else
                 {
-                    results_table[provider_idx*num_values +value_idx][0]="";
+                    results_table[provider_idx*num_values +value_idx][0]=new cell_data("","provider");
                 }
-                results_table[provider_idx*num_values +value_idx][1]=value_tag_to_descriptions(value);
-                results_table[provider_idx*num_values +value_idx][period_idx+2]=(cur_data[value]===null) ? 0 : cur_data[value];
+                results_table[provider_idx*num_values +value_idx][1]=new cell_data(value_tag_to_descriptions(value),"tag");
+                results_table[provider_idx*num_values +value_idx][0].content=data_heading_to_content_type(value);
+                results_table[provider_idx*num_values +value_idx][period_idx+2]=new cell_data(cur_data[value],"value");
             }
         }
     }
@@ -236,7 +311,7 @@ function build_data_table_clinic_only(data)
 {
     
     visits_view_model.results.report_type("Providers");
-    var results_table=setup_results_array(visits_view_model.results.clinics_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2);    
+    var results_table=setup_results_array(visits_view_model.results.clinics_list.length*visits_view_model.results.values_list.length,visits_view_model.results.periods.length+2,2);    
     var num_values=visits_view_model.results.values_list.length;
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
@@ -251,14 +326,15 @@ function build_data_table_clinic_only(data)
             {
                 if(value_idx===0)
                 {
-                    results_table[facility_idx*num_values +value_idx][0]=cur_data.facility;
+                    results_table[facility_idx*num_values +value_idx][0]=new cell_data(cur_data.facility,"clinic");
                 }
                 else
                 {
-                    results_table[facility_idx*num_values +value_idx][0]="";
+                    results_table[facility_idx*num_values +value_idx][0]=new cell_data("","clinic");
                 }
-                results_table[facility_idx*num_values +value_idx][1]=value_tag_to_descriptions(value);
-                results_table[facility_idx*num_values +value_idx][period_idx+2]=(cur_data[value]===null) ? 0 : cur_data[value];
+                results_table[facility_idx*num_values +value_idx][1]=new cell_data(value_tag_to_descriptions(value),"tag");
+                results_table[facility_idx*num_values +value_idx][0].content=data_heading_to_content_type(value);
+                results_table[facility_idx*num_values +value_idx][period_idx+2]=new cell_data(cur_data[value],"value");
             }
         }
     }
@@ -294,7 +370,7 @@ function build_data_table_clinics_and_providers(data)
         clinic_position_map[clinic]=number_clinic_providers;
         number_clinic_providers+=cur_clinic.provider_list.length*visits_view_model.results.values_list.length;
     }
-    var results_table=setup_results_array(number_clinic_providers,visits_view_model.results.periods.length+3);    
+    var results_table=setup_results_array(number_clinic_providers,visits_view_model.results.periods.length+3,3);    
     for(var data_idx=0;data_idx<data.length;data_idx++)
     {
         var cur_data=data[data_idx];
@@ -318,21 +394,22 @@ function build_data_table_clinics_and_providers(data)
                 {
                     if(provider_position===0)
                     {
-                        results_table[base_position +value_idx][0]=cur_data.facility;                   
+                        results_table[base_position +value_idx][0]=new cell_data(cur_data.facility,"clinic");                   
                     }
                     else
                     {
-                        results_table[base_position +value_idx][0]="";
+                        results_table[base_position +value_idx][0]=new cell_data("","clinic");
                     }
-                    results_table[base_position +value_idx][1]=cur_data.provider_id;
+                    results_table[base_position +value_idx][1]=new cell_data(cur_data.provider_id,"provider");
                 }
                 else
                 {
-                    results_table[base_position +value_idx][0]="";
-                    results_table[base_position +value_idx][1]="";
+                    results_table[base_position +value_idx][0]=new cell_data("","clinic");
+                    results_table[base_position +value_idx][1]=new cell_data("","provider");
                 }
-                results_table[base_position +value_idx][2]=value_tag_to_descriptions(value);
-                results_table[base_position +value_idx][period_idx+3]=(cur_data[value]===null) ? 0 : cur_data[value];
+                results_table[base_position +value_idx][2]=new cell_data(value_tag_to_descriptions(value),"tag");
+                results_table[base_position +value_idx][0].content=data_heading_to_content_type(value);
+                results_table[base_position +value_idx][period_idx+3]=new cell_data(cur_data[value],"value");
             }
         }        
     }
@@ -411,6 +488,8 @@ function build_data_table(data)
         visits_view_model.results.headers.push(visits_view_model.results.periods[period_idx]);
     }
     
+    analyze_trends(results_table);
+    
     visits_view_model.results.data_rows(results_table);
 //    alert(JSON.stringify(results_table));
 //    alert(JSON.stringify(visits_view_model.results.clinics_list));
@@ -440,6 +519,36 @@ function provider_integer_to_name(id)
     else
     {
         return "~~Unknown~~";
+    }
+}
+
+function isNumeric(obj)
+{
+    return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
+}
+
+function parseTrendValue(obj)
+{
+    return isNumeric(obj) ? parseFloat(obj) : null;
+}
+function analyze_trends(data)
+{
+    for(var row_idx=0;row_idx<data.length;row_idx++)
+    {
+        var row=data[row_idx];
+        var prev_value=parseTrendValue(row[0].data);
+        for(var col_idx=1;col_idx<row.length;col_idx++)
+        {
+            var cur_value=parseTrendValue(row[col_idx].data);
+            if((prev_value!==null) && (cur_value!==null))
+            {
+                if((prev_value*0.8)>cur_value)
+                {
+                    row[col_idx].trend="decline";
+                }
+            }
+            prev_value=cur_value;
+        }
     }
 }
 

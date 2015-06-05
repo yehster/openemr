@@ -101,6 +101,7 @@ $to_date=date('Y-m-d');
     <title data-bind="text: title"></title>
     <h2><center data-bind="text: title"></center></h2>
 <div id="queryParameters">
+      <span id='filters' data-bind="template:{name: 'visits-parameters', data: parameters}"></span>
        <span class='label'><?php echo xlt('From'); ?></span>
       <input type='text' name='form_from_date' id='form_from_date' size='10' value='<?php echo $from_date ?>'
        onkeyup='datekeyup(this,mypcc)' onblur='dateblur(this,mypcc)' title='Start date yyyy-mm-dd'>
@@ -113,7 +114,9 @@ $to_date=date('Y-m-d');
       <img class='datePicker' src='<?php echo $web_root;?>/interface/pic/show_calendar.gif' align='absbottom' width='24' height='22'
        id='img_to_date' border='0' alt='[?]' style='cursor:pointer'
        title='<?php echo xla('Click here to choose a date'); ?>'>
-      <span id='filters' data-bind="template:{name: 'visits-parameters', data: parameters}"></span>
+      <span id='periods' data-bind="template:{name: 'visits-periods', data: parameters}"></span>
+
+      <div id='execute' data-bind="template:{name: 'visits-execute', data: parameters}"></div>
 </div>
     <div data-bind="template:{name: 'visits-results', data: results}"></div>
 <script>

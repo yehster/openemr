@@ -22,12 +22,69 @@ and open the template in the editor.
      font-weight: bold;
  }
  
-table.results td
+ table.results
+ {
+     border-spacing: 0px;
+     border-collapse: collapse;
+ }
+ table.results th
+ {
+     font-weight: bold;
+     text-align: center;
+     padding: 0.2em;
+ }
+
+ table.results tr
+ {
+     padding: 0px;
+     margin: 0px;
+ }
+ 
+table.results tr > td
 {
     border: 1px solid black;
-    margin: 0px;
-    padding: 0px;
 }
+ 
+table.results tr > td[type='value']
+{
+
+    text-align: center;
+}
+
+table.results tr > td[type='placeholder']
+{
+    text-align: center;
+}
+
+
+
+table.results tbody > tr > td[type='tag'],
+table.results tbody > tr > td[type='provider'],
+table.results tbody > tr > td[type='clinic']
+{
+    padding-left: 1em;
+    padding-right: 0.2em;
+    font-weight:bold;
+    text-align: left;
+}
+
+table.results tbody > tr > td[trend='decline']
+{
+    color: red;
+}
+
+table.results tbody > tr[content='services_per_client'],
+table.results tbody > tr[content='services_per_visit']
+{
+    background-color: lightgoldenrodyellow;
+}
+
+table.results tbody > tr[content='service']
+{
+    background-color:lightcyan;
+}
+
+
 @media print 
 {
     img.datePicker, #filters

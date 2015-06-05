@@ -19,16 +19,16 @@ function export_csv()
 {
     var full_data=[];
     full_data.push(visits_view_model.results.headers());
-    full_data=full_data.concat(visits_view_model.results.data_rows());
-    for(var x_idx=0;x_idx<full_data.length;x_idx++)
+//    full_data=full_data.concat(visits_view_model.results.data_rows());
+    var table_data=visits_view_model.results.data_rows();
+    for(var x_idx=0;x_idx<table_data.length;x_idx++)
     {
-        for(var y_idx=0;y_idx<full_data[x_idx].length;y_idx++)
+        var data_row=[];
+        for(var y_idx=0;y_idx<table_data[x_idx].length;y_idx++)
         {
-            if(full_data[x_idx][y_idx]===undefined)
-            {
-                full_data[x_idx][y_idx]=0;
-            }
+            data_row[y_idx]=table_data[x_idx][y_idx].data;
         }
+        full_data.push(data_row);
     }
     
     $("#jsonData").val(JSON.stringify(full_data));

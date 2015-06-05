@@ -15,7 +15,7 @@ function value_tag_to_descriptions(tag)
     }
     else if(tag==='number_clients')
     {
-        return '<?php echo xlt('Number of Clients'); ?>';
+        return '<?php echo xlt('Number of Unique Clients'); ?>';
     }
     else if(tag==='number_visits')
     {
@@ -35,8 +35,12 @@ function value_tag_to_descriptions(tag)
     }
     else if(tag==='services_per_client')
     {
-        return '<?php echo xlt('Average Services/Client(Daily)'); ?>';
-    }    
+        return '<?php echo xlt('Average Services/Client'); ?>';
+    }
+    else if(tag==='services_per_visit')
+    {
+        return '<?php echo xlt('Average Services/Visit'); ?>';        
+    }
     else
     {
         return tag;
@@ -79,8 +83,8 @@ function value_tag_to_descriptions(tag)
                 </tr>
             </thead>
             <tbody data-bind="foreach: data_rows">
-                <tr data-bind="foreach: $data">
-                    <td data-bind="text: $data==null ? 0 : $data"></td>
+                <tr data-bind="foreach: $data, attr: {content: $data[0].content}">
+                    <td data-bind="text: $data.data, attr: {type: $data.type, trend: $data.trend}"></td>
 
                 </tr>
             </tbody>
