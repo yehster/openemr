@@ -503,7 +503,7 @@ function build_provider_integer_map()
     for(var idx=0;idx<providers.length;idx++)
     {
         var cur_provider=providers[idx];
-        provider_integer_map[cur_provider.id]=cur_provider.lname + "," +cur_provider.fname;
+        provider_integer_map[cur_provider.id]=provider_display_name(cur_provider);
     }
 //    provider_integer_map['0']="~~Unknown~~";
     provider_integer_map[-1]="~~~Clinic Total~~~";
