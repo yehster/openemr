@@ -2744,7 +2744,6 @@ function generate_layout_validation($form_id) {
       case 14:
       case 26:
       case 33:
-      case 36:
         echo
         " if (f.$fldname.selectedIndex <= 0) {\n" .
         "  if (f.$fldname.focus) f.$fldname.focus();\n" .
@@ -2774,6 +2773,17 @@ function generate_layout_validation($form_id) {
 		"  		$('#" . $fldname . "').parents('div.tab').each( function(){ var tabHeader = $('#header_' + $(this).attr('id') ); tabHeader.css('color','');  } ); " .
 		" } \n";
         break;
+      case 36:
+        echo
+        " var multi_select=document.getElementById('$fldname"."[][]'); \n " .
+        " var multi_choice_made=false; \n".
+        " for (var options_index=0; options_index < multi_select.length; options_index++) { ".
+              " multi_choice_made=multi_choice_made || multi_select.options[options_index].selected; \n".
+        "    } \n" .
+        " if(!multi_choice_made)
+            errMsgs[errMsgs.length] = '" . htmlspecialchars( (xl_layout_label($fldtitle)), ENT_QUOTES) . "'; \n" .
+        "";
+          break;
     }
   }
 }
