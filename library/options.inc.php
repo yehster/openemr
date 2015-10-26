@@ -2781,7 +2781,7 @@ function generate_layout_validation($form_id) {
               " multi_choice_made=multi_choice_made || multi_select.options[options_index].selected; \n".
         "    } \n" .
         " if(!multi_choice_made)
-            errMsgs[errMsgs.length] = '" . attr(xl_layout_label($fldtitle)) . "'; \n" .
+            errMsgs[errMsgs.length] = '" . addslashes(xl_layout_label($fldtitle)) . "'; \n" .
         "";
           break;
     }
