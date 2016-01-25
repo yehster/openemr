@@ -1,7 +1,13 @@
 <script type="text/html" id="tabs-controls">
     <div class="tabControls" data-bind="with: tabs">
         <!-- ko  foreach: tabsList -->
-            <span data-bind="text: title"></span>
+            <span class="tabSpan">
+                <span  data-bind="text: title, click: tabClicked"></span>
+                <span class="typcn typcn-refresh" style="font-size: 1.5em;" data-bind="click: tabRefresh"></span>
+                <!-- ko if:closable-->
+                    <span class="typcn typcn-delete" style="font-size: 1.5em;" data-bind="click: tabClose"></span>
+                <!-- /ko -->    
+            </span>
         <!-- /ko -->
     </div>
 </script>

@@ -8,15 +8,22 @@
 ko.bindingHandlers.location={
     init: function(element,valueAccessor, allBindings,viewModel, bindingContext)
     {
+        var tabData = ko.unwrap(valueAccessor());
+        tabData.window=element.contentWindow;
         element.addEventListener("load",
             function()
             {
-                var tabData = ko.unwrap(valueAccessor());
                 
                 var cwDocument=this.contentWindow.document
                 $(cwDocument).ready(function(){
                         var jqDocument=$(cwDocument);
-                        tabData.title(jqDocument.find(".title:first").text());
+                        var titleText="Unknown";
+                        var titleClass=jqDocument.find(".title:first");
+                        if(titleClass.length>=1)
+                        {
+                            titleText=titleClass.text();
+                        }
+                        tabData.title(titleText);
                     }
                 );
             }
