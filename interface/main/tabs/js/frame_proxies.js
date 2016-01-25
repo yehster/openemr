@@ -8,7 +8,7 @@
 var RTop = {
     set location(url)
     {
-        if(frames.length >1) {top.frames[1].location=url;}
+        navigateTab(url,2);
     }
 };
 

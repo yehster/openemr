@@ -27,8 +27,7 @@ function tabs_view_model()
     return this;
 }
 
-
-function tabClicked(data,evt)
+function activateTab(data)
 {
     for(var tabIdx=0;tabIdx<app_view_model.application_data.tabs.tabsList().length;tabIdx++)
     {
@@ -44,16 +43,40 @@ function tabClicked(data,evt)
         {
             curTab.visible(true);
         }
-    }
+    }    
+}
+
+function tabClicked(data,evt)
+{
+    activateTab(data);
 }
 
 function tabRefresh(data,evt)
 {
     data.window.location=data.window.location;
-    tabClicked(data,evt);
+    activateTab(data);
 }
 
 function tabClose(data,evt)
 {
-        var curTab=app_view_model.application_data.tabs.tabsList.remove(data);
+        app_view_model.application_data.tabs.tabsList.remove(data);
+}
+
+
+function navigateTab(url,tabIdx)
+{
+    var curTab;
+    if(tabIdx<app_view_model.application_data.tabs.tabsList().length)
+    {
+        curTab=app_view_model.application_data.tabs.tabsList()[tabIdx];
+        curTab.url(url);
+        
+    }
+    else if (tabIdx===app_view_model.application_data.tabs.tabsList().length)
+
+    {
+        curTab=new tabStatus("New",url,true,false,false);
+        app_view_model.application_data.tabs.tabsList.push(curTab);
+    }
+    activateTab(curTab);
 }
