@@ -8,7 +8,7 @@
 function tabStatus(title,url,closable)
 {
     var self=this;
-    self.visible=ko.observable(false);
+    self.visible=ko.observable(true);
     self.pinned=ko.observable(false);
     self.closable=ko.observable(closable);
     self.title=ko.observable(title);
