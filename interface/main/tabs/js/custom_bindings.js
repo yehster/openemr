@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -22,6 +22,21 @@ ko.bindingHandlers.location={
                         if(titleClass.length>=1)
                         {
                             titleText=titleClass.text();
+                        }
+                        else
+                        {
+                            var frameDocument=jqDocument.find("frame");
+                            if(frameDocument.length>=1)
+                            {
+                                var jqFrameDocument=$(frameDocument.get(0).contentWindow.document);
+                                titleClass=jqFrameDocument.find(".title:first");
+                                if(titleClass.length>=1)
+                                {
+                                    titleText=titleClass.text();                                
+                                }
+                                
+                            }
+                            
                         }
                         tabData.title(titleText);
                     }

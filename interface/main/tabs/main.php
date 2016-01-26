@@ -56,7 +56,7 @@ function allFramesLoaded() {
     </div>
 </div>
 <script>
-
+    var webroot_url="<?php echo $web_root; ?>";
     ko.applyBindings(app_view_model);
 
 </script>

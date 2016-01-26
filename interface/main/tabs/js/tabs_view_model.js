@@ -80,3 +80,16 @@ function navigateTab(url,tabIdx)
     }
     activateTab(curTab);
 }
+
+function tabLockToggle(data,evt)
+{
+    data.locked(!data.locked());
+    if(data.locked())
+    {
+        activateTab(data);
+    }
+    else
+    {
+        data.visible(false);
+    }
+}
