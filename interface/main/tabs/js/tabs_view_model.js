@@ -5,7 +5,7 @@
  */
 
 
-function tabStatus(title,url,closable,visible,locked)
+function tabStatus(title,url,name,closable,visible,locked)
 {
     var self=this;
     self.visible=ko.observable(visible);
@@ -13,6 +13,7 @@ function tabStatus(title,url,closable,visible,locked)
     self.closable=ko.observable(closable);
     self.title=ko.observable(title);
     self.url=ko.observable(url);
+    self.name=ko.observable(name);
     self.window=null;
     return this;
 }
@@ -20,8 +21,8 @@ function tabStatus(title,url,closable,visible,locked)
 function tabs_view_model()
 {
     this.tabsList=ko.observableArray();
-    this.tabsList.push(new tabStatus("One","/iframe/interface/main/main_info.php",false,true,false));
-    this.tabsList.push(new tabStatus("Two","/iframe/interface/main/messages/messages.php?form_active=1",false,false,false));
+    this.tabsList.push(new tabStatus("One","/iframe/interface/main/main_info.php","lst",false,true,false));
+    this.tabsList.push(new tabStatus("Two","/iframe/interface/main/messages/messages.php?form_active=1","msg",false,false,false));
 //    this.tabsList.push(new tabStatus("Three"));
     this.text=ko.observable("Test");
     return this;
@@ -46,6 +47,22 @@ function activateTab(data)
     }    
 }
 
+function activateTabByName(name,hideOthers)
+{
+    for(var tabIdx=0;tabIdx<app_view_model.application_data.tabs.tabsList().length;tabIdx++)
+    {
+        var curTab=app_view_model.application_data.tabs.tabsList()[tabIdx];
+        if(curTab.name()===name)
+        {
+            curTab.visible(true);
+        }
+        else if(hideOthers)
+        {
+            curTab.visible(false);
+        }
+    }
+}
+
 function tabClicked(data,evt)
 {
     activateTab(data);
@@ -63,22 +80,18 @@ function tabClose(data,evt)
 }
 
 
-function navigateTab(url,tabIdx)
+function navigateTab(url,name)
 {
     var curTab;
-    if(tabIdx<app_view_model.application_data.tabs.tabsList().length)
-    {
-        curTab=app_view_model.application_data.tabs.tabsList()[tabIdx];
-        curTab.url(url);
-        
+    if(top.frames[name])
+    {            
+       top.frames[name].window.location=url; 
     }
-    else if (tabIdx===app_view_model.application_data.tabs.tabsList().length)
-
+    else
     {
-        curTab=new tabStatus("New",url,true,false,false);
+        curTab=new tabStatus("New",url,name,true,false,false);
         app_view_model.application_data.tabs.tabsList.push(curTab);
     }
-    activateTab(curTab);
 }
 
 function tabLockToggle(data,evt)

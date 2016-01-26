@@ -8,7 +8,8 @@
 var RTop = {
     set location(url)
     {
-        navigateTab(url,2);
+        navigateTab(url,"pat");
+        activateTabByName("pat",true);
     }
 };
 
@@ -20,7 +21,8 @@ var left_nav = {
 
 left_nav.setPatient = function(pname, pid, pubpid, frname, str_dob)
 {
-    navigateTab(webroot_url+"/interface/patient_file/history/encounters.php",3);
+    navigateTab(webroot_url+"/interface/patient_file/history/encounters.php","enc");
+    activateTabByName("enc",false);
 };
 left_nav.setPatientEncounter = function(EncounterIdArray,EncounterDateArray,CalendarCategoryArray)
 {

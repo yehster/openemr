@@ -22,7 +22,7 @@
         
         <!-- ko  foreach: tabs.tabsList -->
         <div class="frameDisplay" data-bind="visible:visible">
-            <iframe data-bind="location: $data, iframeTitle: $data.title()">
+            <iframe data-bind="location: $data, iframeName: $data.name, ">
 
             </iframe>
         </div>

@@ -28,17 +28,26 @@ ko.bindingHandlers.location={
                             var frameDocument=jqDocument.find("frame");
                             if(frameDocument.length>=1)
                             {
+                                titleText=frameDocument.attr("name");
                                 var jqFrameDocument=$(frameDocument.get(0).contentWindow.document);
                                 titleClass=jqFrameDocument.find(".title:first");
                                 if(titleClass.length>=1)
                                 {
                                     titleText=titleClass.text();                                
                                 }
-                                else
+                                var subFrame= frameDocument.get(0);
+                                subFrame.addEventListener("load",
+                                function()
                                 {
-                                    titleText=frameDocument.attr("name");
-                                }
-                                
+                                    var subFrameDocument=$(subFrame.contentWindow.document);
+                                    titleClass=$(subFrameDocument).find(".title:first");
+                                    if(titleClass.length>=1)
+                                    {
+                                        titleText=titleClass.text();
+                                        tabData.title(titleText);
+                                    }
+                                   
+                                });
                             }
                             
                         }
@@ -54,6 +63,16 @@ ko.bindingHandlers.location={
     {
         var tabData = ko.unwrap(valueAccessor());
         element.src=tabData.url();
+    }
+}
+
+ko.bindingHandlers.iframeName = {
+    init: function(element,valueAccessor, allBindings,viewModel, bindingContext)
+    {
+    },
+    update: function(element,valueAccessor, allBindings,viewModel, bindingContext)
+    {
+        element.name=ko.unwrap(valueAccessor());        
     }
 }
 
