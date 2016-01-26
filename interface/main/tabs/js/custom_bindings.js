@@ -34,6 +34,10 @@ ko.bindingHandlers.location={
                                 {
                                     titleText=titleClass.text();                                
                                 }
+                                else
+                                {
+                                    titleText=frameDocument.attr("name");
+                                }
                                 
                             }
                             
