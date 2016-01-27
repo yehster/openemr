@@ -116,8 +116,10 @@ function dlgopen(url,winname,width,height)
         
         dlgIframe=top.$("<iframe class='dialogIframe'></iframe>");
         dlgIframe.attr("name",winname);
-        dlgIframe.attr("width",width);
-        dlgIframe.attr("height",height);
+        dlgIframe.css({"left":(top.$("body").width()-width)/2
+                       ,"top": "5em"
+                       ,"height":height
+                       ,"width":width});
         top.$("body").append(dlgIframe);
         top.set_opener(winname,window);
         dlgIframe.get(0).src=fullURL;
