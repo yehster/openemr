@@ -92,3 +92,42 @@ body
 {
     color: blue;
 }
+
+
+#dialogDiv
+{
+    margin: 0;
+    padding:0;
+    border:0;
+    position:absolute;
+
+    width: 99%;
+    height:99%;
+    
+    background-color: gray;
+    z-index:1000;
+    opacity: 0.5;
+}
+
+#dialogDiv > div.container
+{
+    display: table;
+    background-color: gray;
+    margin: auto auto;
+    opacity: 1;
+}
+
+iframe.dialogIframe
+{
+    position: absolute;
+    top:0;
+    left:0;
+    margin: auto auto;
+    opacity: 1;
+    z-index:10000;
+}
+
+#patientData
+{
+    min-height: 3em;
+}

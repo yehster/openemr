@@ -39,6 +39,7 @@ function allFramesLoaded() {
 <script type="text/javascript" src="js/tabs_view_model.js"></script>
 <script type="text/javascript" src="js/application_view_model.js"></script>
 <script type="text/javascript" src="js/frame_proxies.js"></script>
+<script type="text/javascript" src="js/dialog_utils.js"></script>
 
 <link rel='stylesheet' href='<?php echo $web_root; ?>/library/fonts/typicons/typicons.min.css' />
 
@@ -47,6 +48,7 @@ function allFramesLoaded() {
 <?php require_once("templates/patient_data_template.php") ?>
 
 <div id="mainBox">
+    <div id="dialogDiv"></div>
     <div id="menu" data-bind="template: {name: 'menu-template', data: application_data} "> </div>
     <div id="patientData" data-bind="template: {name: 'patient-data-template', data: application_data} "></div>
     <div data-bind="template: {name: 'tabs-controls', data: application_data} "> </div>
@@ -56,6 +58,7 @@ function allFramesLoaded() {
     </div>
 </div>
 <script>
+    $("#dialogDiv").hide();
     var webroot_url="<?php echo $web_root; ?>";
     ko.applyBindings(app_view_model);
 

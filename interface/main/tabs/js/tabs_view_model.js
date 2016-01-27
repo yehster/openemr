@@ -83,9 +83,9 @@ function tabClose(data,evt)
 function navigateTab(url,name)
 {
     var curTab;
-    if(top.frames[name])
+    if($("iframe[name='"+name+"']").length>0)
     {            
-       top.frames[name].window.location=url; 
+       $("iframe[name='"+name+"']").get(0).contentWindow.location=url; 
     }
     else
     {
@@ -105,4 +105,9 @@ function tabLockToggle(data,evt)
     {
         data.visible(false);
     }
+}
+
+function refreshPatient(data,evt)
+{
+    
 }

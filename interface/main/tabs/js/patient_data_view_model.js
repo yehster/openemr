@@ -14,13 +14,13 @@ function encounter_data(id,date,category)
     return this;
 }
 
-function patient_data_view_model()
+function patient_data_view_model(pname,pid,pubpid,str_dob)
 {
     var self=this;
-    self.pname=ko.observable();
-    self.pid=ko.observable();
-    self.pubpid=ko.observable();
-    self.str_dob=ko.observable();
+    self.pname=ko.observable(pname);
+    self.pid=ko.observable(pid);
+    self.pubpid=ko.observable(pubpid);
+    self.str_dob=ko.observable(str_dob);
     
     self.encounterArray=ko.observableArray();
     
