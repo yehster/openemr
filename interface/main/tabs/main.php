@@ -27,6 +27,7 @@ function allFramesLoaded() {
  return true;
 }    
 </script>
+<link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css">
 <link rel="stylesheet" type="text/css" href="css/tabs.css"/>
 
 <?php include_js_library("knockout/knockout-3.4.0.js"); ?>
@@ -49,9 +50,9 @@ function allFramesLoaded() {
 
 <div id="mainBox">
     <div id="dialogDiv"></div>
-    <div id="menu" data-bind="template: {name: 'menu-template', data: application_data} "> </div>
-    <div id="patientData" data-bind="template: {name: 'patient-data-template', data: application_data} "></div>
-    <div data-bind="template: {name: 'tabs-controls', data: application_data} "> </div>
+    <div id="menu" class="body_top" data-bind="template: {name: 'menu-template', data: application_data} "> </div>
+    <div id="patientData" class="body_title" data-bind="template: {name: 'patient-data-template', data: application_data} "></div>
+    <div class="body_title" data-bind="template: {name: 'tabs-controls', data: application_data} "> </div>
 
     <div class="mainFrames">
         <div id="framesDisplay" data-bind="template: {name: 'tabs-frames', data: application_data}"> </div>

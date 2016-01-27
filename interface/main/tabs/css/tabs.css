@@ -32,12 +32,15 @@ body
     align-content: space-between;
     width: 100%;
     flex: 1 0 auto;
+    margin: 0;
+    padding: 0;
 }
 
 #mainBox > div
 {
     flex: 0 1 auto;
-    margin: 4px 0 0 0;
+    margin: 0 0 0 0;
+    padding: 0;
 }
 
 #mainBox > div.mainFrames
@@ -63,6 +66,8 @@ body
     align-content:stretch;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 #framesDisplay > div > iframe
@@ -75,17 +80,19 @@ body
 {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    display: flex;
+    flex-direction: row;
 }
 
 .tabSpan
 {
     margin: 0 0 0 0;
-    padding:  2px 3px 0 3px;
+    padding:  0 0 0 0;
     border: 2px solid black;
-    background-color: #BCF;
     border-radius: 6px 6px 0 0;
     cursor: pointer;
     font-weight: bold;
+    flex: 0 1 auto;
 }
 
 .tabSpan:hover

@@ -1,18 +1,18 @@
 <script type="text/html" id="tabs-controls">
     <div class="tabControls" data-bind="with: tabs">
         <!-- ko  foreach: tabsList -->
-            <span class="tabSpan">
+            <span class="tabSpan bgcolor2">
                 <span  data-bind="text: title, click: tabClicked"></span>
-                <span class="typcn typcn-refresh" style="font-size: 1.5em;" data-bind="click: tabRefresh"></span>
+                <span class="typcn typcn-refresh" data-bind="click: tabRefresh"></span>
                 <!--ko if:!locked() -->
-                    <span class="typcn typcn-lock-open" style="font-size: 1.5em;" data-bind="click: tabLockToggle"></span>
+                    <span class="typcn typcn-lock-open"  data-bind="click: tabLockToggle"></span>
                 <!-- /ko -->
                 <!--ko if:locked() -->
-                    <span class="typcn typcn-lock-closed" style="font-size: 1.5em;" data-bind="click: tabLockToggle"></span>
+                    <span class="typcn typcn-lock-closed"  data-bind="click: tabLockToggle"></span>
                 <!-- /ko -->
 
                 <!-- ko if:closable-->
-                    <span class="typcn typcn-delete" style="font-size: 1.5em;" data-bind="click: tabClose"></span>
+                    <span class="typcn typcn-delete" data-bind="click: tabClose"></span>
                 <!-- /ko -->    
             </span>
         <!-- /ko -->
