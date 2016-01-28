@@ -179,3 +179,9 @@ function loadCurrentPatient()
     activateTabByName("pat",true);    
     
 }
+
+function menuActionClick(data,evt)
+{
+    navigateTab(webroot_url+data.url(),"pat");
+    activateTabByName("pat",true);
+}
