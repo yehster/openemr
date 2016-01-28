@@ -29,6 +29,7 @@ function allFramesLoaded() {
 </script>
 <link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css">
 <link rel="stylesheet" type="text/css" href="css/tabs.css"/>
+<link rel="stylesheet" type="text/css" href="css/menu.css"/>
 
 <?php include_js_library("knockout/knockout-3.4.0.js"); ?>
 <?php include_js_library("jquery-2.2.0.min.js"); ?>
