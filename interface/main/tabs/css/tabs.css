@@ -20,6 +20,7 @@ html
 body
 {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
@@ -97,9 +98,12 @@ body
 
 .tabSpan:hover
 {
-    color: blue;
+    color: red;
 }
-
+.tabHidden
+{
+    color: gray;
+}
 
 #dialogDiv
 {
@@ -133,9 +137,72 @@ iframe.dialogIframe
     opacity: 1;
     z-index:10000;
     border: 1px solid black;
+    border-radius: 10px;
 }
 
 #patientData
 {
-    min-height: 3em;
+    min-height: 4em;
+}
+
+.patientDataColumn
+{
+    width: 33%;
+    float: left;
+    display: block;
+}
+
+.patientEncountersColumn
+{
+}
+
+.patientEncounterList
+{
+    position:fixed;
+    overflow: hidden;
+    border: 1px solid black;
+    background: white;
+    cursor: pointer;
+}
+
+.patientEncounterList  table.encounters
+{
+    display: none;
+}
+
+
+.patientEncounterList:hover table.encounters
+{
+    display: block;
+}
+
+.patientEncounterList > div
+{
+    padding: 2px;
+}
+.patientEncounterList:hover
+{
+    overflow: visible;
+    height: auto;
+}
+
+
+.patientEncounterList > div:hover
+{
+    color: red;
+}
+
+.patientEncounterList table.encounters td:hover
+{
+    color:red;
+}
+
+
+.patientEncounterList .review
+{
+    font-size: x-small;
+    padding: 3px;
+    border: 1px solid black;
+    background-color: lightgray;
+    border-radius: 5px;
 }

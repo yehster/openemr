@@ -22,7 +22,7 @@ function tabs_view_model()
 {
     this.tabsList=ko.observableArray();
     this.tabsList.push(new tabStatus("One","/iframe/interface/main/main_info.php","lst",false,true,false));
-    this.tabsList.push(new tabStatus("Two","/iframe/interface/main/messages/messages.php?form_active=1","msg",false,false,false));
+    this.tabsList.push(new tabStatus("Two","/iframe/interface/main/messages/messages.php?form_active=1","pat",false,false,false));
 //    this.tabsList.push(new tabStatus("Three"));
     this.text=ko.observable("Test");
     return this;
@@ -58,7 +58,10 @@ function activateTabByName(name,hideOthers)
         }
         else if(hideOthers)
         {
-            curTab.visible(false);
+            if(!curTab.locked())
+            {
+                curTab.visible(false);
+            }
         }
     }
 }
@@ -70,6 +73,7 @@ function tabClicked(data,evt)
 
 function tabRefresh(data,evt)
 {
+    // To do: Consider modification if part of frame.
     data.window.location=data.window.location;
     activateTab(data);
 }
@@ -82,6 +86,7 @@ function tabClose(data,evt)
 
 function navigateTab(url,name)
 {
+    top.restoreSession();
     var curTab;
     if($("iframe[name='"+name+"']").length>0)
     {            
@@ -109,5 +114,68 @@ function tabLockToggle(data,evt)
 
 function refreshPatient(data,evt)
 {
+    loadCurrentPatient();
+}
+
+
+function setEncounter(id)
+{
+    app_view_model.application_data.patient().selectedEncounterID(id);
+}
+
+function chooseEncounterEvent(data,evt)
+{
+    setEncounter(data.id());
+    goToEncounter(data.id());
+}
+
+function goToEncounter(encId)
+{
+    var url=webroot_url+'/interface/patient_file/encounter/encounter_top.php?set_encounter=' + encId;
+    navigateTab(url,"enc");
+    activateTabByName("enc",true);
+}
+
+function reviewEncounter(encId)
+{
+    var url=webroot_url+'/interface/patient_file/encounter/forms.php?review_id=' + encId;
+    navigateTab(url,"rev");
+    activateTabByName("rev",true);
+}
+
+function reviewEncounterEvent(data,evt)
+{
+    reviewEncounter(data.id());
+}
+function clickNewEncounter(data,evt)
+{
+    newEncounter();
+}
+
+function newEncounter()
+{
+    var url=webroot_url+'/interface/forms/newpatient/new.php?autoloaded=1&calenc='
+    navigateTab(url,"enc");
+    activateTabByName("enc",true);    
+
+}
+
+function clickEncounterList(data,evt)
+{
+    encounterList();
+}
+function encounterList()
+{
+    var url=webroot_url+'/interface/patient_file/history/encounters.php'
+    navigateTab(url,"enc");
+    activateTabByName("enc",true);    
+    
+}
+
+function loadCurrentPatient()
+{
+    var url=webroot_url+'/interface/patient_file/summary/demographics.php'
+    navigateTab(url,"pat");
+    activateTabByName("pat",true);    
     
 }

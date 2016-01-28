@@ -9,9 +9,14 @@
 $tabs=true;
 if(isset($_REQUEST['tabs']))
 {
-    if($_REQUEST['tabs']='false')
+    if($_REQUEST['tabs']==='false')
     {
         $tabs=false;
+        ?>
+        <script type="text/javascript">
+            top.tab_mode=false;
+        </script>
+        <?php
     }
 }
 if ($tabs===true)
@@ -20,4 +25,15 @@ if ($tabs===true)
     header('Location: '.$tabs_base_url);
     exit();
 }
+if(isset($_REQUEST['analysis']))
+{
+    if($_REQUEST['analysis']==='true')
+    {
+        ?>
+            <script type="text/javascript" src="tabs/js/menu_analysis.js"></script>
+        <?php
+    }
+}
+
+
 ?>

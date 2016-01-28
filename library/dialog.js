@@ -87,45 +87,47 @@ function dialogID()
   return s4() + s4() + s4() + s4() + s4() + + s4() + s4() + s4();
 }
 
-
-function dlgopen(url,winname,width,height)
+if(top.tab_mode)
 {
-    
-    var fullURL;
-    if(url[0]==="/")
+    dlgopen=function(url,winname,width,height)
     {
-        fullURL=url
-    }
-    else
-    {
-        fullURL=window.location.href.substr(0,window.location.href.lastIndexOf("/")+1)+url;
-    }
-    var dialogDiv=top.$("#dialogDiv");
-    var dlgIframe={};
-    if(winname!=="_blank")
-    {
-        dlgIframe=dialogDiv.find("iframe[name='"+winname+"']");
-    }
-    else
-    {
-        winname=dialogID();
-    }
-    
-    if(1)
-    {
-        
-        dlgIframe=top.$("<iframe class='dialogIframe'></iframe>");
-        dlgIframe.attr("name",winname);
-        dlgIframe.css({"left":(top.$("body").width()-width)/2
-                       ,"top": "5em"
-                       ,"height":height
-                       ,"width":width});
-        top.$("body").append(dlgIframe);
-        top.set_opener(winname,window);
-        dlgIframe.get(0).src=fullURL;
-        
-    }
-    dialogDiv.show();
-    
 
+        var fullURL;
+        if(url[0]==="/")
+        {
+            fullURL=url
+        }
+        else
+        {
+            fullURL=window.location.href.substr(0,window.location.href.lastIndexOf("/")+1)+url;
+        }
+        var dialogDiv=top.$("#dialogDiv");
+        var dlgIframe={};
+        if(winname!=="_blank")
+        {
+            dlgIframe=dialogDiv.find("iframe[name='"+winname+"']");
+        }
+        else
+        {
+            winname=dialogID();
+        }
+
+        if(1)
+        {
+
+            dlgIframe=top.$("<iframe class='dialogIframe'></iframe>");
+            dlgIframe.attr("name",winname);
+            dlgIframe.css({"left":(top.$("body").width()-width)/2
+                           ,"top": "5em"
+                           ,"height":height
+                           ,"width":width});
+            top.$("body").append(dlgIframe);
+            top.set_opener(winname,window);
+            dlgIframe.get(0).src=fullURL;
+
+        }
+        dialogDiv.show();
+
+
+    }
 }

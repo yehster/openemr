@@ -21,7 +21,7 @@ require_once($webserver_root."/interface/includes/include_utils.php");
 
 //  Include this variable for backward compatibility 
 var loadedFrameCount = 0;
-
+var tab_mode=true;
 function allFramesLoaded() {
 // Stub function for backward compatibility with frame race condition mechanism
  return true;
@@ -47,7 +47,7 @@ function allFramesLoaded() {
 <?php require_once("templates/tabs_template.php") ?>
 <?php require_once("templates/menu_template.php") ?>
 <?php require_once("templates/patient_data_template.php") ?>
-
+<a href="../main_screen.php?tabs=false&analysis=true">No Tabs</a>
 <div id="mainBox">
     <div id="dialogDiv"></div>
     <div id="menu" class="body_top" data-bind="template: {name: 'menu-template', data: application_data} "> </div>

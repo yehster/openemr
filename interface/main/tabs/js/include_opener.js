@@ -6,20 +6,23 @@
 
 
 
-if(!opener)
+if(top.tab_mode===true)
 {
-    opener=top.get_opener(window.name);
-}
+    if(!opener)
+    {
+        opener=top.get_opener(window.name);
+    }
 
-window.close=
-        function()
-        {
-            var dialogDiv=top.$("#dialogDiv");
-            var body=top.$("body");
-                var removeFrame=body.find("iframe.dialogIframe[name='"+window.name+"']");
-                removeFrame.remove();
-                if(body.children("iframe.dialogIframe").length===0)
-                {   
-                    dialogDiv.hide();
-                };
-            };
+    window.close=
+            function()
+            {
+                var dialogDiv=top.$("#dialogDiv");
+                var body=top.$("body");
+                    var removeFrame=body.find("iframe.dialogIframe[name='"+window.name+"']");
+                    removeFrame.remove();
+                    if(body.children("iframe.dialogIframe").length===0)
+                    {   
+                        dialogDiv.hide();
+                    };
+                };    
+}

@@ -2,7 +2,7 @@
     <div class="tabControls" data-bind="with: tabs">
         <!-- ko  foreach: tabsList -->
             <span class="tabSpan bgcolor2">
-                <span  data-bind="text: title, click: tabClicked"></span>
+                <span  data-bind="text: title, click: tabClicked, css: {tabHidden: !visible()}"></span>
                 <span class="typcn typcn-refresh" data-bind="click: tabRefresh"></span>
                 <!--ko if:!locked() -->
                     <span class="typcn typcn-lock-open"  data-bind="click: tabLockToggle"></span>
