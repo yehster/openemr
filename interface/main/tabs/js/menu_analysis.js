@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-
+function post_process(menu_entries)
+{
+    
+}
 function parse_link(link,entry)
 {
     if(link)
@@ -37,20 +40,25 @@ function menu_entry(label,link,menu_id)
     self.label=label;
     self.menu_id=menu_id;
     parse_link(link,self);
-    self.menu_target;
     self.children=[];
     self.requirement=0;
-    
     if(menu_id)
     {
         if(menu_id.charAt(3)==='1')
         {
-            alert(self.url);
+            if(self.label==='Summary')
+            {
+                self.target="pat";
+            }
+            else
+            {
+                self.target="enc";
+            }
             self.requirement=1;
         } else
         if(menu_id.charAt(3)==='2')
         {
-            alert(self.url);
+            self.target="enc";
             self.requirement=2;
         }
     }
@@ -107,13 +115,17 @@ function analyze_menu()
                             }
                             var subSubMenu=$(elem).children("ul");
                             //Third Level Menu Items
-                            subSubMenu.children("li").each(function(idx,elem)   
+                            if(subSubMenu.length>0 && sub_entry.label !=="Visit Forms")
                             {
-                                var sub_sub_anchor=$(elem).children("a");
-                                var sub_sub_entry=menu_entry_from_jq(sub_sub_anchor);
-                                sub_entry.children.push(sub_sub_entry);
+                                subSubMenu.children("li").each(function(idx,elem)   
+                                {
+                                    var sub_sub_anchor=$(elem).children("a");
+                                    var sub_sub_entry=menu_entry_from_jq(sub_sub_anchor);
+                                    sub_entry.children.push(sub_sub_entry);
+
+                                });
                                 
-                            });
+                            }
                             //End Third Level Menu Items
                             newEntry.children.push(sub_entry);
                         });
@@ -129,8 +141,10 @@ function analyze_menu()
                     
         );
         // Process Complete
+        
+        post_process(menu_entries);
         var data=$("<div id='#menuData'></div>");
-        data.text(JSON.stringify(menu_entries));
+        data.text("$menu_json=\""+JSON.stringify(menu_entries).replace(/\"/g,"\\\"")+"\";");
         $("body").append(data);
     });
 }

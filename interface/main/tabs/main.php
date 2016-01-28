@@ -44,9 +44,10 @@ function allFramesLoaded() {
 
 <link rel='stylesheet' href='<?php echo $web_root; ?>/library/fonts/typicons/typicons.min.css' />
 
-<?php require_once("templates/tabs_template.php") ?>
-<?php require_once("templates/menu_template.php") ?>
-<?php require_once("templates/patient_data_template.php") ?>
+<?php require_once("templates/tabs_template.php"); ?>
+<?php require_once("templates/menu_template.php"); ?>
+<?php require_once("templates/patient_data_template.php"); ?>
+<?php require_once("menu/menu_json.php"); ?>
 <a href="../main_screen.php?tabs=false&analysis=true">No Tabs</a>
 <div id="mainBox">
     <div id="dialogDiv"></div>
