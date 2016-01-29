@@ -21,8 +21,8 @@ function tabStatus(title,url,name,closable,visible,locked)
 function tabs_view_model()
 {
     this.tabsList=ko.observableArray();
-    this.tabsList.push(new tabStatus("One","/iframe/interface/main/main_info.php","lst",false,true,false));
-    this.tabsList.push(new tabStatus("Two","/iframe/interface/main/messages/messages.php?form_active=1","pat",false,false,false));
+    this.tabsList.push(new tabStatus("One",webroot_url+"/interface/main/main_info.php","lst",false,true,false));
+    this.tabsList.push(new tabStatus("Two",webroot_url+"/interface/main/messages/messages.php?form_active=1","pat",false,false,false));
 //    this.tabsList.push(new tabStatus("Three"));
     this.text=ko.observable("Test");
     return this;
