@@ -49,7 +49,6 @@ function allFramesLoaded() {
 <?php require_once("templates/menu_template.php"); ?>
 <?php require_once("templates/patient_data_template.php"); ?>
 <?php require_once("menu/menu_json.php"); ?>
-<a href="../main_screen.php?tabs=false&analysis=true">No Tabs</a>
 <div id="mainBox">
     <div id="dialogDiv"></div>
     <div id="menu" class="body_top" data-bind="template: {name: 'menu-template', data: application_data} "> </div>

@@ -17,8 +17,7 @@
                 </div>
             </span>
             <span class="patientDataColumn">
-                <?php echo xlt("Allergies");?>:
-                <b>NOT YET IMPLEMENTED</b>
+                &nbsp;
             </span>
             <span class="patientDataColumn patientEncountersColumn">
                 <div>
