@@ -1,14 +1,14 @@
 <script type="text/html" id="menu-action">
-    <span class='menuLabel' data-bind="text:label,click: menuActionClick"></span>
+    <div class='menuLabel' data-bind="text:label,click: menuActionClick"></div>
 </script>
 <script type="text/html" id="menu-header">
     
-    <span class="menuSection">
-        <b><span class='menuLabel' data-bind="text:label"></span></b>
+    <div class="menuSection">
+        <div class='menuLabel' data-bind="text:label"></div>
         <ul class="menuEntries" data-bind="foreach: children">
            <li data-bind="template: {name:header ? 'menu-header' : 'menu-action', data: $data }"></li>
         <ul>
-    </span>
+    </div>
 </script>
 <script type="text/html" id="menu-template">
     <div class='appMenu' data-bind="foreach: menu">

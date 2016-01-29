@@ -24,6 +24,15 @@ function parse_link(link,entry)
             parameters=parameters.replace(/\'/g,"").replace(/\"/g,"");
             var params=parameters.split(",");
             entry.target=params[1];
+            if(entry.target==='RTop')
+            {
+                entry.target='pat';
+            }
+            if(entry.target==='RBot')
+            {
+                entry.target='enc';
+            }
+
             entry.url=params[2].replace("../","/");
             if(entry.url.indexOf("/")>0)
             {

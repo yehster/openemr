@@ -182,6 +182,14 @@ function loadCurrentPatient()
 
 function menuActionClick(data,evt)
 {
-    navigateTab(webroot_url+data.url(),"pat");
-    activateTabByName("pat",true);
+    if(data.enabled())
+    {
+        navigateTab(webroot_url+data.url(),data.target);
+        activateTabByName(data.target,true);        
+    }
+    else
+    {
+        alert(data.requirement);
+    }    
+       
 }

@@ -29,6 +29,11 @@ $menu_parsed=json_decode($menu_json);
         {
             self.header=true;
         }
+        if('target' in object)
+        {
+            self.target=object.target;
+        }
+        self.requirement=object.requirement;
         if(object.requirement===0)
         {
             self.enabled=ko.observable(true);

@@ -53,11 +53,13 @@ left_nav.setEncounter=function(edate, eid, frname)
 
 left_nav.loadFrame=function(id,name,url)
 {
+    alert(name);
     if(name==="")
     {
         name='enc';
     }
     navigateTab(webroot_url+"/interface/"+url,name)
+    activateTabByName(name,true);
 }
 
 left_nav.setRadio = function(raname, rbid)
