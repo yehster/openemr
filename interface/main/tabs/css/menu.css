@@ -67,3 +67,7 @@ and open the template in the editor.
 {
     color: red;
 }
+.menuDisabled
+{
+    color:lightgray;
+}

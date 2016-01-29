@@ -49,6 +49,14 @@ ko.bindingHandlers.location={
                                    
                                 });
                             }
+                            else
+                            {
+                                var bold=jqDocument.find("b:first");
+                                if(bold.length)
+                                {
+                                    titleText=bold.text();
+                                }
+                            }
                             
                         }
                         tabData.title(titleText);

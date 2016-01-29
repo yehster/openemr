@@ -4,9 +4,37 @@
  * and open the template in the editor.
  */
 
+var targets={};
+targets['Calendar']='lst';
+targets['Flow Board']='lst';
+targets['Messages ']='pat';
+targets['Administration']='adm';
+targets['Reports']='rep';
+targets['Miscellaneous']='msc';
+function setTarget(entry,target)
+{
+    if('url' in entry)
+    {
+        entry.target=target
+    }
+    else
+    {
+        for(var idx=0;idx<entry.children.length;idx++)
+        {
+            setTarget(entry.children[idx],target);
+        }
+    }
+}
 function post_process(menu_entries)
 {
-    
+    for(var idx=0;idx<menu_entries.length;idx++)
+    {
+        var curEntry=menu_entries[idx];
+        if(curEntry.label in targets)
+        {
+            setTarget(curEntry,targets[curEntry.label]);
+        }
+    }
 }
 function parse_link(link,entry)
 {

@@ -34,6 +34,7 @@ left_nav.setPatient = function(pname, pid, pubpid, frname, str_dob)
     var new_patient=new patient_data_view_model(pname,pid,pubpid,str_dob);
     app_view_model.application_data.patient(new_patient);
     navigateTab(webroot_url+"/interface/patient_file/history/encounters.php","enc");
+    tabCloseByName('rev');
 };
 left_nav.setPatientEncounter = function(EncounterIdArray,EncounterDateArray,CalendarCategoryArray)
 {
@@ -53,7 +54,6 @@ left_nav.setEncounter=function(edate, eid, frname)
 
 left_nav.loadFrame=function(id,name,url)
 {
-    alert(name);
     if(name==="")
     {
         name='enc';

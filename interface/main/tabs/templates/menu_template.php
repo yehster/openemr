@@ -1,5 +1,5 @@
 <script type="text/html" id="menu-action">
-    <div class='menuLabel' data-bind="text:label,click: menuActionClick"></div>
+    <div class='menuLabel' data-bind="text:label,click: menuActionClick,css: {menuDisabled: ! enabled()}"></div>
 </script>
 <script type="text/html" id="menu-header">
     

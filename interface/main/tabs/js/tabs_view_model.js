@@ -83,6 +83,17 @@ function tabClose(data,evt)
         app_view_model.application_data.tabs.tabsList.remove(data);
 }
 
+function tabCloseByName(name)
+{
+    for(var tabIdx=0;tabIdx<app_view_model.application_data.tabs.tabsList().length;tabIdx++)
+    {
+        var curTab=app_view_model.application_data.tabs.tabsList()[tabIdx];
+        if(curTab.name()===name)
+        {
+            tabClose(curTab);
+        }
+    }    
+}
 
 function navigateTab(url,name)
 {
@@ -189,7 +200,14 @@ function menuActionClick(data,evt)
     }
     else
     {
-        alert(data.requirement);
+        if(data.requirement===1)
+        {
+            alert('You must first select or add a patient.');        
+        }
+        else if(data.requirement===2)
+        {
+            alert('You must first select or create an encounter.');                    
+        }
     }    
        
 }
