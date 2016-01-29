@@ -25,7 +25,8 @@ var tab_mode=true;
 function allFramesLoaded() {
 // Stub function for backward compatibility with frame race condition mechanism
  return true;
-}    
+}
+var webroot_url="<?php echo $web_root; ?>";
 </script>
 <link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css">
 <link rel="stylesheet" type="text/css" href="css/tabs.css"/>
@@ -61,7 +62,6 @@ function allFramesLoaded() {
 </div>
 <script>
     $("#dialogDiv").hide();
-    var webroot_url="<?php echo $web_root; ?>";
     ko.applyBindings(app_view_model);
 
 </script>
