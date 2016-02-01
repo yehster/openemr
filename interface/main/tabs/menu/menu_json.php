@@ -6,9 +6,11 @@
  * and open the template in the editor.
  */
 require_once("menu_data.php");
+require_once("menu_updates.php");
 $menu_parsed=json_decode($menu_json);
 
 // TODO: Transform menu objects with xlt and apply ACL/global restrictions
+menu_update_entries($menu_parsed);
 
 ?>
 <script type="text/javascript">
