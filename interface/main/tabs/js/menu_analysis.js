@@ -11,6 +11,9 @@ targets['Messages ']='pat';
 targets['Administration']='adm';
 targets['Reports']='rep';
 targets['Miscellaneous']='msc';
+
+targets['Patients']='lst';
+
 function setTarget(entry,target)
 {
     if('url' in entry)
@@ -34,6 +37,7 @@ function post_process(menu_entries)
         {
             setTarget(curEntry,targets[curEntry.label]);
         }
+        post_process(curEntry.children);
     }
 }
 function parse_link(link,entry)

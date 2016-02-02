@@ -56,6 +56,15 @@ ko.bindingHandlers.location={
                                 {
                                     titleText=bold.text();
                                 }
+                                else
+                                {
+                                    var title=jqDocument.find("title");
+                                    if(title.length)
+                                    {
+                                        titleText=title.text();
+                                    }
+                                }
+                                        
                             }
                             
                         }
