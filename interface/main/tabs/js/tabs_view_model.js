@@ -211,3 +211,23 @@ function menuActionClick(data,evt)
     }    
        
 }
+
+function clearPatient()
+{
+    top.restoreSession();    
+    app_view_model.application_data.patient(null);
+    tabCloseByName('enc');
+    tabCloseByName('rev');
+    navigateTab(webroot_url+'/interface/main/messages/messages.php?form_active=1','pat');
+    activateTabByName('lst',true);    
+    //Ajax call to clear active patient in session
+    $.ajax({
+        type: "POST",
+        url: webroot_url+"/library/ajax/unset_session_ajax.php",
+	  data: { func: "unset_pid"},
+	  success:function( msg ) {
+
+    
+	  }
+	});
+}

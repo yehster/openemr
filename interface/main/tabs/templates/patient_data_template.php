@@ -1,18 +1,30 @@
 <script type="text/html" id="patient-data-template">
-    <!-- ko if: patient -->
-        <div data-bind="with: patient">
+        <divs>
             <span class="patientDataColumn">
-                <div>
-                    <span>Patient:</span>
+                <div class="patientInfo">
+                    <span>
+                            <?php echo xlt("Patient"); ?>:
+                    </span>
                     <b>
-                    <a data-bind="click:refreshPatient" href="#">
-                        <span data-bind="text: pname()"></span>(<span data-bind="text: pubpid"></span>)
-                    </a>
+                    <!-- ko if: patient -->
+                        <a data-bind="click:refreshPatient,with: patient" href="#">
+                            <span data-bind="text: pname()"></span>(<span data-bind="text: pubpid"></span>)
+                        </a>
+                    <!-- /ko -->
+                    <!-- ko ifnot: patient -->
+                        <span><?php echo xlt("None");?></span>
+                    <!-- /ko -->
+
+                    <!-- ko if: patient -->
+                    <span class="clear" data-bind="click:clearPatient"><?php echo xlt("Clear") ?></span>
+                        <!-- /ko -->
                     </b>
                 </div>
-                <div>
+                <div class="patientInfo">
                     <b>
-                        <span data-bind="text:str_dob()"></span>
+                    <!-- ko if: patient -->
+                        <span data-bind="text:patient().str_dob()"></span>
+                    <!-- /ko -->
                     </b>
                 </div>
             </span>
@@ -20,6 +32,8 @@
                 &nbsp;
             </span>
             <span class="patientDataColumn patientEncountersColumn">
+                <!-- ko if: patient -->                
+                <!-- ko with: patient -->                
                 <div>
                     <span>Selected Encounter:</span>
                     <!-- ko if:selectedEncounter() -->
@@ -50,6 +64,9 @@
                         </tbody>
                     </table>
                 </span>
+                <!-- /ko -->                
+                <!-- /ko -->                
+
             </span>
         </div>
     <!-- /ko -->

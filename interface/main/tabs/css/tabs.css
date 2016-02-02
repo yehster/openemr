@@ -197,11 +197,10 @@ iframe.dialogIframe
     color:red;
 }
 
-
 .patientEncounterList .review
 {
     font-size: x-small;
-    padding: 3px;
+    padding: 2px;
     border: 1px solid black;
     background-color: lightgray;
     border-radius: 5px;
@@ -211,4 +210,24 @@ iframe.dialogIframe
 {
     position: absolute;
     right: 0;
+}
+.patientInfo
+{
+    padding: 1px;
+}
+
+.patientInfo .clear
+{
+    font-size: x-small;
+    margin: 1px;
+    padding: 3px;
+    border: 1px solid black;
+    background-color: lightgray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.patientInfo .clear:hover
+{
+    color:red;
 }
