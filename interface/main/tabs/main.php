@@ -38,6 +38,8 @@ var webroot_url="<?php echo $web_root; ?>";
 <script type="text/javascript" src="js/custom_bindings.js"></script>
 
 
+
+<script type="text/javascript" src="js/user_data_view_model.js"></script>
 <script type="text/javascript" src="js/patient_data_view_model.js"></script>
 <script type="text/javascript" src="js/tabs_view_model.js"></script>
 <script type="text/javascript" src="js/application_view_model.js"></script>
@@ -49,10 +51,28 @@ var webroot_url="<?php echo $web_root; ?>";
 <?php require_once("templates/tabs_template.php"); ?>
 <?php require_once("templates/menu_template.php"); ?>
 <?php require_once("templates/patient_data_template.php"); ?>
+<?php require_once("templates/user_data_template.php"); ?>
 <?php require_once("menu/menu_json.php"); ?>
+<?php $userQuery = sqlQuery("select * from users where username='".$_SESSION{"authUser"}."'"); ?>
+<script type="text/javascript">
+    <?php if(isset($_REQUEST['url']))
+        {
+        ?>
+            app_view_model.application_data.tabs.tabsList()[0].url(<?php echo json_encode("../".urldecode($_REQUEST['url'])); ?>);
+        <?php 
+        }
+    ?>
+    app_view_model.application_data.user(new user_data_view_model(<?php echo json_encode($_SESSION{"authUser"})
+                                                                  .',' . json_encode($userQuery['fname'])
+                                                                  .',' . json_encode($userQuery['lname'])
+                                                                  .',' . json_encode($_SESSION['authGroup']); ?>));
+</script>
 <div id="mainBox">
     <div id="dialogDiv"></div>
-    <div id="menu" class="body_top" data-bind="template: {name: 'menu-template', data: application_data} "> </div>
+    <div class="body_top">
+        <span id="menu"  data-bind="template: {name: 'menu-template', data: application_data} "> </span>
+        <span id="userData" data-bind="template: {name: 'user-data-template', data:application_data} "></span>
+    </div>
     <div id="patientData" class="body_title" data-bind="template: {name: 'patient-data-template', data: application_data} "></div>
     <div class="body_title" data-bind="template: {name: 'tabs-controls', data: application_data} "> </div>
 

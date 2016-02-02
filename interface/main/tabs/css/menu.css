@@ -71,3 +71,22 @@ and open the template in the editor.
 {
     color:lightgray;
 }
+
+#username
+{
+    cursor: pointer;
+}
+#username > .userfunctions
+{
+    background-color:lightskyblue;
+    display: none;
+}
+#username:hover > .userfunctions
+{
+    display: block;
+}
+
+#username > .userfunctions > div:hover
+{
+    color: red;
+}

@@ -13,9 +13,33 @@ $menu_update_map["Modules"]="update_modules_menu";
 
 function update_modules_menu(&$menu_list)
 {
-    error_log("Updating modules");
-}
+    $module_query = sqlStatement("select mod_directory,mod_name,mod_nick_name,mod_relative_link,type from modules where mod_active = 1 AND sql_run= 1 order by mod_ui_order asc");
+    if (sqlNumRows($module_query)) {
+      while ($modulerow = sqlFetchArray($module_query)) {
+                    $acl_section = strtolower($modulerow['mod_directory']);
+                    $disallowed[$acl_section] = zh_acl_check($_SESSION['authUserID'],$acl_section) ?  "" : "1";
+                    $modulePath = "";
+                    $added 		= "";
+                    if($modulerow['type'] == 0) {
+                            $modulePath = $GLOBALS['customModDir'];
+                            $added		= "";
+                    }
+                    else{ 	
+                            $added		= "index";
+                            $modulePath = $GLOBALS['zendModDir'];
+                    }
 
+                    $relative_link ="modules/".$modulePath."/".$modulerow['mod_relative_link'].$added;
+                    $mod_nick_name = $modulerow['mod_nick_name'] ? $modulerow['mod_nick_name'] : $modulerow['mod_name'];
+          $newEntry=new stdClass();
+          $newEntry->label=xlt($mod_nick_name);
+          $newEntry->url=$relative_link;
+          $newEntry->requirement=0;
+          $newEntry->target='mod';
+          array_push($menu_list->children,$newEntry);
+       }
+    }
+}
 function update_visit_forms(&$menu_list)
 {
     $baseURL="/interface/patient_file/encounter/load_form.php?formname=";
@@ -28,7 +52,7 @@ if (sqlNumRows($lres)) {
     $title = $lrow['title'];
     $formURL=$baseURL . urlencode($option_id);
     $formEntry=new stdClass();
-    $formEntry->label=$title;
+    $formEntry->label=xl_form_title($title);
     $formEntry->url=$formURL;
     $formEntry->requirement=2;
     $formEntry->target='enc';
@@ -47,7 +71,7 @@ if (sqlNumRows($lres)) {
         
         $formURL=$baseURL . urlencode($option_id);
         $formEntry=new stdClass();
-        $formEntry->label=$title;
+        $formEntry->label=xl_form_title($title);
         $formEntry->url=$formURL;
         $formEntry->requirement=2;
         $formEntry->target='enc';
@@ -62,6 +86,7 @@ function menu_update_entries(&$menu_list)
     global $menu_update_map;
     for($idx=0;$idx<count($menu_list);$idx++)
     {
+
         $entry = $menu_list[$idx];
         if(!isset($entry->url))
         {

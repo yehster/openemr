@@ -206,3 +206,9 @@ iframe.dialogIframe
     background-color: lightgray;
     border-radius: 5px;
 }
+
+#userData
+{
+    position: absolute;
+    right: 0;
+}
