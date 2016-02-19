@@ -58,7 +58,9 @@ function grabfocus(w) {
 }
 
 // call this when a "modal" dialog is desired
-function dlgopen(url, winname, width, height) {
+
+ 
+ function dlgopen(url, winname, width, height) {
  if (top.modaldialog && ! top.modaldialog.closed) {
   if (window.focus) top.modaldialog.focus();
   if (top.modaldialog.confirm(top.oemr_dialog_close_msg)) {
@@ -72,4 +74,60 @@ function dlgopen(url, winname, width, height) {
   "resizable=1,scrollbars=1,location=0,toolbar=0");
  grabfocus(top);
  return false;
+}
+
+
+function dialogID()
+{
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + s4() + s4() + s4() + + s4() + s4() + s4();
+}
+
+if(top.tab_mode)
+{
+    dlgopen=function(url,winname,width,height)
+    {
+
+        var fullURL;
+        if(url[0]==="/")
+        {
+            fullURL=url
+        }
+        else
+        {
+            fullURL=window.location.href.substr(0,window.location.href.lastIndexOf("/")+1)+url;
+        }
+        var dialogDiv=top.$("#dialogDiv");
+        var dlgIframe={};
+        if(winname!=="_blank")
+        {
+            dlgIframe=dialogDiv.find("iframe[name='"+winname+"']");
+        }
+        else
+        {
+            winname=dialogID();
+        }
+
+        if(1)
+        {
+
+            dlgIframe=top.$("<iframe class='dialogIframe'></iframe>");
+            dlgIframe.attr("name",winname);
+            dlgIframe.css({"left":(top.$("body").width()-width)/2
+                           ,"top": "5em"
+                           ,"height":height
+                           ,"width":width});
+            top.$("body").append(dlgIframe);
+            top.set_opener(winname,window);
+            dlgIframe.get(0).src=fullURL;
+
+        }
+        dialogDiv.show();
+
+
+    }
 }
