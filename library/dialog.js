@@ -89,9 +89,15 @@ function dialogID()
 
 if(top.tab_mode)
 {
-    dlgopen=function(url,winname,width,height)
+    dlgOpenWindow=dlgopen;
+    dlgopen=function(url,winname,width,height,forceNewWindow)
     {
-
+        if(forceNewWindow)
+        {
+            return dlgOpenWindow(url,winname,width,height);
+        }
+        width=width+80;
+        height=height+80;
         var fullURL;
         if(url[0]==="/")
         {
@@ -112,20 +118,34 @@ if(top.tab_mode)
             winname=dialogID();
         }
 
-        if(1)
+
+        dlgIframe=top.$("<iframe></iframe>");
+        dlgIframe.attr("name",winname);
+                   
+        var dlgDivContainer=top.$("<div class='dialogIframe'></div>");
+        var closeDlg=top.$("<div class='closeDlgIframe'></div>");
+        dlgDivContainer.append(closeDlg);
+        closeDlg.click(function()
         {
+            var body=top.$("body");
+            var closeItems=body.find("[name='"+winname+"']");
+            closeItems.remove();
+            if(body.children("div.dialogIframe").length===0)
+            {   
+                dialogDiv.hide();
+            };            
+        })
+        dlgDivContainer.attr("name",winname);
+        dlgDivContainer.append(dlgIframe);
+        dlgDivContainer.css({"left":(top.$("body").width()-width)/2
+                       ,"top": "5em"
+                       ,"height":height
+                       ,"width":width});
+        
+        top.$("body").append(dlgDivContainer);
+        top.set_opener(winname,window);
+        dlgIframe.get(0).src=fullURL;
 
-            dlgIframe=top.$("<iframe class='dialogIframe'></iframe>");
-            dlgIframe.attr("name",winname);
-            dlgIframe.css({"left":(top.$("body").width()-width)/2
-                           ,"top": "5em"
-                           ,"height":height
-                           ,"width":width});
-            top.$("body").append(dlgIframe);
-            top.set_opener(winname,window);
-            dlgIframe.get(0).src=fullURL;
-
-        }
         dialogDiv.show();
 
 
