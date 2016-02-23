@@ -128,7 +128,7 @@ body
     opacity: 1;
 }
 
-iframe.dialogIframe
+.dialogIframe
 {
     position: absolute;
     top:0;
@@ -140,6 +140,24 @@ iframe.dialogIframe
     border-radius: 10px;
 }
 
+div.closeDlgIframe {
+
+	position: absolute;
+	top: -12px;
+	right: -15px;
+	height: 30px;
+	width: 30px;
+	background: url('iframe_close.png') top left no-repeat;
+	cursor: pointer;
+	z-index: 10010;
+}
+
+.dialogIframe > iframe{
+    border: none;
+    border-radius: 10px;
+    height:100%;
+    width:100%;
+}
 #patientData
 {
     min-height: 4em;
@@ -232,15 +250,3 @@ iframe.dialogIframe
     color:red;
 }
 
-div.closeIframe {
-
-	position: absolute;
-	top: -12px;
-	right: -15px;
-	height: 30px;
-	width: 30px;
-	background: url('fancy_closebox.png') top left no-repeat;
-	cursor: pointer;
-	z-index: 181;
-	display: none;
-}
