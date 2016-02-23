@@ -70,7 +70,9 @@
    sqlQuery($query, array($form_pid, $list_id, $encounter)); 
   }
 
-  echo "<html><body><script language='JavaScript'>\n";
+  echo "<html><body>"
+  ."<script type=\"text/javascript\" src=\"". $webroot ."/interface/main/tabs/js/include_opener.js\"></script>"
+  . "<script language='JavaScript'>\n";
   if ($alertmsg) echo " alert('$alertmsg');\n";
   echo " window.close();\n";
   echo "</script></body></html>\n";
@@ -91,6 +93,7 @@
 <html>
 <head>
 <?php html_header_show();?>
+<script type="text/javascript" src="<?php echo $webroot ?>/interface/main/tabs/js/include_opener.js"></script>
 <link rel=stylesheet href="<?php echo $css_header; ?>" type="text/css">
 <title><?php xl('Issues and Encounters','e'); ?></title>
 

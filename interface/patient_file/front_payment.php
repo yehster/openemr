@@ -28,6 +28,7 @@ $INTEGRATED_AR = $GLOBALS['oer_config']['ws_accounting']['enabled'] === 2;
 <html>
 <head>
 <?php html_header_show();?>
+<script type="text/javascript" src="<?php echo $webroot ?>/interface/main/tabs/js/include_opener.js"></script>    
 <link rel='stylesheet' href='<?php echo $css_header ?>' type='text/css'>
 <?php
 // Format dollars for display.

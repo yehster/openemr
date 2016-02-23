@@ -5,6 +5,11 @@
  */
 
 
+/* This is code needed to connect the iframe for a dialog back to the window which makes the call.
+ * It is neccessary to include this script at the "top" of any php file that is used as a dialog.
+ * It was not possible to inject this code at "document ready" because sometimes the opened dialog 
+ * has a redirect or a close before the document ever becomes ready.
+ */
 
 if(top.tab_mode===true)
 {
