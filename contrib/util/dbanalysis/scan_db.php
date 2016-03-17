@@ -106,6 +106,16 @@ class field_type
         }
         
     }
+    
+    function getType()
+    {
+        return $this->_type;
+    }
+    
+    function getNumFields()
+    {
+        return count($this->_fields);
+    }
 }
 $table_names=collect_table_data();
 
@@ -157,6 +167,8 @@ function compare_field_counts($a,$b)
     return -1;
 }
 
-var_dump($field_types);
-
-echo count($table_names)."\n";
+foreach($field_types as $field_type)
+{
+    echo $field_type->getType() .":". $field_type->getNumFields() . "\n";
+}
+echo "Total Number of Tables:".count($table_names)."\n";
