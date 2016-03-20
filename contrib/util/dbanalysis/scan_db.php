@@ -59,7 +59,14 @@ class field_table_list
     {
         array_push($this->_table_list,$table_info);
     }
-    
+    function getFieldName()
+    {
+        return $this->_name;
+    }
+    function getNumTables()
+    {
+        return count($this->_table_list);
+    }
 }
 
 class table_info
@@ -116,6 +123,16 @@ class field_type
     {
         return count($this->_fields);
     }
+    
+    function SortFields()
+    {
+        usort($this->_fields,"compare_field_table_list");
+    }
+    
+    function getFields()
+    {
+        return $this->_fields;
+    }
 }
 $table_names=collect_table_data();
 
@@ -167,8 +184,42 @@ function compare_field_counts($a,$b)
     return -1;
 }
 
+function compare_field_table_list($a,$b)
+{
+    if($a->getNumTables()>$b->getNumTables())
+    {
+        return 1;
+    }
+    elseif($a->getNumTables()===$b->getNumTables())
+    {
+        return strcmp($a->getFieldName(),$b->getFieldName());
+    }
+    return -1;
+}
 foreach($field_types as $field_type)
 {
     echo $field_type->getType() .":". $field_type->getNumFields() . "\n";
 }
 echo "Total Number of Tables:".count($table_names)."\n";
+
+$field_types['int(11)']->SortFields();
+$field_types['bigint(20)']->SortFields();
+//var_dump($field_types['int(11)']);
+
+
+foreach($field_types['bigint(20)']->getFields() as $field_table_list)
+{
+
+    if($field_table_list->getNumTables()>1)
+    {
+        echo $field_table_list->getFieldName() .":".$field_table_list->getNumTables()."\n";        
+    }
+}
+
+foreach($field_types['int(11)']->getFields() as $field_table_list)
+{
+
+    if($field_table_list->getNumTables()>1)
+    {
+        echo $field_table_list->getFieldName() .":".$field_table_list->getNumTables()."\n";        
+    }}
