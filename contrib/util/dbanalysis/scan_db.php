@@ -7,18 +7,37 @@
  */
 
 require_once("cli_header.php");
+require_once("create_pid_foreign_keys.php");
 
-require_once($openemr_root_dir."/interface/main/tabs/menu/menu_data.php");
 
-
-function collect_table_data()
+function collect_table_names()
 {
     $query="SHOW TABLES";
     $retval=array();
     $res=  ExecuteQuery($query, array());
+    $skip_prefixes=["background_services,gacl_","pma_","geo_","icd","ccda_","lang_","menu_","module_","modules","external_","facility"];
+    $skip_tables=["version","x12_partners","code_types","codes","categories","categories_seq","config","config_seq","enc_category_map","fee_sheet_options","globals","groups","issue_types","layout_options","prices","registry","sequences","supported_external_dataloads","template_users","product_warehouse"];
     foreach($res as $result)
     {
-        array_push($retval,$result[0]);
+        $skip=false;
+        foreach($skip_prefixes as $prefix)
+        {
+            if(strpos($result[0],$prefix)===0)
+            {
+                $skip=true;
+            }
+        }
+        foreach($skip_tables as $skip_table)
+        {
+            if($result[0]===$skip_table)
+            {
+                $skip=true;
+            }
+        }
+        if(!$skip)
+        {
+            array_push($retval,$result[0]);        
+        }
     }
     return $retval;
 }
@@ -72,8 +91,10 @@ class field_table_list
 class table_info
 {
     protected $_fields=array();
+    protected $_name;
     function __construct($name)
     {
+        $this->_name=$name;
         $query="SHOW COLUMNS FROM " .$name. " FROM " . $GLOBALS['dbase'];
         $res=  ExecuteQuery($query,array());
         foreach($res as $result)
@@ -83,9 +104,29 @@ class table_info
         }
     }
     
+    function getName()
+    {
+        return $this->_name;
+    }
     function getFields()
     {
         return $this->_fields;
+    }
+    
+    function hasFieldList(&$field_names)
+    {
+        foreach($this->_fields as $field)
+        {
+            foreach($field_names as $field_name)
+            {
+                if($field->getName()===$field_name)
+                {
+                    return $field;
+                }
+            }
+            
+        }
+        return false;
     }
 
 }
@@ -134,7 +175,7 @@ class field_type
         return $this->_fields;
     }
 }
-$table_names=collect_table_data();
+$table_names=collect_table_names();
 
 $fields=array();
 
@@ -222,4 +263,13 @@ foreach($field_types['int(11)']->getFields() as $field_table_list)
     if($field_table_list->getNumTables()>1)
     {
         echo $field_table_list->getFieldName() .":".$field_table_list->getNumTables()."\n";        
-    }}
+    }
+    
+}
+
+
+//ChangeTablesToInnodb($tables);
+
+create_pid_foreign_keys($tables);
+
+echo "\n" ."Number of Tables" .":".count($tables) . "\n";

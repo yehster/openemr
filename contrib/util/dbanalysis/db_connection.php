@@ -55,7 +55,6 @@
         if(!$res)
         {
             report_error($GLOBALS['database'], $sql);
-            die();
         }
         return $res;
     }
