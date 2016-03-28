@@ -15,8 +15,22 @@ function collect_table_names()
     $query="SHOW TABLES";
     $retval=array();
     $res=  ExecuteQuery($query, array());
-    $skip_prefixes=["background_services,gacl_","pma_","geo_","icd","ccda_","lang_","menu_","module_","modules","external_","facility"];
-    $skip_tables=["version","x12_partners","code_types","codes","categories","categories_seq","config","config_seq","enc_category_map","fee_sheet_options","globals","groups","issue_types","layout_options","prices","registry","sequences","supported_external_dataloads","template_users","product_warehouse"];
+    $skip_prefixes=["background_services","gacl_","pma_","geo_","icd","ccda_","lang_","menu_","module_","modules","external_","facility"];
+    $skip_tables=["audit_details","automatic_notification"
+        ,"drug_inventory","drug_templates","drugs",
+"array","version","x12_partners","clinical_plans_rules","code_types","codes","categories","categories_seq","config","config_seq","enc_category_map","fee_sheet_options","globals","groups","issue_types","layout_options","prices","registry","sequences","supported_external_dataloads","template_users","product_warehouse","list_options"
+        ,"rule_action","rule_action_item","rule_filter","rule_reminder","rule_target"
+        ,"notification_settings"
+        ,"patient_portal_menu"
+        ,"openemr_module_vars","openemr_modules","openemr_postcalendar_categories","openemr_postcalendar_limits"
+        ,"openemr_postcalendar_topics","openemr_session_info"
+        ,"standardized_tables_track"
+        ,"syndromic_surveillance"  // lists_id joins to either the lists table or the billing table on the id when a given diagnosis code is present
+        ,"gprelations" // the tables to which the id1 and id2 columns join are indeterminant and thus it is not possible to have a foreign key relationship
+        ,"integration_mapping" // foreign_id and local_id columns can map to different tables in different situations
+        ,"user_settings","users","users_facility","users_secure"
+        ,"addresses"  // foreign_id can join to multiple tables
+        ];
     foreach($res as $result)
     {
         $skip=false;
@@ -272,4 +286,40 @@ foreach($field_types['int(11)']->getFields() as $field_table_list)
 
 create_pid_foreign_keys($tables);
 
-echo "\n" ."Number of Tables" .":".count($tables) . "\n";
+create_form_encounter_index();
+create_encounter_foreign_keys($tables);
+
+CreateForeignKeyNamedTable("amendments_history","amendment_id","amendments","amendment_id");
+CreateForeignKeyNamedTable("prescriptions","pharmacy_id","pharmacies","id");
+CreateForeignKeyNamedTable("lbf_data","form_id","forms","form_id");
+CreateForeignKeyNamedTable("categories_to_documents","document_id","documents","id");
+CreateForeignKeyNamedTable("lbt_data","form_id","transactions","id");
+CreateForeignKeyNamedTable("dated_reminders_link","dr_id","dated_reminders","dr_id");
+
+
+
+function DetermineUnmodifiedTables()
+{
+    global $tables;
+    global $modified_tables;
+    $retval=array();
+    echo count($modified_tables) . " Mods\n";
+    foreach($tables as $table)
+    {
+        if(!isset($modified_tables[$table->getName()]))
+        {
+           array_push($retval,$table);
+        }
+    }
+    return $retval;
+}
+
+$unmodified_tables=DetermineUnmodifiedTables();
+foreach($unmodified_tables as $unmod)
+{
+    echo $unmod->getName() . "\n";
+}
+
+
+echo "\n" ."Number of Tables" .":".count(DetermineUnmodifiedTables()) . "\n";
+
