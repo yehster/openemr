@@ -15,7 +15,11 @@ function collect_table_names()
     $query="SHOW TABLES";
     $retval=array();
     $res=  ExecuteQuery($query, array());
-    $skip_prefixes=["background_services","gacl_","pma_","geo_","icd","ccda_","lang_","menu_","module_","modules","external_","facility"];
+    $skip_prefixes=[
+        "customlists" // Nation Notes Templates
+        ,"documents_legal_categories" // offsite portal metadata
+        ,"documents_legal_master" // offsite portal metadata
+        ,"background_services","gacl_","pma_","geo_","icd","ccda_","lang_","menu_","module_","modules","external_","facility"];
     $skip_tables=["audit_details","automatic_notification"
         ,"drug_inventory","drug_templates","drugs",
 "array","version","x12_partners","clinical_plans_rules","code_types","codes","categories","categories_seq","config","config_seq","enc_category_map","fee_sheet_options","globals","groups","issue_types","layout_options","prices","registry","sequences","supported_external_dataloads","template_users","product_warehouse","list_options"
@@ -30,6 +34,13 @@ function collect_table_names()
         ,"integration_mapping" // foreign_id and local_id columns can map to different tables in different situations
         ,"user_settings","users","users_facility","users_secure"
         ,"addresses"  // foreign_id can join to multiple tables
+        ,"phone_numbers" // foreign_id can join to multiple tables
+        ,"esign_signatures" // TID can join to ID of any table
+        ,"notes"  // foreign_id 
+        ,"insurance_companies" // provider is varchar, insurance.id is int CreateForeignKeyNamedTable("insurance_data","provider","insurance_companies","id");
+        ,"insurance_numbers"
+        ,"misc_address_book" // Odd table, only seems to be accessed when writing with parse_patient_xml.php
+        ,"payment_gateway_details" // Offsite portal.  No apparent foreign key relationships
         ];
     foreach($res as $result)
     {
@@ -295,6 +306,21 @@ CreateForeignKeyNamedTable("lbf_data","form_id","forms","form_id");
 CreateForeignKeyNamedTable("categories_to_documents","document_id","documents","id");
 CreateForeignKeyNamedTable("lbt_data","form_id","transactions","id");
 CreateForeignKeyNamedTable("dated_reminders_link","dr_id","dated_reminders","dr_id");
+CreateForeignKeyNamedTable("dated_reminders_link","dr_id","dated_reminders","dr_id");
+CreateForeignKeyNamedTable("report_results","report_id","report_itemized","report_id");
+CreateForeignKeyNamedTable("patient_tracker_element","pt_tracker_id","patient_tracker","id");
+CreateForeignKeyNamedTable("onotes","user","users","username");
+CreateForeignKeyNamedTable("eligibility_verification","response_id","eligibility_response","response_id");
+
+ChangeColumnType("log_comment_encrypt","log_id","bigint(20)");
+CreateForeignKeyNamedTable("log_comment_encrypt","log_id","log","id");
+
+CreateForeignKeyNamedTable("procedure_answers","procedure_order_id","procedure_order","procedure_order_id");
+CreateForeignKeyNamedTable("procedure_report","procedure_order_id","procedure_order","procedure_order_id");
+CreateForeignKeyNamedTable("procedure_result","procedure_report_id","procedure_report","procedure_report_id");
+
+
+CreateForeignKeyNamedTable("procedure_order_code","procedure_order_id","procedure_order","procedure_order_id"); // MyISAM table incompatible because of autoincrement.  Foreign key ignored
 
 
 

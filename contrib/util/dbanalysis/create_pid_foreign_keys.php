@@ -62,7 +62,7 @@ function CreateForeignKey(&$table,$field,$foreign_table,$foreign_field)
 function create_pid_foreign_keys(&$table_list)
 {
 
-    $pid_synonmys=['patient_id','pid',"ct_pid","pc_pid"];
+    $pid_synonmys=['patient_id','pid',"ct_pid","pc_pid","dld_pid"];
     foreach($table_list as $table)
     {
         if($table->getName()!=='patient_data')
