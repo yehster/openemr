@@ -37,6 +37,12 @@ function ChangeTablesToInnodb(&$table_list)
 
 function CreateForeignKey(&$table,$field,$foreign_table,$foreign_field)
 {
+        if($table->getName()==='drug_sales')
+        {
+            echo "--------->drug_sales\n";
+            echo "--------->drug_sales\n";
+            echo "--------->drug_sales\n";
+        }    
     global $modified_tables;
     global $tables;
     $table_name=$table->getName();
@@ -65,6 +71,7 @@ function create_pid_foreign_keys(&$table_list)
     $pid_synonmys=['patient_id','pid',"ct_pid","pc_pid","dld_pid"];
     foreach($table_list as $table)
     {
+        
         if($table->getName()!=='patient_data')
         {
             if($field=$table->hasFieldList($pid_synonmys))
