@@ -157,6 +157,18 @@ class table_info
         return count($this->_tags)>0;
     }
 
+    function hasTag($tag)
+    {
+        if(isset($this->_tags[$tag]))
+        {
+            return $this->_tags[$tag];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }
 
 class field_type

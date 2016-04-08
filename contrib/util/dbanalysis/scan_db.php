@@ -104,8 +104,9 @@ CreateForeignKeyNamedTable("prescriptions","pharmacy_id","pharmacies","id");
 CreateForeignKeyNamedTable("lbf_data","form_id","forms","form_id");
 CreateForeignKeyNamedTable("categories_to_documents","document_id","documents","id");
 CreateForeignKeyNamedTable("lbt_data","form_id","transactions","id");
+
 CreateForeignKeyNamedTable("dated_reminders_link","dr_id","dated_reminders","dr_id");
-CreateForeignKeyNamedTable("dated_reminders_link","dr_id","dated_reminders","dr_id");
+CreateForeignKeyNamedTable("dated_reminders_link","to_id","users","id");
 CreateForeignKeyNamedTable("report_results","report_id","report_itemized","report_id");
 CreateForeignKeyNamedTable("patient_tracker_element","pt_tracker_id","patient_tracker","id");
 CreateForeignKeyNamedTable("onotes","user","users","username");
